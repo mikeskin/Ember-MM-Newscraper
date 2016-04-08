@@ -77,6 +77,7 @@ Public Class frmMain
     Private dScrapeRow As DataRow = Nothing
 
     Private fScanner As New Scanner
+    Private fScraper As New Scraper
     Private GenreImage As Image
     Private InfoCleared As Boolean = False
     Private LoadingDone As Boolean = False
@@ -10302,6 +10303,8 @@ doCancel:
 
         AddHandler fScanner.ScannerUpdated, AddressOf ScannerUpdated
         AddHandler fScanner.ScanningCompleted, AddressOf ScanningCompleted
+        AddHandler fScraper.ScraperUpdated, AddressOf ScraperUpdated
+        AddHandler fScraper.ScrapingCompleted, AddressOf ScrapingCompleted
         AddHandler ModulesManager.Instance.GenericEvent, AddressOf GenericRunCallBack
         AddHandler fCommandLine.TaskEvent, AddressOf TaskRunCallBack
 
@@ -15326,6 +15329,32 @@ doCancel:
             FillList(True, True, True)
             LoadingDone = True
         End If
+    End Sub
+
+    Private Sub ScraperUpdated(ByVal iType As Integer, ByVal sText As String)
+        'Select Case iType
+        '    Case 1
+        '        SetStatus(String.Concat(Master.eLang.GetString(814, "Added Episode:"), " " & sText))
+        '    Case 2
+        '        SetStatus(Master.eLang.GetString(116, "Performing Preliminary Tasks (Gathering Data)..."))
+        '    Case 3
+        '        SetStatus(Master.eLang.GetString(644, "Cleaning Database..."))
+        '    Case Else
+        '        SetStatus(String.Concat(Master.eLang.GetString(815, "Added Movie:"), " " & sText))
+        'End Select
+    End Sub
+
+    Private Sub ScrapingCompleted()
+        'If Not Master.isCL Then
+        '    SetStatus(String.Empty)
+        '    FillList(True, True, True)
+        '    tspbLoading.Visible = False
+        '    tslLoading.Visible = False
+        '    LoadingDone = True
+        'Else
+        '    FillList(True, True, True)
+        '    LoadingDone = True
+        'End If
     End Sub
 
     Private Sub scMain_SplitterMoved(ByVal sender As System.Object, ByVal e As System.Windows.Forms.SplitterEventArgs) Handles scMain.SplitterMoved
