@@ -1950,6 +1950,7 @@ Public Class ModulesManager
         Private _ContextMenuTVEpisodeList As ContextMenuStrip
         Private _ContextMenuTVSeasonList As ContextMenuStrip
         Private _ContextMenuTVShowList As ContextMenuStrip
+        Private _Dialog_Edit_Movie As Dialog_Edit_Movie
         Private _FilterMovies As String
         Private _FilterMoviesSearch As String
         Private _FilterMoviesType As String
@@ -1981,6 +1982,8 @@ Public Class ModulesManager
 
         'all runtime object including Function (delegate) that need to be exposed to Modules
         Delegate Sub OpenImageViewer(ByVal _Image As Image)
+
+        Delegate Sub Dialog_Edit_Movie(ByRef _DBElement As Database.DBElement)
 
 #End Region 'Delegates
 
@@ -2214,6 +2217,10 @@ Public Class ModulesManager
             _OpenImageViewer = IV
         End Sub
 
+        Public Sub DelegateShowDialog_Edit_Movie(ByRef EM As Dialog_Edit_Movie)
+            _Dialog_Edit_Movie = EM
+        End Sub
+
         Public Sub InvokeLoadMedia(ByVal Scan As Structures.ScanOrClean, Optional ByVal SourceID As Long = -1)
             'Invoked from Modules
             _LoadMedia.Invoke(Scan, SourceID)
@@ -2221,6 +2228,10 @@ Public Class ModulesManager
 
         Public Sub InvokeOpenImageViewer(ByRef _image As Image)
             _OpenImageViewer.Invoke(_image)
+        End Sub
+
+        Public Sub InvokeDialog_Edit_Movie(ByRef _DBElement As Database.DBElement)
+            _Dialog_Edit_Movie.Invoke(_DBElement)
         End Sub
 
 #End Region 'Methods

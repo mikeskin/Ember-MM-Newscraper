@@ -27,7 +27,7 @@ Imports NLog
 Public Class frmMain
 
 #Region "Fields"
-    Shared logger As Logger = NLog.LogManager.GetCurrentClassLogger()
+    Shared logger As Logger = LogManager.GetCurrentClassLogger()
 
     Friend WithEvents bwCheckVersion As New System.ComponentModel.BackgroundWorker
     Friend WithEvents bwCleanDB As New System.ComponentModel.BackgroundWorker
@@ -8291,6 +8291,10 @@ doCancel:
         drow.ItemArray = v.ItemArray
     End Sub
 
+    Private Sub uiEdit_Movie(ByRef DBMovie As Database.DBElement)
+        Edit_Movie(DBMovie, Enums.ModuleEventType.ScraperSingle_Movie)
+    End Sub
+
     Private Sub Edit_Movie(ByRef DBMovie As Database.DBElement, Optional ByVal EventType As Enums.ModuleEventType = Enums.ModuleEventType.AfterEdit_Movie)
         SetControlsEnabled(False)
         If DBMovie.IsOnline OrElse FileUtils.Common.CheckOnlineStatus_Movie(DBMovie, True) Then
@@ -10273,6 +10277,7 @@ doCancel:
 
         ModulesManager.Instance.RuntimeObjects.DelegateLoadMedia(AddressOf LoadMedia)
         ModulesManager.Instance.RuntimeObjects.DelegateOpenImageViewer(AddressOf OpenImageViewer)
+        ModulesManager.Instance.RuntimeObjects.DelegateShowDialog_Edit_Movie(AddressOf uiEdit_Movie)
         ModulesManager.Instance.RuntimeObjects.MainMenu = mnuMain
         ModulesManager.Instance.RuntimeObjects.MainTabControl = tcMain
         ModulesManager.Instance.RuntimeObjects.MainToolStrip = tsMain
@@ -12140,9 +12145,16 @@ doCancel:
         tslLoading.Visible = True
         tspbLoading.Visible = True
         Application.DoEvents()
-        bwMovieScraper.WorkerSupportsCancellation = True
-        bwMovieScraper.WorkerReportsProgress = True
-        bwMovieScraper.RunWorkerAsync(New Arguments With {.ScrapeOptions = ScrapeOptions, .ScrapeList = ScrapeList, .ScrapeType = sType})
+        'bwMovieScraper.WorkerSupportsCancellation = True
+        'bwMovieScraper.WorkerReportsProgress = True
+        'bwMovieScraper.RunWorkerAsync(New Arguments With {.ScrapeOptions = ScrapeOptions, .ScrapeList = ScrapeList, .ScrapeType = sType})
+
+        Dim test As New List(Of Scraper.ScraperTask)
+        For Each tRow In ScrapeList
+            Dim nScraperTask As New Scraper.ScraperTask With {.mContentType = Enums.ContentType.Movie, .ScrapeModifiers = tRow.ScrapeModifiers, .mID = Convert.ToInt64(tRow.DataRow.Item("idMovie")), .ScrapeOptions = ScrapeOptions, .ScrapeType = sType}
+            test.Add(nScraperTask)
+        Next
+        fScraper.RunScraper(test)
     End Sub
 
     Private Sub InfoDownloaded_MovieSet(ByRef DBMovieSet As Database.DBElement)
