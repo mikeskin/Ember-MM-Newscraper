@@ -1621,6 +1621,7 @@ mPlot:          'Plot
             Dim rUri As String = String.Empty
 
             intHTTP = New HTTP
+            Dim temp = String.Concat("http://", Master.eSettings.MovieIMDBURL, "/search/title?title=", HttpUtility.UrlEncode(sShow), "&title_type=tv_series")
             HTML = intHTTP.DownloadData(String.Concat("http://", Master.eSettings.MovieIMDBURL, "/search/title?title=", HttpUtility.UrlEncode(sShow), "&title_type=tv_series"))
             rUri = intHTTP.ResponseUri
 

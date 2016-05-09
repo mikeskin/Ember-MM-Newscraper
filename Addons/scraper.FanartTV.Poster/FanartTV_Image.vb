@@ -532,7 +532,7 @@ Public Class FanartTV_Image
         logger.Trace("[FanartTV_Image] [Scraper_Movie] [Start]")
 
         LoadSettings_Movie()
-        Dim _scraper As New FanartTVs.Scraper(_SpecialSettings_Movie)
+        Dim _scraper As New Scraper(_SpecialSettings_Movie)
 
         Dim FilteredModifiers As Structures.ScrapeModifiers = Functions.ScrapeModifiersAndAlso(ScrapeModifiers, ConfigModifier_Movie)
 
@@ -559,7 +559,7 @@ Public Class FanartTV_Image
 
         If Not String.IsNullOrEmpty(DBMovieset.MovieSet.TMDB) Then
             LoadSettings_MovieSet()
-            Dim _scraper As New FanartTVs.Scraper(_SpecialSettings_MovieSet)
+            Dim _scraper As New Scraper(_SpecialSettings_MovieSet)
 
             Dim FilteredModifiers As Structures.ScrapeModifiers = Functions.ScrapeModifiersAndAlso(ScrapeModifiers, ConfigModifier_MovieSet)
 
@@ -574,13 +574,17 @@ Public Class FanartTV_Image
         logger.Trace("[FanartTV_Image] [Scraper_TV] [Start]")
 
         LoadSettings_TV()
-        Dim _scraper As New FanartTVs.Scraper(_SpecialSettings_TV)
+        Dim _scraper As New Scraper(_SpecialSettings_TV)
 
         Dim FilteredModifiers As Structures.ScrapeModifiers = Functions.ScrapeModifiersAndAlso(ScrapeModifiers, ConfigModifier_TV)
 
+        If Not DBTV.TVShow.TVDBSpecified Then
+            UniqueID.GetUniqueIDs(DBTV)
+        End If
+
         Select Case DBTV.ContentType
             Case Enums.ContentType.TVEpisode
-                If Not String.IsNullOrEmpty(DBTV.TVShow.TVDB) Then
+                If DBTV.TVShow.TVDBSpecified Then
                     If FilteredModifiers.MainFanart Then
                         ImagesContainer.MainFanarts = _scraper.GetImages_TV(DBTV.TVShow.TVDB, FilteredModifiers).MainFanarts
                     End If
@@ -588,13 +592,13 @@ Public Class FanartTV_Image
                     logger.Trace(String.Concat("[FanartTV_Image] [Scraper_TV] [Abort] No TVDB ID exist to search: ", DBTV.ListTitle))
                 End If
             Case Enums.ContentType.TVSeason
-                If Not String.IsNullOrEmpty(DBTV.TVShow.TVDB) Then
+                If DBTV.TVShow.TVDBSpecified Then
                     ImagesContainer = _scraper.GetImages_TV(DBTV.TVShow.TVDB, FilteredModifiers)
                 Else
                     logger.Trace(String.Concat("[FanartTV_Image] [Scraper_TV] [Abort] No TVDB ID exist to search: ", DBTV.ListTitle))
                 End If
             Case Enums.ContentType.TVShow
-                If Not String.IsNullOrEmpty(DBTV.TVShow.TVDB) Then
+                If DBTV.TVShow.TVDBSpecified Then
                     ImagesContainer = _scraper.GetImages_TV(DBTV.TVShow.TVDB, FilteredModifiers)
                 Else
                     logger.Trace(String.Concat("[FanartTV_Image] [Scraper_TV] [Abort] No TVDB ID exist to search: ", DBTV.ListTitle))
@@ -607,15 +611,15 @@ Public Class FanartTV_Image
         Return New Interfaces.ModuleResult With {.breakChain = False}
     End Function
 
-    Public Sub ScraperOrderChanged_Movie() Implements EmberAPI.Interfaces.ScraperModule_Image_Movie.ScraperOrderChanged
+    Public Sub ScraperOrderChanged_Movie() Implements Interfaces.ScraperModule_Image_Movie.ScraperOrderChanged
         _setup_Movie.orderChanged()
     End Sub
 
-    Public Sub ScraperOrderChanged_MovieSet() Implements EmberAPI.Interfaces.ScraperModule_Image_MovieSet.ScraperOrderChanged
+    Public Sub ScraperOrderChanged_MovieSet() Implements Interfaces.ScraperModule_Image_MovieSet.ScraperOrderChanged
         _setup_MovieSet.orderChanged()
     End Sub
 
-    Public Sub ScraperOrderChanged_TV() Implements EmberAPI.Interfaces.ScraperModule_Image_TV.ScraperOrderChanged
+    Public Sub ScraperOrderChanged_TV() Implements Interfaces.ScraperModule_Image_TV.ScraperOrderChanged
         _setup_TV.orderChanged()
     End Sub
 
