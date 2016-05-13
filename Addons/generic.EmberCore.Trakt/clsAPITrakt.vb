@@ -188,7 +188,7 @@ Public Class clsAPITrakt
         tmpMovie.Title = tDBElement.Movie.Title
         tmpMovie.Year = If(tDBElement.Movie.YearSpecified, CInt(tDBElement.Movie.Year), Nothing)
 
-        Dim traktResponse = TrakttvAPI.RemoveMovieFromCollection(tmpMovie)
+        Dim traktResponse = TrakttvAPI.RemoveFromCollectionMovie(tmpMovie)
         If traktResponse IsNot Nothing Then
             If traktResponse.Deleted.Movies = 1 Then
                 logger.Info(String.Concat("Removed Item on Trakt.tv: ", tmpMovie.Title))

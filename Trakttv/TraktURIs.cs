@@ -17,8 +17,8 @@ namespace Trakttv
         #region SEND Data to Trakt.tv (POST URIs)!
 
         // Modify watched movies/episodes/shows/seasons
-        public const string SENDWatchedHistoryAdd = "https://api-v2launch.trakt.tv/sync/history";
-        public const string SENDWatchedHistoryRemove = "https://api-v2launch.trakt.tv/sync/history/remove";
+        public const string SENDHistoryAdd = "https://api-v2launch.trakt.tv/sync/history";
+        public const string SENDHistoryRemove = "https://api-v2launch.trakt.tv/sync/history/remove";
         // Modify ratings of movies/episodes/shows/seasons
         public const string SENDRatingsAdd = "https://api-v2launch.trakt.tv/sync/ratings";
         public const string SENDRatingsRemove = "https://api-v2launch.trakt.tv/sync/ratings/remove";

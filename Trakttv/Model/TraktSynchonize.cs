@@ -23,5 +23,8 @@ namespace Trakttv.TraktAPI.Model
 
         [DataMember(Name = "people", EmitDefaultValue = false)]
         public List<TraktPerson> People { get; set; }
+
+        [DataMember(Name = "ids", EmitDefaultValue = false)]
+        public List<TraktId> IDs { get; set; }
     }
 }

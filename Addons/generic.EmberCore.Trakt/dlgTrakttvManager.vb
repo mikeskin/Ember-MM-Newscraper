@@ -564,9 +564,8 @@ Public Class dlgTrakttvManager
 
                     _traktToken = LoginToTrakt(_MySettings.Username, _MySettings.Password, _traktToken)
                     If Not String.IsNullOrEmpty(_traktToken) Then
-                        Dim deletemoviemodel As New TraktAPI.Model.TraktSyncMovies
-                        deletemoviemodel.Movies = lstmovietoremove
-                        Dim response = TrakttvAPI.RemoveMoviesFromWatchlist(deletemoviemodel)
+                        Dim deletemoviemodel As New TraktAPI.Model.TraktSynchronize With {.Movies = lstmovietoremove}
+                        Dim response = TrakttvAPI.RemoveFromWatchlist(deletemoviemodel)
                         If response IsNot Nothing Then
                             If response.Added IsNot Nothing Then
                                 logger.Info("[btntraktWatchlistSyncLibrary_Click] Trakt Response. Added movies: " & response.Added.Movies)
@@ -728,9 +727,8 @@ Public Class dlgTrakttvManager
                     _traktToken = LoginToTrakt(_MySettings.Username, _MySettings.Password, _traktToken)
 
                     If Not String.IsNullOrEmpty(_traktToken) Then
-                        Dim deletemoviemodel As New TraktAPI.Model.TraktSyncMovies
-                        deletemoviemodel.Movies = lstmovietoremove
-                        Dim response = TrakttvAPI.RemoveMoviesFromWatchlist(deletemoviemodel)
+                        Dim deletemoviemodel As New TraktAPI.Model.TraktSynchronize With {.Movies = lstmovietoremove}
+                        Dim response = TrakttvAPI.RemoveFromWatchlist(deletemoviemodel)
                         If response IsNot Nothing Then
                             If response.Added IsNot Nothing Then
                                 logger.Info("[btntraktWatchlistClean_Click] Trakt Response. Added movies: " & response.Added.Movies)
@@ -908,7 +906,7 @@ Public Class dlgTrakttvManager
             Next
             If postRatings Then
                 If MessageBox.Show(response, Master.eLang.GetString(356, "Warning"), MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button1) = DialogResult.Yes Then
-                    Dim traktResponse = TrakttvAPI.AddMoviesToRatings(tmpTraktSynchronize)
+                    Dim traktResponse = TrakttvAPI.AddRatings(tmpTraktSynchronize)
                     If traktResponse IsNot Nothing Then
                         If traktResponse.Added.Movies > 0 Then
                             logger.Info("Added Ratings to trakt.tv!")
@@ -983,8 +981,8 @@ Public Class dlgTrakttvManager
                 If MessageBox.Show(response, Master.eLang.GetString(356, "Warning"), MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button1) = DialogResult.Yes Then
                     Dim tmpresponse As String = String.Empty
                     If IsMovie Then
-                        Dim tMovies As New TraktAPI.Model.TraktSyncMovies With {.Movies = lstToRemove_Movies}
-                        Dim traktResponse = TrakttvAPI.RemoveMoviesFromWatchedHistory(tMovies)
+                        Dim tMovies As New TraktAPI.Model.TraktSynchronize With {.Movies = lstToRemove_Movies}
+                        Dim traktResponse = TrakttvAPI.RemoveFromHistory(tMovies)
                         If traktResponse IsNot Nothing Then
                             logger.Info(String.Concat("Deleted Movies: ", traktResponse.Deleted.Movies))
                             tmpresponse = String.Concat(tmpresponse, Master.eLang.GetString(1407, "Deleted"), ": ", traktResponse.Deleted.Movies, " Movies", Environment.NewLine)
@@ -1072,9 +1070,9 @@ Public Class dlgTrakttvManager
                 ' Use new Trakttv wrapper class to get watched data!
                 _traktToken = LoginToTrakt(_MySettings.Username, _MySettings.Password, _traktToken)
                 If Not String.IsNullOrEmpty(_traktToken) Then
-                    Dim result As DialogResult = MessageBox.Show(response, Master.eLang.GetString(356, "Warning"), MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button1)
-                    If result = Windows.Forms.DialogResult.Yes Then
-                        Dim traktResponse = TrakttvAPI.AddMoviesToWatchedHistory(tmpTraktSynchronize)
+
+                    If MessageBox.Show(response, Master.eLang.GetString(356, "Warning"), MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button1) = DialogResult.Yes Then
+                        Dim traktResponse = TrakttvAPI.AddToHistory(tmpTraktSynchronize)
                         If traktResponse IsNot Nothing Then
                             If traktResponse.Added.Movies > 0 Then
                                 logger.Info("Added to watch history!")

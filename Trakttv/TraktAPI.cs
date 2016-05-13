@@ -305,6 +305,237 @@ namespace Trakttv
 
         #endregion
 
+            
+
+        public static TraktResponse AddToHistory(TraktSynchronize items)
+        {
+            var response = SENDToTrakt(TraktURIs.SENDHistoryAdd, items.ToJSON());
+            return response.FromJSON<TraktResponse>();
+        }
+
+        public static TraktResponse AddToHistoryMovie(TraktMovie movie)
+        {
+            var items = new TraktSynchronize
+            {
+                Movies = new List<TraktMovie>() { movie }
+            };
+
+            return AddToHistory(items);
+        }
+
+        public static TraktResponse AddToHistoryEpisode(TraktEpisode episode)
+        {
+            var items = new TraktSynchronize
+            {
+                Episodes = new List<TraktEpisode>() { episode }
+            };
+
+            return AddToHistory(items);
+        }
+
+        public static TraktResponse AddToHistoryShow(TraktShow show) 
+        {
+            var items = new TraktSynchronize
+            {
+                Shows = new List<TraktShow>() { show }
+            };
+
+            return AddToHistory(items);
+        }
+
+        public static TraktResponse AddRatings(TraktSynchronize items)
+        {
+            var response = SENDToTrakt(TraktURIs.SENDRatingsAdd, items.ToJSON());
+            return response.FromJSON<TraktResponse>();
+        }
+
+        public static TraktResponse AddRatingToMovie(TraktMovie movie)
+        {
+            var items = new TraktSynchronize
+            {
+                Movies = new List<TraktMovie>() { movie }
+            };
+
+            return AddRatings(items);
+        }
+
+        public static TraktResponse AddRatingToEpisode(TraktEpisode episode)
+        {
+            var items = new TraktSynchronize
+            {
+                Episodes = new List<TraktEpisode>() { episode }
+            };
+
+            return AddRatings(items);
+        }
+
+        public static TraktResponse AddRatingToShow(TraktShow show)
+        {
+            var items = new TraktSynchronize
+            {
+                Shows = new List<TraktShow>() { show }
+            };
+
+            return AddRatings(items);
+        }
+
+        public static TraktResponse RemoveFromCollection(TraktSynchronize items)
+        {
+            var response = SENDToTrakt(TraktURIs.SENDCollectionRemove, items.ToJSON());
+            return response.FromJSON<TraktResponse>();
+        }
+
+        public static TraktResponse RemoveFromCollectionMovie(TraktMovie movie)
+        {
+            var items = new TraktSynchronize
+            {
+                Movies = new List<TraktMovie>() { movie }
+            };
+
+            return RemoveFromCollection(items);
+        }
+
+        public static TraktResponse RemoveFromCollectionEpisode(TraktEpisode episode)
+        {
+            var items = new TraktSynchronize
+            {
+                Episodes = new List<TraktEpisode>() { episode }
+            };
+
+            return RemoveFromCollection(items);
+        }
+
+        public static TraktResponse RemoveFromCollectionShow(TraktShow show)
+        {
+            var items = new TraktSynchronize
+            {
+                Shows = new List<TraktShow>() { show }
+            };
+
+            return RemoveFromCollection(items);
+        }
+
+        public static TraktResponse RemoveFromHistory(TraktSynchronize items)
+        {
+            var response = SENDToTrakt(TraktURIs.SENDHistoryRemove, items.ToJSON());
+            return response.FromJSON<TraktResponse>();
+        }
+
+        public static TraktResponse RemoveFromHistoryMovie(TraktMovie movie)
+        {
+            var items = new TraktSynchronize
+            {
+                Movies = new List<TraktMovie>() { movie }
+            };
+
+            return RemoveFromHistory(items);
+        }
+
+        public static TraktResponse RemoveFromHistoryEpisode(TraktEpisode episode)
+        {
+            var items = new TraktSynchronize
+            {
+                Episodes = new List<TraktEpisode>() { episode }
+            };
+
+            return RemoveFromHistory(items);
+        }
+
+        public static TraktResponse RemoveFromHistoryID(TraktId id)
+        {
+            var items = new TraktSynchronize
+            {
+                IDs = new List<TraktId>() { id }
+            };
+
+            return RemoveFromHistory(items);
+        }
+
+        public static TraktResponse RemoveFromHistoryShow(TraktShow show)
+        {
+            var items = new TraktSynchronize
+            {
+                Shows = new List<TraktShow>() { show }
+            };
+
+            return RemoveFromHistory(items);
+        }
+
+        public static TraktResponse RemoveFromWatchlist(TraktSynchronize items)
+        {
+            var response = SENDToTrakt(TraktURIs.SENDHistoryRemove, items.ToJSON());
+            return response.FromJSON<TraktResponse>();
+        }
+
+        public static TraktResponse RemoveFromWatchlistMovie(TraktMovie movie)
+        {
+            var items = new TraktSynchronize
+            {
+                Movies = new List<TraktMovie>() { movie }
+            };
+
+            return RemoveFromWatchlist(items);
+        }
+
+        public static TraktResponse RemoveFromWatchlistEpisode(TraktEpisode episode)
+        {
+            var items = new TraktSynchronize
+            {
+                Episodes = new List<TraktEpisode>() { episode }
+            };
+
+            return RemoveFromWatchlist(items);
+        }
+
+        public static TraktResponse RemoveFromWatchlistShow(TraktShow show)
+        {
+            var items = new TraktSynchronize
+            {
+                Shows = new List<TraktShow>() { show }
+            };
+
+            return RemoveFromWatchlist(items);
+        }
+
+        public static TraktResponse RemoveRatings(TraktSynchronize items)
+        {
+            var response = SENDToTrakt(TraktURIs.SENDRatingsRemove, items.ToJSON());
+            return response.FromJSON<TraktResponse>();
+        }
+
+        public static TraktResponse RemoveRatingFromMovie(TraktMovie movie)
+        {
+            var items = new TraktSynchronize
+            {
+                Movies = new List<TraktMovie>() { movie }
+            };
+
+            return RemoveRatings(items);
+        }
+
+        public static TraktResponse RemoveRatingFromEpisode(TraktEpisode episode)
+        {
+            var items = new TraktSynchronize
+            {
+                Episodes = new List<TraktEpisode>() { episode }
+            };
+
+            return RemoveRatings(items);
+        }
+
+        public static TraktResponse RemoveRatingFromShow(TraktShow show)
+        {
+            var items = new TraktSynchronize
+            {
+                Shows = new List<TraktShow>() { show }
+            };
+
+            return RemoveRatings(items);
+        }
+
+
+
+
         #region GET Collection (Movie/Episodes)
 
         public static IEnumerable<TraktMovieCollected> GetCollectedMovies()
@@ -660,53 +891,7 @@ namespace Trakttv
         }
 
         #endregion
-
-        #region POST Rating (only movies for now...)
-
-        /// <summary>
-        /// Rate a single movie on trakt.tv
-        /// </summary>
-        public static TraktResponse AddMovieToRatings(TraktSyncMovieRated movie)
-        {
-            var movies = new TraktSyncMoviesRated
-            {
-                Movies = new List<TraktSyncMovieRated>() { movie }
-            };
-
-            return AddMoviesToRatings(movies);
-        }
-
-        /// <summary>
-        /// UnRate a single movie on trakt.tv
-        /// </summary>
-        public static TraktResponse RemoveMovieFromRatings(TraktMovie movie)
-        {
-            var movies = new TraktSyncMovies
-            {
-                Movies = new List<TraktMovie>() { new TraktMovie { Ids = movie.Ids } }
-            };
-
-            return RemoveMoviesFromRatings(movies);
-        }
-
-
-        /// <summary>
-        /// Sends movies rate data to Trakt
-        /// </summary>
-        public static TraktResponse AddMoviesToRatings(TraktSyncMoviesRated movies)
-        {
-            var response = SENDToTrakt(TraktURIs.SENDRatingsAdd, movies.ToJSON());
-            return response.FromJSON<TraktResponse>();
-        }
-
-        public static TraktResponse RemoveMoviesFromRatings(TraktSyncMovies movies)
-        {
-            var response = SENDToTrakt(TraktURIs.SENDRatingsRemove, movies.ToJSON());
-            return response.FromJSON<TraktResponse>();
-        }
-
-        #endregion
-
+        
         #region POST Watchlist
 
         public static TraktResponse AddMoviesToWatchlist(TraktSyncMovies movies)
@@ -724,21 +909,6 @@ namespace Trakttv
             return AddMoviesToWatchlist(movies);
         }
 
-        public static TraktResponse RemoveMoviesFromWatchlist(TraktSyncMovies movies)
-        {
-            var response = SENDToTrakt(TraktURIs.SENDWatchlistRemove, movies.ToJSON());
-            return response.FromJSON<TraktResponse>();
-        }
-        public static TraktResponse RemoveMovieFromWatchlist(TraktMovie movie)
-        {
-            var movies = new TraktSyncMovies
-            {
-                Movies = new List<TraktMovie>() { movie }
-            };
-
-            return RemoveMoviesFromWatchlist(movies);
-        }
-
         public static TraktResponse AddShowsToWatchlist(TraktSyncShows shows)
         {
             var response = SENDToTrakt(TraktURIs.SENDWatchlistAdd, shows.ToJSON());
@@ -753,20 +923,6 @@ namespace Trakttv
 
             return AddShowsToWatchlist(shows);
         }
-        public static TraktResponse RemoveShowsFromWatchlist(TraktSyncShows shows)
-        {
-            var response = SENDToTrakt(TraktURIs.SENDWatchlistRemove, shows.ToJSON());
-            return response.FromJSON<TraktResponse>();
-        }
-        public static TraktResponse RemoveShowFromWatchlist(TraktShow show)
-        {
-            var shows = new TraktSyncShows
-            {
-                Shows = new List<TraktShow>() { show }
-            };
-
-            return RemoveShowsFromWatchlist(shows);
-        }
         public static TraktResponse AddEpisodesToWatchlist(TraktSyncEpisodes episodes)
         {
             var response = SENDToTrakt(TraktURIs.SENDWatchlistAdd, episodes.ToJSON());
@@ -780,20 +936,6 @@ namespace Trakttv
             };
 
             return AddEpisodesToWatchlist(episodes);
-        }
-        public static TraktResponse RemoveEpisodesFromWatchlist(TraktSyncEpisodes episodes)
-        {
-            var response = SENDToTrakt(TraktURIs.SENDWatchlistRemove, episodes.ToJSON());
-            return response.FromJSON<TraktResponse>();
-        }
-        public static TraktResponse RemoveEpisodeFromWatchlist(TraktEpisode episode)
-        {
-            var episodes = new TraktSyncEpisodes
-            {
-                Episodes = new List<TraktEpisode>() { episode }
-            };
-
-            return RemoveEpisodesFromWatchlist(episodes);
         }
 
         #endregion
@@ -862,86 +1004,29 @@ namespace Trakttv
 
         #endregion
 
-        #region POST Collection
-
-        public static TraktResponse RemoveMovieFromCollection(TraktMovie movie)
-        {
-            var movies = new TraktSyncMovies
-            {
-                Movies = new List<TraktMovie>() { movie }
-            };
-
-            return RemoveMoviesFromCollection(movies);
-        }
-
-        public static TraktResponse RemoveMoviesFromCollection(TraktSyncMovies movies)
-        {
-            var response = SENDToTrakt(TraktURIs.SENDCollectionRemove, movies.ToJSON());
-            return response.FromJSON<TraktResponse>();
-        }
-
-        #endregion
-
         #region POST Watched History
-
-        public static TraktResponse AddMoviesToWatchedHistory(TraktSyncMoviesWatched movies)
-        {
-            var response = SENDToTrakt(TraktURIs.SENDWatchedHistoryAdd, movies.ToJSON());
-            return response.FromJSON<TraktResponse>();
-        }
-
-        public static TraktResponse RemoveMoviesFromWatchedHistory(TraktSyncMovies movies)
-        {
-            var response = SENDToTrakt(TraktURIs.SENDWatchedHistoryRemove, movies.ToJSON());
-            return response.FromJSON<TraktResponse>();
-        }
 
         public static TraktResponse RemoveHistoryIDFromWatchedHistory(TraktSyncHistoryID HistoryID)
         {
-            var response = SENDToTrakt(TraktURIs.SENDWatchedHistoryRemove, HistoryID.ToJSON());
-            return response.FromJSON<TraktResponse>();
-        }
-
-
-        public static TraktResponse AddShowsToWatchedHistory(TraktSyncShows shows)
-        {
-            var response = SENDToTrakt(TraktURIs.SENDWatchedHistoryAdd, shows.ToJSON());
-            return response.FromJSON<TraktResponse>();
-        }
-
-        public static TraktResponse RemoveShowsFromWatchedHistory(TraktSyncShows shows)
-        {
-            var response = SENDToTrakt(TraktURIs.SENDWatchedHistoryRemove, shows.ToJSON());
-            return response.FromJSON<TraktResponse>();
-        }
-
-        public static TraktResponse AddEpisodesToWatchedHistory(TraktSyncEpisodesWatched episodes)
-        {
-            var response = SENDToTrakt(TraktURIs.SENDWatchedHistoryAdd, episodes.ToJSON());
-            return response.FromJSON<TraktResponse>();
-        }
-
-        public static TraktResponse RemoveEpisodesFromWatchedHistory(TraktSyncEpisodes episodes)
-        {
-            var response = SENDToTrakt(TraktURIs.SENDWatchedHistoryRemove, episodes.ToJSON());
+            var response = SENDToTrakt(TraktURIs.SENDHistoryRemove, HistoryID.ToJSON());
             return response.FromJSON<TraktResponse>();
         }
 
         public static TraktResponse AddShowsToWatchedHistoryEx(TraktSyncShowsEx shows)
         {
-            var response = SENDToTrakt(TraktURIs.SENDWatchedHistoryAdd, shows.ToJSON());
+            var response = SENDToTrakt(TraktURIs.SENDHistoryAdd, shows.ToJSON());
             return response.FromJSON<TraktResponse>();
         }
 
         public static TraktResponse AddShowsToWatchedHistoryEx(TraktSyncShowsWatchedEx shows)
         {
-            var response = SENDToTrakt(TraktURIs.SENDWatchedHistoryAdd, shows.ToJSON());
+            var response = SENDToTrakt(TraktURIs.SENDHistoryAdd, shows.ToJSON());
             return response.FromJSON<TraktResponse>();
         }
 
         public static TraktResponse RemoveShowsFromWatchedHistoryEx(TraktSyncShowsEx shows)
         {
-            var response = SENDToTrakt(TraktURIs.SENDWatchedHistoryRemove, shows.ToJSON());
+            var response = SENDToTrakt(TraktURIs.SENDHistoryRemove, shows.ToJSON());
             return response.FromJSON<TraktResponse>();
         }
 
@@ -955,16 +1040,6 @@ namespace Trakttv
             return AddMoviesToWatchedHistory(movies);
         }
 
-        public static TraktResponse RemoveMovieFromWatchedHistory(TraktMovie movie)
-        {
-            var movies = new TraktSyncMovies
-            {
-                Movies = new List<TraktMovie>() { movie }
-            };
-
-            return RemoveMoviesFromWatchedHistory(movies);
-        }
-
 
         public static TraktResponse AddShowToWatchedHistory(TraktShow show)
         {
@@ -974,16 +1049,6 @@ namespace Trakttv
             };
 
             return AddShowsToWatchedHistory(shows);
-        }
-
-        public static TraktResponse RemoveShowFromWatchedHistory(TraktShow show)
-        {
-            var shows = new TraktSyncShows
-            {
-                Shows = new List<TraktShow>() { show }
-            };
-
-            return RemoveShowsFromWatchedHistory(shows);
         }
 
         public static TraktResponse AddShowToWatchedHistoryEx(TraktSyncShowEx show)
@@ -1014,16 +1079,6 @@ namespace Trakttv
             };
 
             return AddEpisodesToWatchedHistory(episodes);
-        }
-
-        public static TraktResponse RemoveEpisodeFromWatchedHistory(TraktEpisode episode)
-        {
-            var episodes = new TraktSyncEpisodes
-            {
-                Episodes = new List<TraktEpisode>() { episode }
-            };
-
-            return RemoveEpisodesFromWatchedHistory(episodes);
         }
 
         #endregion
