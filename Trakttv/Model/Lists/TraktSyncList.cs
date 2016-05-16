@@ -1,8 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
 using System.Runtime.Serialization;
+using Trakttv.TraktAPI.Model.General;
+using Trakttv.TraktAPI.Model.Movies;
 
 namespace Trakttv.TraktAPI.Model
 {
@@ -41,7 +40,7 @@ namespace Trakttv.TraktAPI.Model
 
         [DataMember(Name = "TraktListItems")]
         public List<TraktListItem> TraktListItems { get; set; }
-        public List<TraktMovie> Movies { get; set; }
+        public List<Movie> Movies { get; set; }
 
         [DataMember(Name = "list_modified")]
 

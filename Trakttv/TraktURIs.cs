@@ -47,16 +47,26 @@ namespace Trakttv
 
         #region  GET Data from Trakt.tv (GET URIs)!
 
+        // History
+        public const string GETHistory = "https://api-v2launch.trakt.tv/sync/history";
+        public const string GETHistoryByType = "https://api-v2launch.trakt.tv/sync/history/{0}";
+        public const string GETHistoryByTypeExtended = "https://api-v2launch.trakt.tv/users/{0}/history/{1}?extended=full&limit={2}";
+        public const string GETWatchedMovies = "https://api-v2launch.trakt.tv/sync/watched/movies";
+        public const string GETWatchedMoviesExtended = "https://api-v2launch.trakt.tv/sync/watched/movies?extended=full";
+        public const string GETWatchedTVShows = "https://api-v2launch.trakt.tv/sync/watched/shows";
+        public const string GETWatchedTVShowsExtended = "https://api-v2launch.trakt.tv/sync/watched/shows?extended=full";
+
+
+
+
+
         // Movie requests
         public const string GETCollectionMovies = "https://api-v2launch.trakt.tv/sync/collection/movies";
-        public const string GETWatchedMovies = "https://api-v2launch.trakt.tv/sync/watched/movies";
         public const string GETRatedMovies = "https://api-v2launch.trakt.tv/sync/ratings/movies";
         public const string GETMovieRating = "https://api-v2launch.trakt.tv/movies/{0}/ratings";
-        public const string GETWatchedHistoryMovies = "https://api-v2launch.trakt.tv/users/{0}/history/movies?extended=full&limit=5000";
 
         // Show requests
         public const string GETCollectionEpisodes = "https://api-v2launch.trakt.tv/sync/collection/shows";
-        public const string GETWatchedEpisodes = "https://api-v2launch.trakt.tv/sync/watched/shows";
         public const string GETRatedEpisodes = "https://api-v2launch.trakt.tv/sync/ratings/episodes";
         public const string GETRatedShows = "https://api-v2launch.trakt.tv/sync/ratings/shows";
         public const string GETRatedSeasons = "https://api-v2launch.trakt.tv/sync/ratings/seasons";

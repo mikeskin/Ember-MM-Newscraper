@@ -1,8 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
 using System.Runtime.Serialization;
+using Trakttv.TraktAPI.Model.Movies;
+using Trakttv.TraktAPI.Model.TVShows;
 
 namespace Trakttv.TraktAPI.Model
 {
@@ -47,16 +46,16 @@ namespace Trakttv.TraktAPI.Model
         public class NotFoundObjects
         {
             [DataMember(Name = "movies")]
-            public List<TraktMovie> Movies { get; set; }
+            public List<Movie> Movies { get; set; }
 
             [DataMember(Name = "shows")]
-            public List<TraktShow> Shows { get; set; }
+            public List<TVShow> Shows { get; set; }
 
             [DataMember(Name = "episodes")]
-            public List<TraktEpisode> Episodes { get; set; }
+            public List<TVEpisode> Episodes { get; set; }
 
             [DataMember(Name = "seasons")]
-            public List<TraktSeason> Seasons { get; set; }
+            public List<TVSeason> Seasons { get; set; }
 
             [DataMember(Name = "people")]
             public List<TraktPerson> People { get; set; }

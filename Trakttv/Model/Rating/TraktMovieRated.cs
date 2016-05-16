@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Runtime.Serialization;
+﻿using System.Runtime.Serialization;
+using Trakttv.TraktAPI.Model.Movies;
 
 namespace Trakttv.TraktAPI.Model
 {
@@ -16,6 +13,6 @@ namespace Trakttv.TraktAPI.Model
         public string RatedAt { get; set; }
 
         [DataMember(Name = "movie")]
-        public TraktMovie Movie { get; set; }
+        public Movie Movie { get; set; }
     }
 }

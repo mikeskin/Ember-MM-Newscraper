@@ -1,4 +1,5 @@
 ﻿using System.Runtime.Serialization;
+using Trakttv.TraktAPI.Model.TVShows;
 
 namespace Trakttv.TraktAPI.Model
 {
@@ -12,6 +13,6 @@ namespace Trakttv.TraktAPI.Model
         public string RatedAt { get; set; }
 
         [DataMember(Name = "show")]
-        public TraktShow Show { get; set; }
+        public TVShow Show { get; set; }
     }
 }

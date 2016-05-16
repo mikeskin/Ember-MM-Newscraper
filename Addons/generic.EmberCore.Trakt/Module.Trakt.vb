@@ -130,7 +130,8 @@ Public Class Trakt_Generic
                     _TraktAPI.SetWatchedState_TVEpisode(_dbelement)
                 End If
             Case Enums.ModuleEventType.CommandLine
-                _TraktAPI.SyncToEmber_All()
+                '_TraktAPI.SyncToEmber_All()
+                _TraktAPI.Test()
             Case Enums.ModuleEventType.ScraperMulti_Movie
                 If _MySettings.SyncPlaycountMultiMovies AndAlso _dbelement IsNot Nothing Then
                     _TraktAPI.SetWatchedState_Movie(_dbelement)

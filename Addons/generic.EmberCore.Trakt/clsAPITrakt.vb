@@ -88,11 +88,11 @@ Public Class clsAPITrakt
         Return TraktSettings.Token
     End Function
 
-    Public Function GetProcess_TVShow(ByVal strTraktID As String) As TraktAPI.Model.TraktShowProgress
+    Public Function GetProcess_TVShow(ByVal strTraktID As String) As TraktAPI.Model.TVShows.TVShowProgress
         If String.IsNullOrEmpty(strTraktID) Then Return Nothing
 
         If CheckConnection() Then
-            Dim tProgressTVShow As TraktAPI.Model.TraktShowProgress = TrakttvAPI.GetProgressShow(strTraktID)
+            Dim tProgressTVShow As TraktAPI.Model.TVShows.TVShowProgress = TrakttvAPI.GetProgressShow(strTraktID)
             Return tProgressTVShow
         Else
             Return Nothing
@@ -117,44 +117,43 @@ Public Class clsAPITrakt
         End If
     End Function
 
-    Public Function GetWatched_Movies() As IEnumerable(Of TraktAPI.Model.TraktMovieWatched)
+    Public Function GetWatched_Movies() As IEnumerable(Of TraktAPI.Model.Histories.WatchedMoviesResponse)
         If CheckConnection() Then
-            Dim lWatchedMovies As IEnumerable(Of TraktAPI.Model.TraktMovieWatched) = TrakttvAPI.GetWatchedMovies
+            Dim lWatchedMovies As IEnumerable(Of TraktAPI.Model.Histories.WatchedMoviesResponse) = TrakttvAPI.GetWatchedMovies
             Return lWatchedMovies
         Else
             Return Nothing
         End If
     End Function
 
-    Public Function GetWatched_TVEpisodes() As IEnumerable(Of TraktAPI.Model.TraktEpisodeWatched)
+    Public Function GetWatched_TVShows() As IEnumerable(Of TraktAPI.Model.Histories.WatchedTVShowsResponse)
         If CheckConnection() Then
-            Dim lWatchedTVEpisodes As IEnumerable(Of TraktAPI.Model.TraktEpisodeWatched) = TrakttvAPI.GetWatchedEpisodes
-            Return lWatchedTVEpisodes
+            Dim lWatchedTVShows As IEnumerable(Of TraktAPI.Model.Histories.WatchedTVShowsResponse) = TrakttvAPI.GetWatchedTVShows
+            Return lWatchedTVShows
         Else
             Return Nothing
         End If
     End Function
 
-    Public Function GetWatchedProcess_TVShows() As List(Of TraktAPI.Model.TraktShowWatchedProgress)
-        Dim WatchedTVShows = GetWatched_TVEpisodes()
+    Public Function GetWatchedProcess_TVShows() As List(Of TraktAPI.Model.TVShows.WatchedTVShowProgress)
+        Dim WatchedTVShows = GetWatched_TVShows()
         Return GetWatchedProgress_TVShows(WatchedTVShows)
     End Function
 
-    Public Function GetWatchedProgress_TVShows(ByVal WatchedTVEpisodes As IEnumerable(Of TraktAPI.Model.TraktEpisodeWatched)) As List(Of TraktAPI.Model.TraktShowWatchedProgress)
-        If WatchedTVEpisodes Is Nothing Then Return Nothing
+    Public Function GetWatchedProgress_TVShows(ByVal WatchedTVShows As IEnumerable(Of TraktAPI.Model.Histories.WatchedTVShowsResponse)) As List(Of TraktAPI.Model.TVShows.WatchedTVShowProgress)
+        If WatchedTVShows Is Nothing Then Return Nothing
 
-        Dim lWatchedProgressTVShows As New List(Of TraktAPI.Model.TraktShowWatchedProgress)
+        Dim lWatchedProgressTVShows As New List(Of TraktAPI.Model.TVShows.WatchedTVShowProgress)
 
-        For Each tWatchedTVShow In WatchedTVEpisodes
-            Dim nWatchedProgressTVShow As New TraktAPI.Model.TraktShowWatchedProgress
-            nWatchedProgressTVShow.LastWatchedEpisode = Functions.ConvertToProperDateTime(tWatchedTVShow.WatchedAt)
+        For Each tWatchedTVShow In WatchedTVShows
+            Dim nWatchedProgressTVShow As New TraktAPI.Model.TVShows.WatchedTVShowProgress
+            nWatchedProgressTVShow.LastWatchedEpisode = Functions.ConvertToProperDateTime(tWatchedTVShow.LastWatchedAt)
             nWatchedProgressTVShow.EpisodePlaycount = tWatchedTVShow.Plays
-            nWatchedProgressTVShow.ShowID = tWatchedTVShow.Show.Ids.Trakt.ToString
-            nWatchedProgressTVShow.ShowTitle = tWatchedTVShow.Show.Title
+            nWatchedProgressTVShow.Show = tWatchedTVShow.Show
 
             'get progress
             If _SpecialSettings.GetShowProgress Then
-                Dim nProgressTVShow As TraktAPI.Model.TraktShowProgress = GetProcess_TVShow(nWatchedProgressTVShow.ShowID)
+                Dim nProgressTVShow As TraktAPI.Model.TVShows.TVShowProgress = GetProcess_TVShow(nWatchedProgressTVShow.Show.Ids.Trakt.ToString)
                 If nProgressTVShow IsNot Nothing Then
                     nWatchedProgressTVShow.EpisodesAired = nProgressTVShow.Aired
                     nWatchedProgressTVShow.EpisodesWatched = nProgressTVShow.Completed
@@ -173,7 +172,7 @@ Public Class clsAPITrakt
         Return lWatchedProgressTVShows
     End Function
 
-    Public Function GetWatchedRated_Movies() As List(Of TraktAPI.Model.TraktMovieWatchedRated)
+    Public Function GetWatchedRated_Movies() As List(Of TraktAPI.Model.Movies.TraktMovieWatchedRated)
         Dim WatchedMovies = GetWatched_Movies()
         Dim RatedMovies = GetRated_Movies()
         Return GetWatchedRated_Movies(WatchedMovies, RatedMovies)
@@ -182,7 +181,7 @@ Public Class clsAPITrakt
     Public Function RemoveFromCollection_Movie(ByVal tDBElement As Database.DBElement) As Boolean
         If tDBElement Is Nothing OrElse Not tDBElement.ContentType = Enums.ContentType.Movie Then Return False
 
-        Dim tmpMovie As New TraktAPI.Model.TraktMovie With {.Ids = New TraktAPI.Model.TraktMovieBase}
+        Dim tmpMovie As New TraktAPI.Model.Movies.Movie With {.Ids = New TraktAPI.Model.Movies.MovieIds}
         tmpMovie.Ids.Imdb = tDBElement.Movie.ID
         tmpMovie.Ids.Tmdb = If(tDBElement.Movie.TMDBIDSpecified, CInt(tDBElement.Movie.TMDBID), Nothing)
         tmpMovie.Title = tDBElement.Movie.Title
@@ -202,13 +201,13 @@ Public Class clsAPITrakt
         End If
     End Function
 
-    Public Function GetWatchedRated_Movies(ByVal WatchedMovies As IEnumerable(Of TraktAPI.Model.TraktMovieWatched), ByVal RatedMovies As IEnumerable(Of TraktAPI.Model.TraktMovieRated)) As List(Of TraktAPI.Model.TraktMovieWatchedRated)
+    Public Function GetWatchedRated_Movies(ByVal WatchedMovies As IEnumerable(Of TraktAPI.Model.Histories.WatchedMoviesResponse), ByVal RatedMovies As IEnumerable(Of TraktAPI.Model.TraktMovieRated)) As List(Of TraktAPI.Model.Movies.TraktMovieWatchedRated)
         If WatchedMovies Is Nothing Then Return Nothing
 
-        Dim lWatchedRatedMovies As New List(Of TraktAPI.Model.TraktMovieWatchedRated)
+        Dim lWatchedRatedMovies As New List(Of TraktAPI.Model.Movies.TraktMovieWatchedRated)
 
         For Each tWatchedMovie In WatchedMovies
-            Dim nWatchedRatedMovie As New TraktAPI.Model.TraktMovieWatchedRated
+            Dim nWatchedRatedMovie As New TraktAPI.Model.Movies.TraktMovieWatchedRated
             nWatchedRatedMovie.LastWatchedAt = Functions.ConvertToProperDateTime(tWatchedMovie.LastWatchedAt)
             nWatchedRatedMovie.Movie = tWatchedMovie.Movie
             nWatchedRatedMovie.Plays = tWatchedMovie.Plays
@@ -227,7 +226,7 @@ Public Class clsAPITrakt
         Return lWatchedRatedMovies
     End Function
 
-    Public Sub SaveWatchedStateToEmber_Movies(ByVal mywatchedmovies As IEnumerable(Of TraktAPI.Model.TraktMovieWatched), Optional ByVal sfunction As ShowProgress = Nothing)
+    Public Sub SaveWatchedStateToEmber_Movies(ByVal mywatchedmovies As IEnumerable(Of TraktAPI.Model.Histories.WatchedMoviesResponse), Optional ByVal sfunction As ShowProgress = Nothing)
         Using SQLtransaction As SQLite.SQLiteTransaction = Master.DB.MyVideosDBConn.BeginTransaction()
             Dim i As Integer = 0
             'filter watched movies at trakt.tv to movies with an Unique ID only
@@ -266,7 +265,7 @@ Public Class clsAPITrakt
         End Using
     End Sub
 
-    Public Sub SaveWatchedStateToEmber_TVEpisodes(ByVal myWatchedEpisodes As IEnumerable(Of TraktAPI.Model.TraktEpisodeWatched), Optional ByVal sfunction As ShowProgress = Nothing)
+    Public Sub SaveWatchedStateToEmber_TVEpisodes(ByVal myWatchedEpisodes As IEnumerable(Of TraktAPI.Model.Histories.WatchedTVShowsResponse), Optional ByVal sfunction As ShowProgress = Nothing)
         Using SQLtransaction As SQLite.SQLiteTransaction = Master.DB.MyVideosDBConn.BeginTransaction()
             Dim i As Integer = 0
             'filter watched tv shows at trakt.tv to tv shows with an Unique ID only
@@ -278,7 +277,7 @@ Public Class clsAPITrakt
                         Using SQLCommand As SQLite.SQLiteCommand = Master.DB.MyVideosDBConn.CreateCommand()
                             Dim DateTimeLastPlayedUnix As Double = -1
                             Try
-                                Dim DateTimeLastPlayed As Date = Date.ParseExact(Functions.ConvertToProperDateTime(watchedTVEpisode.WatchedAt), "yyyy-MM-dd HH:mm:ss", Globalization.CultureInfo.InvariantCulture)
+                                Dim DateTimeLastPlayed As Date = Date.ParseExact(Functions.ConvertToProperDateTime(watchedTVEpisode.LastWatchedAt), "yyyy-MM-dd HH:mm:ss", Globalization.CultureInfo.InvariantCulture)
                                 DateTimeLastPlayedUnix = Functions.ConvertToUnixTimestamp(DateTimeLastPlayed)
                             Catch ex As Exception
                                 DateTimeLastPlayedUnix = -1
@@ -301,7 +300,7 @@ Public Class clsAPITrakt
                                 While SQLreader.Read
                                     Dim tmpTVEpisode As Database.DBElement = Master.DB.Load_TVEpisode(Convert.ToInt64(SQLreader("idEpisode")), True)
                                     tmpTVEpisode.TVEpisode.Playcount = watchedTVEpisode.Plays
-                                    tmpTVEpisode.TVEpisode.LastPlayed = Functions.ConvertToProperDateTime(watchedTVEpisode.WatchedAt)
+                                    tmpTVEpisode.TVEpisode.LastPlayed = Functions.ConvertToProperDateTime(watchedTVEpisode.LastWatchedAt)
                                     Master.DB.Save_TVEpisode(tmpTVEpisode, True, True, False, False, True)
                                 End While
                             End Using
@@ -325,7 +324,7 @@ Public Class clsAPITrakt
             Dim intTMDBID As Integer = -1
             Integer.TryParse(tDBElement.Movie.TMDBID, intTMDBID)
 
-            Dim lWatchedMovies As IEnumerable(Of TraktAPI.Model.TraktMovieWatched) = GetWatched_Movies()
+            Dim lWatchedMovies As IEnumerable(Of TraktAPI.Model.Histories.WatchedMoviesResponse) = GetWatched_Movies()
             If lWatchedMovies IsNot Nothing AndAlso lWatchedMovies.Count > 0 Then
                 Dim tMovie = lWatchedMovies.FirstOrDefault(Function(f) (f.Movie.Ids.Imdb IsNot Nothing AndAlso f.Movie.Ids.Imdb = strIMDBID) OrElse
                                                   (f.Movie.Ids.Tmdb IsNot Nothing AndAlso CInt(f.Movie.Ids.Tmdb) = intTMDBID))
@@ -350,7 +349,7 @@ Public Class clsAPITrakt
             Integer.TryParse(tDBElement.TVShow.TMDB, intTMDBID)
             Integer.TryParse(tDBElement.TVShow.TVDB, intTVDBID)
 
-            Dim lWatchedTVEpisodes As IEnumerable(Of TraktAPI.Model.TraktEpisodeWatched) = GetWatched_TVEpisodes()
+            Dim lWatchedTVEpisodes As IEnumerable(Of TraktAPI.Model.Histories.WatchedTVShowsResponse) = GetWatched_TVShows()
             If lWatchedTVEpisodes IsNot Nothing AndAlso lWatchedTVEpisodes.Count > 0 Then
                 Dim tTVShow = lWatchedTVEpisodes.FirstOrDefault(Function(f) (f.Show.Ids.Tvdb IsNot Nothing AndAlso CInt(f.Show.Ids.Tvdb) = intTVDBID) OrElse
                                                                    (f.Show.Ids.Imdb IsNot Nothing AndAlso f.Show.Ids.Imdb = strIMDBID) OrElse
@@ -363,7 +362,7 @@ Public Class clsAPITrakt
 
                             Dim tTVEpisode = tTVShow.Seasons.FirstOrDefault(Function(f) f.Number = intSeason).Episodes.FirstOrDefault(Function(f) f.Number = intEpisode)
                             If tTVEpisode IsNot Nothing Then
-                                tDBElement.TVEpisode.LastPlayed = Functions.ConvertToProperDateTime(tTVEpisode.WatchedAt)
+                                tDBElement.TVEpisode.LastPlayed = Functions.ConvertToProperDateTime(tTVEpisode.LastWatchedAt)
                                 tDBElement.TVEpisode.Playcount = tTVEpisode.Plays
                                 Return True
                             End If
@@ -374,7 +373,7 @@ Public Class clsAPITrakt
 
                                 Dim tTVEpisode = tTVShow.Seasons.FirstOrDefault(Function(f) f.Number = intSeason).Episodes.FirstOrDefault(Function(f) f.Number = intEpisode)
                                 If tTVEpisode IsNot Nothing Then
-                                    tEpisode.TVEpisode.LastPlayed = Functions.ConvertToProperDateTime(tTVEpisode.WatchedAt)
+                                    tEpisode.TVEpisode.LastPlayed = Functions.ConvertToProperDateTime(tTVEpisode.LastWatchedAt)
                                     tEpisode.TVEpisode.Playcount = tTVEpisode.Plays
                                 End If
                             Next
@@ -400,10 +399,15 @@ Public Class clsAPITrakt
     End Sub
 
     Public Sub SyncToEmber_TVEpisodes(Optional ByVal sfunction As ShowProgress = Nothing)
-        Dim WatchedTVEpisodes = GetWatched_TVEpisodes()
+        Dim WatchedTVEpisodes = GetWatched_TVShows()
         If WatchedTVEpisodes IsNot Nothing Then
             SaveWatchedStateToEmber_TVEpisodes(WatchedTVEpisodes, sfunction)
         End If
+    End Sub
+
+    Public Sub Test(Optional ByVal sfunction As ShowProgress = Nothing)
+        Dim test = TrakttvAPI.Test
+        Dim bla As String = String.Empty
     End Sub
 
 #End Region 'Methods

@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Runtime.Serialization;
+﻿using System.Runtime.Serialization;
+using Trakttv.TraktAPI.Model.General;
 
 namespace Trakttv.TraktAPI.Model
 {
@@ -10,6 +7,6 @@ namespace Trakttv.TraktAPI.Model
     public class TraktUserImages
     {
         [DataMember(Name = "avatar")]
-        public TraktImage Avatar { get; set; }
+        public Image Avatar { get; set; }
     }
 }

@@ -1,8 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Runtime.Serialization;
+﻿using System.Runtime.Serialization;
+using Trakttv.TraktAPI.Model.Movies;
+using Trakttv.TraktAPI.Model.TVShows;
 
 namespace Trakttv.TraktAPI.Model
 {
@@ -16,16 +14,16 @@ namespace Trakttv.TraktAPI.Model
         public string Type { get; set; }
 
         [DataMember(Name = "movie")]
-        public TraktMovieSummary Movie { get; set; }
+        public MovieSummary Movie { get; set; }
 
         [DataMember(Name = "show")]
-        public TraktShowSummary Show { get; set; }
+        public TVShowSummary Show { get; set; }
 
         [DataMember(Name = "season")]
-        public TraktSeasonSummary Season { get; set; }
+        public TVSeasonSummary Season { get; set; }
 
         [DataMember(Name = "episode")]
-        public TraktEpisodeSummary Episode { get; set; }
+        public TVEpisodeSummary Episode { get; set; }
 
         [DataMember(Name = "person")]
         public TraktPersonSummary Person { get; set; }
