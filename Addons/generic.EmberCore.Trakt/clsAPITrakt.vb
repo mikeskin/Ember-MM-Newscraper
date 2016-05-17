@@ -406,7 +406,9 @@ Public Class clsAPITrakt
     End Sub
 
     Public Sub Test(Optional ByVal sfunction As ShowProgress = Nothing)
-        Dim test = TrakttvAPI.Test
+        Dim container As New TraktAPI.Model.Collection.CollectionMovieContainer
+        container.Metadata.Stereo3D = True
+        Dim Test = TrakttvAPI.Test
         Dim bla As String = String.Empty
     End Sub
 

@@ -105,10 +105,15 @@
     <Compile Include="Exceptions\InvalidApiKeyException.cs" />
     <Compile Include="Exceptions\TraktException.cs" />
     <Compile Include="JSONExtensions.cs" />
+    <Compile Include="Model\Collection\CollectionAdd.cs" />
+    <Compile Include="Model\Collection\CollectionMovieContainer.cs" />
+    <Compile Include="Model\Collection\CollectionMoviesResponseExtended.cs" />
+    <Compile Include="Model\Collection\CollectionMoviesResponse.cs" />
     <Compile Include="Model\Comments\TraktComment.cs" />
     <Compile Include="Model\Comments\TraktCommentBase.cs" />
     <Compile Include="Model\Comments\TraktCommentItem.cs" />
     <Compile Include="Model\Comments\TraktCommentMovie.cs" />
+    <Compile Include="Model\General\Metadata.cs" />
     <Compile Include="Model\Histories\HistoryBase.cs" />
     <Compile Include="Model\Histories\HistoryResponseExtended.cs" />
     <Compile Include="Model\Histories\HistoryResponse.cs" />
@@ -192,7 +197,6 @@
     <Content Include="Readme.txt" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Model\Collection\" />
     <Folder Include="Model\User\" />
   </ItemGroup>
   <ItemGroup>
