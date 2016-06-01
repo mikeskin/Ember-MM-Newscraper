@@ -41,24 +41,25 @@ Namespace FileUtils
 
 #Region "Methods"
 
-        Public Shared Function DoCleanUp(Optional ByVal sfunction As ReportProgress = Nothing) As Boolean
+        Public Shared Sub DoCleanUp(ByVal tContentType As Enums.ContentType, Optional ByVal sfunction As ReportProgress = Nothing)
             Using SQLtransaction As SQLite.SQLiteTransaction = Master.DB.MyVideosDBConn.BeginTransaction()
-                Using SQLCommand As SQLite.SQLiteCommand = Master.DB.MyVideosDBConn.CreateCommand()
-                    SQLCommand.CommandText = String.Format("SELECT idMovie FROM movie ORDER BY Title ASC;")
-                    Using SQLReader As SQLite.SQLiteDataReader = SQLCommand.ExecuteReader()
-                        While SQLReader.Read()
-                            Dim tmpMovie As Database.DBElement = Master.DB.Load_Movie(Convert.ToInt32(SQLReader("idMovie")))
-                            Dim fScanner As New Scanner
-                            fScanner.GetFolderContents_Movie(tmpMovie, True)
-                            Master.DB.Save_Movie(tmpMovie, True, True, True, True)
-                        End While
-                    End Using
-                End Using
+                Select Case tContentType
+                    Case Enums.ContentType.Movie
+                        Using SQLCommand As SQLite.SQLiteCommand = Master.DB.MyVideosDBConn.CreateCommand()
+                            SQLCommand.CommandText = String.Format("SELECT idMovie FROM movie ORDER BY Title ASC;")
+                            Using SQLReader As SQLite.SQLiteDataReader = SQLCommand.ExecuteReader()
+                                While SQLReader.Read()
+                                    Dim tmpMovie As Database.DBElement = Master.DB.Load_Movie(Convert.ToInt32(SQLReader("idMovie")))
+                                    Dim fScanner As New Scanner
+                                    fScanner.GetFolderContents_Movie(tmpMovie, True)
+                                    Master.DB.Save_Movie(tmpMovie, True, True, True, True)
+                                End While
+                            End Using
+                        End Using
+                End Select
                 SQLtransaction.Commit()
             End Using
-
-            Return True
-        End Function
+        End Sub
 
 #End Region 'Methods
 

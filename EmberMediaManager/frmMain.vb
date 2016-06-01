@@ -601,8 +601,7 @@ Public Class frmMain
     Public Sub LoadMedia(ByVal Scan As Structures.ScanOrClean, Optional ByVal SourceID As Long = -1, Optional ByVal Folder As String = "")
         Try
             SetStatus(Master.eLang.GetString(116, "Performing Preliminary Tasks (Gathering Data)..."))
-            tspbLoading.ProgressBar.Style = ProgressBarStyle.Marquee
-            tspbLoading.Visible = True
+            tspbSubTask.ProgressBar.Style = ProgressBarStyle.Marquee
 
             Application.DoEvents()
 
@@ -1412,7 +1411,6 @@ Public Class frmMain
 
     Private Sub bwCleanDB_RunWorkerCompleted(ByVal sender As Object, ByVal e As System.ComponentModel.RunWorkerCompletedEventArgs) Handles bwCleanDB.RunWorkerCompleted
         SetStatus(String.Empty)
-        tspbLoading.Visible = False
 
         FillList(True, True, True)
     End Sub
@@ -1858,8 +1856,6 @@ Public Class frmMain
         ElseIf Res.Cancelled Then
             'Reload last partially scraped Movie from disk to get clean informations in DB
             Reload_Movie(Res.DBElement.ID, False, True)
-            tslLoading.Visible = False
-            tspbLoading.Visible = False
             btnCancel.Visible = False
             lblCanceling.Visible = False
             prbCanceling.Visible = False
@@ -1872,8 +1868,6 @@ Public Class frmMain
             Else
                 ClearInfo()
             End If
-            tslLoading.Visible = False
-            tspbLoading.Visible = False
             btnCancel.Visible = False
             lblCanceling.Visible = False
             prbCanceling.Visible = False
@@ -2065,9 +2059,9 @@ Public Class frmMain
         ElseIf e.ProgressPercentage = -2 Then
             RefreshRow_Movie(CLng(e.UserState))
         ElseIf e.ProgressPercentage = -3 Then
-            tslLoading.Text = e.UserState.ToString
+            tslblSubTask.Text = e.UserState.ToString
         Else
-            tspbLoading.Value += e.ProgressPercentage
+            tspbSubTask.Value += e.ProgressPercentage
             SetStatus(e.UserState.ToString)
         End If
     End Sub
@@ -2083,8 +2077,6 @@ Public Class frmMain
         ElseIf Res.Cancelled Then
             'Reload last partially scraped MovieSet from disk to get clean informations in DB
             Reload_MovieSet(Res.DBElement.ID)
-            tslLoading.Visible = False
-            tspbLoading.Visible = False
             btnCancel.Visible = False
             lblCanceling.Visible = False
             prbCanceling.Visible = False
@@ -2096,8 +2088,6 @@ Public Class frmMain
             Else
                 ClearInfo()
             End If
-            tslLoading.Visible = False
-            tspbLoading.Visible = False
             btnCancel.Visible = False
             lblCanceling.Visible = False
             prbCanceling.Visible = False
@@ -2286,9 +2276,9 @@ Public Class frmMain
         ElseIf e.ProgressPercentage = -2 Then
             RefreshRow_MovieSet(CLng(e.UserState))
         ElseIf e.ProgressPercentage = -3 Then
-            tslLoading.Text = e.UserState.ToString
+            tslblSubTask.Text = e.UserState.ToString
         Else
-            tspbLoading.Value += e.ProgressPercentage
+            tspbSubTask.Value += e.ProgressPercentage
             SetStatus(e.UserState.ToString)
         End If
     End Sub
@@ -2304,8 +2294,6 @@ Public Class frmMain
         ElseIf Res.Cancelled Then
             'Reload last partially scraped TVShow from disk to get clean informations in DB
             Reload_TVShow(Res.DBElement.ID, False, True, True)
-            tslLoading.Visible = False
-            tspbLoading.Visible = False
             btnCancel.Visible = False
             lblCanceling.Visible = False
             prbCanceling.Visible = False
@@ -2318,8 +2306,6 @@ Public Class frmMain
             Else
                 ClearInfo()
             End If
-            tslLoading.Visible = False
-            tspbLoading.Visible = False
             btnCancel.Visible = False
             lblCanceling.Visible = False
             prbCanceling.Visible = False
@@ -2442,9 +2428,9 @@ Public Class frmMain
         ElseIf e.ProgressPercentage = -2 Then
             RefreshRow_TVShow(CLng(e.UserState))
         ElseIf e.ProgressPercentage = -3 Then
-            tslLoading.Text = e.UserState.ToString
+            tslblSubTask.Text = e.UserState.ToString
         Else
-            tspbLoading.Value += e.ProgressPercentage
+            tspbSubTask.Value += e.ProgressPercentage
             SetStatus(e.UserState.ToString)
         End If
     End Sub
@@ -2460,8 +2446,6 @@ Public Class frmMain
         ElseIf Res.Cancelled Then
             'Reload last partially scraped Episode from disk to get clean informations in DB
             Reload_TVEpisode(Res.DBElement.ID, False, True)
-            tslLoading.Visible = False
-            tspbLoading.Visible = False
             btnCancel.Visible = False
             lblCanceling.Visible = False
             prbCanceling.Visible = False
@@ -2474,8 +2458,6 @@ Public Class frmMain
             Else
                 ClearInfo()
             End If
-            tslLoading.Visible = False
-            tspbLoading.Visible = False
             btnCancel.Visible = False
             lblCanceling.Visible = False
             prbCanceling.Visible = False
@@ -2588,9 +2570,9 @@ Public Class frmMain
         ElseIf e.ProgressPercentage = -2 Then
             RefreshRow_TVEpisode(CLng(e.UserState))
         ElseIf e.ProgressPercentage = -3 Then
-            tslLoading.Text = e.UserState.ToString
+            tslblSubTask.Text = e.UserState.ToString
         Else
-            tspbLoading.Value += e.ProgressPercentage
+            tspbSubTask.Value += e.ProgressPercentage
             SetStatus(e.UserState.ToString)
         End If
     End Sub
@@ -2606,8 +2588,6 @@ Public Class frmMain
         ElseIf Res.Cancelled Then
             'Reload last partially scraped TVSeason from disk to get clean informations in DB
             Reload_TVSeason(Res.DBElement.ID, False, True, False)
-            tslLoading.Visible = False
-            tspbLoading.Visible = False
             btnCancel.Visible = False
             lblCanceling.Visible = False
             prbCanceling.Visible = False
@@ -2620,8 +2600,6 @@ Public Class frmMain
             Else
                 ClearInfo()
             End If
-            tslLoading.Visible = False
-            tspbLoading.Visible = False
             btnCancel.Visible = False
             lblCanceling.Visible = False
             prbCanceling.Visible = False
@@ -2725,9 +2703,9 @@ Public Class frmMain
         ElseIf e.ProgressPercentage = -2 Then
             RefreshRow_TVSeason(CLng(e.UserState))
         ElseIf e.ProgressPercentage = -3 Then
-            tslLoading.Text = e.UserState.ToString
+            tslblSubTask.Text = e.UserState.ToString
         Else
-            tspbLoading.Value += e.ProgressPercentage
+            tspbSubTask.Value += e.ProgressPercentage
             SetStatus(e.UserState.ToString)
         End If
     End Sub
@@ -2762,15 +2740,13 @@ Public Class frmMain
             RefreshRow_Movie(CLng(e.UserState))
         Else
             SetStatus(e.UserState.ToString)
-            tspbLoading.Value = e.ProgressPercentage
+            tspbSubTask.Value = e.ProgressPercentage
         End If
     End Sub
 
     Private Sub bwReload_Movies_RunWorkerCompleted(ByVal sender As Object, ByVal e As System.ComponentModel.RunWorkerCompletedEventArgs) Handles bwReload_Movies.RunWorkerCompleted
         Dim Res As Results = DirectCast(e.Result, Results)
-        tslLoading.Text = String.Empty
-        tspbLoading.Visible = False
-        tslLoading.Visible = False
+        tslblSubTask.Text = String.Empty
 
         If Res.doFill Then
             FillList(True, True, False)
@@ -2811,15 +2787,13 @@ Public Class frmMain
             RefreshRow_MovieSet(CLng(e.UserState))
         Else
             SetStatus(e.UserState.ToString)
-            tspbLoading.Value = e.ProgressPercentage
+            tspbSubTask.Value = e.ProgressPercentage
         End If
     End Sub
 
     Private Sub bwReload_MovieSets_RunWorkerCompleted(ByVal sender As Object, ByVal e As System.ComponentModel.RunWorkerCompletedEventArgs) Handles bwReload_MovieSets.RunWorkerCompleted
         Dim Res As Results = DirectCast(e.Result, Results)
-        tslLoading.Text = String.Empty
-        tspbLoading.Visible = False
-        tslLoading.Visible = False
+        tslblSubTask.Text = String.Empty
 
         If Res.doFill Then
             FillList(False, True, False)
@@ -2861,15 +2835,13 @@ Public Class frmMain
             RefreshRow_TVShow(CLng(e.UserState))
         Else
             SetStatus(e.UserState.ToString)
-            tspbLoading.Value = e.ProgressPercentage
+            tspbSubTask.Value = e.ProgressPercentage
         End If
     End Sub
 
     Private Sub bwReload_TVShows_RunWorkerCompleted(ByVal sender As Object, ByVal e As System.ComponentModel.RunWorkerCompletedEventArgs) Handles bwReload_TVShows.RunWorkerCompleted
         Dim Res As Results = DirectCast(e.Result, Results)
-        tslLoading.Text = String.Empty
-        tspbLoading.Visible = False
-        tslLoading.Visible = False
+        tslblSubTask.Text = String.Empty
 
         If Res.doFill Then
             FillList(False, False, True)
@@ -2900,13 +2872,11 @@ Public Class frmMain
 
     Private Sub bwRewrite_Movies_ProgressChanged(ByVal sender As Object, ByVal e As System.ComponentModel.ProgressChangedEventArgs) Handles bwRewrite_Movies.ProgressChanged
         SetStatus(e.UserState.ToString)
-        tspbLoading.Value = e.ProgressPercentage
+        tspbSubTask.Value = e.ProgressPercentage
     End Sub
 
     Private Sub bwRewrite_Movies_RunWorkerCompleted(ByVal sender As Object, ByVal e As System.ComponentModel.RunWorkerCompletedEventArgs) Handles bwRewrite_Movies.RunWorkerCompleted
-        tslLoading.Text = String.Empty
-        tslLoading.Visible = False
-        tspbLoading.Visible = False
+        tslblSubTask.Text = String.Empty
         btnCancel.Visible = False
         lblCanceling.Visible = False
         prbCanceling.Visible = False
@@ -3847,53 +3817,19 @@ Public Class frmMain
 
     Private Sub CleanDB(ByVal Clean As Structures.ScanOrClean)
         SetControlsEnabled(False, True)
-        tspbLoading.Style = ProgressBarStyle.Marquee
+        tspbSubTask.Style = ProgressBarStyle.Marquee
         EnableFilters_Movies(False)
         EnableFilters_MovieSets(False)
         EnableFilters_Shows(False)
 
         SetStatus(Master.eLang.GetString(644, "Cleaning Database..."))
-        tspbLoading.Visible = True
 
         bwCleanDB.WorkerSupportsCancellation = True
         bwCleanDB.RunWorkerAsync(Clean)
     End Sub
 
-    Private Sub CleanFiles()
-        FileUtils.CleanUp.DoCleanUp()
-        'Try
-        '    Dim sWarning As String = String.Empty
-        '    Dim sWarningFile As String = String.Empty
-        '    With Master.eSettings
-        '        If .FileSystemExpertCleaner Then
-        '            sWarning = String.Concat(Master.eLang.GetString(102, "WARNING: If you continue, all non-whitelisted file types will be deleted!"), Environment.NewLine, Environment.NewLine, Master.eLang.GetString(101, "Are you sure you want to continue?"))
-        '        Else
-        '            If .CleanDotFanartJPG Then sWarningFile += String.Concat("<movie>.fanart.jpg", Environment.NewLine)
-        '            If .CleanFanartJPG Then sWarningFile += String.Concat("fanart.jpg", Environment.NewLine)
-        '            If .CleanFolderJPG Then sWarningFile += String.Concat("folder.jpg", Environment.NewLine)
-        '            If .CleanMovieFanartJPG Then sWarningFile += String.Concat("<movie>-fanart.jpg", Environment.NewLine)
-        '            If .CleanMovieJPG Then sWarningFile += String.Concat("movie.jpg", Environment.NewLine)
-        '            If .CleanMovieNameJPG Then sWarningFile += String.Concat("<movie>.jpg", Environment.NewLine)
-        '            If .CleanMovieNFO Then sWarningFile += String.Concat("movie.nfo", Environment.NewLine)
-        '            If .CleanMovieNFOB Then sWarningFile += String.Concat("<movie>.nfo", Environment.NewLine)
-        '            If .CleanMovieTBN Then sWarningFile += String.Concat("movie.tbn", Environment.NewLine)
-        '            If .CleanMovieTBNB Then sWarningFile += String.Concat("<movie>.tbn", Environment.NewLine)
-        '            If .CleanPosterJPG Then sWarningFile += String.Concat("poster.jpg", Environment.NewLine)
-        '            If .CleanPosterTBN Then sWarningFile += String.Concat("poster.tbn", Environment.NewLine)
-        '            If .CleanExtrathumbs Then sWarningFile += String.Concat("/extrathumbs/", Environment.NewLine)
-        '            sWarning = String.Concat(Master.eLang.GetString(103, "WARNING: If you continue, all files of the following types will be permanently deleted:"), Environment.NewLine, Environment.NewLine, sWarningFile, Environment.NewLine, Master.eLang.GetString(101, "Are you sure you want to continue?"))
-        '        End If
-        '    End With
-        '    If MessageBox.Show(sWarning, Master.eLang.GetString(104, "Are you sure?"), MessageBoxButtons.YesNo, MessageBoxIcon.Warning) = DialogResult.Yes Then
-        '        NonScrape(Enums.TaskManagerType.CleanFolders)
-        '    End If
-        'Catch ex As Exception
-        '    logger.Error(ex, New StackFrame().GetMethod().Name)
-        'End Try
-    End Sub
-
     Private Sub mnuMainToolsCleanFiles_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles mnuMainToolsCleanFiles.Click, cmnuTrayToolsCleanFiles.Click
-        CleanFiles()
+        fTaskManager.AddTask(New TaskManager.TaskItem With {.ContentType = Enums.ContentType.Movie, .TaskType = Enums.TaskManagerType.CleanFiles})
     End Sub
 
     Private Sub mnuMainToolsClearCache_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles mnuMainToolsClearCache.Click, cmnuTrayToolsClearCache.Click
@@ -5294,18 +5230,16 @@ Public Class frmMain
         Dim doFill As Boolean = False
 
         If dgvTVSeasons.SelectedRows.Count > 0 Then
-            tspbLoading.Style = ProgressBarStyle.Continuous
-            tspbLoading.Value = 0
-            tspbLoading.Maximum = dgvTVSeasons.SelectedRows.Count
+            tspbSubTask.Style = ProgressBarStyle.Continuous
+            tspbSubTask.Value = 0
+            tspbSubTask.Maximum = dgvTVSeasons.SelectedRows.Count
 
-            tslLoading.Text = String.Concat(Master.eLang.GetString(563, "Reloading Season"), ":")
-            tslLoading.Visible = True
-            tspbLoading.Visible = True
+            tslblSubTask.Text = String.Concat(Master.eLang.GetString(563, "Reloading Season"), ":")
             Application.DoEvents()
 
             Using SQLtransaction As SQLite.SQLiteTransaction = Master.DB.MyVideosDBConn.BeginTransaction()
                 For Each sRow As DataGridViewRow In dgvTVSeasons.SelectedRows
-                    tspbLoading.Value += 1
+                    tspbSubTask.Value += 1
                     If Reload_TVSeason(Convert.ToInt64(sRow.Cells("idSeason").Value), True, dgvTVSeasons.SelectedRows.Count = 1, False) Then
                         doFill = True
                     Else
@@ -5315,8 +5249,6 @@ Public Class frmMain
                 SQLtransaction.Commit()
             End Using
 
-            tslLoading.Visible = False
-            tspbLoading.Visible = False
         End If
 
         dgvTVShows.Cursor = Cursors.Default
@@ -5336,18 +5268,16 @@ Public Class frmMain
         Dim doFill As Boolean = False
 
         If dgvTVSeasons.SelectedRows.Count > 0 Then
-            tspbLoading.Style = ProgressBarStyle.Continuous
-            tspbLoading.Value = 0
-            tspbLoading.Maximum = dgvTVSeasons.SelectedRows.Count
+            tspbSubTask.Style = ProgressBarStyle.Continuous
+            tspbSubTask.Value = 0
+            tspbSubTask.Maximum = dgvTVSeasons.SelectedRows.Count
 
-            tslLoading.Text = String.Concat(Master.eLang.GetString(563, "Reloading Season"), ":")
-            tslLoading.Visible = True
-            tspbLoading.Visible = True
+            tslblSubTask.Text = String.Concat(Master.eLang.GetString(563, "Reloading Season"), ":")
             Application.DoEvents()
 
             Using SQLtransaction As SQLite.SQLiteTransaction = Master.DB.MyVideosDBConn.BeginTransaction()
                 For Each sRow As DataGridViewRow In dgvTVSeasons.SelectedRows
-                    tspbLoading.Value += 1
+                    tspbSubTask.Value += 1
                     If Reload_TVSeason(Convert.ToInt64(sRow.Cells("idSeason").Value), True, dgvTVSeasons.SelectedRows.Count = 1, False) Then
                         doFill = True
                     Else
@@ -5357,8 +5287,6 @@ Public Class frmMain
                 SQLtransaction.Commit()
             End Using
 
-            tslLoading.Visible = False
-            tspbLoading.Visible = False
         End If
 
         dgvTVShows.Cursor = Cursors.Default
@@ -5378,18 +5306,16 @@ Public Class frmMain
         Dim doFill As Boolean = False
 
         If dgvTVShows.SelectedRows.Count > 1 Then
-            tspbLoading.Style = ProgressBarStyle.Continuous
-            tspbLoading.Value = 0
-            tspbLoading.Maximum = dgvTVShows.SelectedRows.Count
+            tspbSubTask.Style = ProgressBarStyle.Continuous
+            tspbSubTask.Value = 0
+            tspbSubTask.Maximum = dgvTVShows.SelectedRows.Count
 
-            tslLoading.Text = String.Concat(Master.eLang.GetString(562, "Reloading Show"), ":")
-            tslLoading.Visible = True
-            tspbLoading.Visible = True
+            tslblSubTask.Text = String.Concat(Master.eLang.GetString(562, "Reloading Show"), ":")
             Application.DoEvents()
 
             Using SQLtransaction As SQLite.SQLiteTransaction = Master.DB.MyVideosDBConn.BeginTransaction()
                 For Each sRow As DataGridViewRow In dgvTVShows.SelectedRows
-                    tspbLoading.Value += 1
+                    tspbSubTask.Value += 1
                     If Reload_TVShow(Convert.ToInt64(sRow.Cells("idShow").Value), True, dgvTVShows.SelectedRows.Count = 1, False) Then
                         doFill = True
                     Else
@@ -5399,8 +5325,6 @@ Public Class frmMain
                 SQLtransaction.Commit()
             End Using
 
-            tslLoading.Visible = False
-            tspbLoading.Visible = False
         ElseIf dgvTVShows.SelectedRows.Count = 1 Then
             If Reload_TVShow(Convert.ToInt64(dgvTVShows.SelectedRows(0).Cells("idShow").Value), False, True, False) Then
                 doFill = True
@@ -5426,18 +5350,16 @@ Public Class frmMain
         Dim doFill As Boolean = False
 
         If dgvTVShows.SelectedRows.Count > 1 Then
-            tspbLoading.Style = ProgressBarStyle.Continuous
-            tspbLoading.Value = 0
-            tspbLoading.Maximum = dgvTVShows.SelectedRows.Count
+            tspbSubTask.Style = ProgressBarStyle.Continuous
+            tspbSubTask.Value = 0
+            tspbSubTask.Maximum = dgvTVShows.SelectedRows.Count
 
-            tslLoading.Text = String.Concat(Master.eLang.GetString(562, "Reloading Show"), ":")
-            tslLoading.Visible = True
-            tspbLoading.Visible = True
+            tslblSubTask.Text = String.Concat(Master.eLang.GetString(562, "Reloading Show"), ":")
             Application.DoEvents()
 
             Using SQLtransaction As SQLite.SQLiteTransaction = Master.DB.MyVideosDBConn.BeginTransaction()
                 For Each sRow As DataGridViewRow In dgvTVShows.SelectedRows
-                    tspbLoading.Value += 1
+                    tspbSubTask.Value += 1
                     If Reload_TVShow(Convert.ToInt64(sRow.Cells("idShow").Value), True, dgvTVShows.SelectedRows.Count = 1, True) Then
                         doFill = True
                     Else
@@ -5447,8 +5369,6 @@ Public Class frmMain
                 SQLtransaction.Commit()
             End Using
 
-            tslLoading.Visible = False
-            tspbLoading.Visible = False
         ElseIf dgvTVShows.SelectedRows.Count = 1 Then
             If Reload_TVShow(Convert.ToInt64(dgvTVShows.SelectedRows(0).Cells("idShow").Value), False, True, True) Then
                 doFill = True
@@ -8262,7 +8182,7 @@ Public Class frmMain
                     Case DialogResult.OK
                         DBMovie = dEditMovie.Result
                         ModulesManager.Instance.RunGeneric(EventType, Nothing, Nothing, False, DBMovie)
-                        tslLoading.Text = String.Concat(Master.eLang.GetString(399, "Downloading and Saving Contents into Database"), ":")
+                        tslblSubTask.Text = String.Concat(Master.eLang.GetString(399, "Downloading and Saving Contents into Database"), ":")
                         Master.DB.Save_Movie(DBMovie, False, True, True, False)
                         RefreshRow_Movie(DBMovie.ID)
                     Case DialogResult.Retry
@@ -8293,7 +8213,7 @@ Public Class frmMain
                 Case DialogResult.OK
                     DBMovieSet = dEditMovieSet.Result
                     ModulesManager.Instance.RunGeneric(Enums.ModuleEventType.AfterEdit_MovieSet, Nothing, Nothing, False, DBMovieSet)
-                    tslLoading.Text = String.Concat(Master.eLang.GetString(399, "Downloading and Saving Contents into Database"), ":")
+                    tslblSubTask.Text = String.Concat(Master.eLang.GetString(399, "Downloading and Saving Contents into Database"), ":")
                     Master.DB.Save_MovieSet(DBMovieSet, False, True, False)
                     RefreshRow_MovieSet(DBMovieSet.ID)
                 Case DialogResult.Retry
@@ -8324,7 +8244,7 @@ Public Class frmMain
                     Case DialogResult.OK
                         DBTVEpisode = dEditTVEpisode.Result
                         ModulesManager.Instance.RunGeneric(EventType, Nothing, Nothing, False, DBTVEpisode)
-                        tslLoading.Text = String.Concat(Master.eLang.GetString(399, "Downloading and Saving Contents into Database"), ":")
+                        tslblSubTask.Text = String.Concat(Master.eLang.GetString(399, "Downloading and Saving Contents into Database"), ":")
                         Master.DB.Save_TVEpisode(DBTVEpisode, False, True, True, True, True)
                         RefreshRow_TVEpisode(DBTVEpisode.ID)
                     Case Else
@@ -8346,7 +8266,7 @@ Public Class frmMain
                     Case DialogResult.OK
                         DBTVSeason = dEditTVSeason.Result
                         ModulesManager.Instance.RunGeneric(EventType, Nothing, Nothing, False, DBTVSeason)
-                        tslLoading.Text = String.Concat(Master.eLang.GetString(399, "Downloading and Saving Contents into Database"), ":")
+                        tslblSubTask.Text = String.Concat(Master.eLang.GetString(399, "Downloading and Saving Contents into Database"), ":")
                         Master.DB.Save_TVSeason(DBTVSeason, False, True, True)
                         RefreshRow_TVSeason(DBTVSeason.ID)
                     Case Else
@@ -8368,7 +8288,7 @@ Public Class frmMain
                     Case DialogResult.OK
                         DBTVShow = dEditTVShow.Result
                         ModulesManager.Instance.RunGeneric(EventType, Nothing, Nothing, False, DBTVShow)
-                        tslLoading.Text = String.Concat(Master.eLang.GetString(399, "Downloading and Saving Contents into Database"), ":")
+                        tslblSubTask.Text = String.Concat(Master.eLang.GetString(399, "Downloading and Saving Contents into Database"), ":")
                         Master.DB.Save_TVShow(DBTVShow, False, True, True, True)
                         RefreshRow_TVShow(DBTVShow.ID)
                     Case DialogResult.Retry
@@ -9118,9 +9038,7 @@ Public Class frmMain
             mnuMainEdit.Enabled = True
             cmnuTrayUpdate.Enabled = True
             mnuMainHelp.Enabled = True
-            tslLoading.Visible = False
-            tspbLoading.Visible = False
-            tspbLoading.Value = 0
+            tspbSubTask.Value = 0
             tcMain.Enabled = True
             DoTitleCheck()
             EnableFilters_Movies(True)
@@ -10270,7 +10188,7 @@ Public Class frmMain
         AddHandler fScanner.ScannerUpdated, AddressOf ScannerUpdated
         AddHandler fScanner.ScanningCompleted, AddressOf ScanningCompleted
         AddHandler fTaskManager.ProgressUpdate, AddressOf TaskManagerProgressUpdate
-        'AddHandler fTaskManager.TaskManagerDone, AddressOf ScanningCompleted
+        AddHandler fTaskManager.TaskManagerDone, AddressOf TaskManagerDone
         AddHandler ModulesManager.Instance.GenericEvent, AddressOf GenericRunCallBack
 
         Functions.DGVDoubleBuffer(dgvMovies)
@@ -10633,8 +10551,33 @@ Public Class frmMain
         End Select
     End Sub
 
+    Private Sub TaskManagerDone()
+        tslblMainTask.Text = "No Pending Tasks"
+        tslblSubTask.Text = "No Pending Sub-Tasks"
+        tspbMainTask.Maximum = 100
+        tspbMainTask.Minimum = 0
+        tspbMainTask.Style = ProgressBarStyle.Blocks
+        tspbMainTask.Value = 0
+        tspbSubTask.Maximum = 100
+        tspbSubTask.Minimum = 0
+        tspbSubTask.Style = ProgressBarStyle.Blocks
+        tspbSubTask.Value = 0
+    End Sub
+
     Private Sub TaskManagerProgressUpdate(ByVal eProgressValue As TaskManager.ProgressValue)
         Select Case eProgressValue.EventType
+
+            Case Enums.TaskManagerEventType.MainTaskUpdate
+                If eProgressValue.MainTaskMessage IsNot Nothing Then tslblMainTask.Text = eProgressValue.MainTaskMessage
+                If eProgressValue.MainTaskProgressbar.Maximum > 0 Then tspbMainTask.Maximum = eProgressValue.MainTaskProgressbar.Maximum
+                If eProgressValue.MainTaskProgressbar.Value > 0 Then tspbMainTask.Value = eProgressValue.MainTaskProgressbar.Value
+                tspbMainTask.Style = eProgressValue.MainTaskProgressbar.Style
+
+            Case Enums.TaskManagerEventType.SubTaskUpdate
+                If eProgressValue.SubTaskMessage IsNot Nothing Then tslblSubTask.Text = eProgressValue.SubTaskMessage
+                If eProgressValue.SubTaskProgressbar.Maximum > 0 Then tspbSubTask.Maximum = eProgressValue.SubTaskProgressbar.Maximum
+                If eProgressValue.SubTaskProgressbar.Value > 0 Then tspbSubTask.Value = eProgressValue.SubTaskProgressbar.Value
+                tspbSubTask.Style = eProgressValue.SubTaskProgressbar.Style
 
             Case Enums.TaskManagerEventType.RefreshRow
                 Select Case eProgressValue.ContentType
@@ -10649,8 +10592,7 @@ Public Class frmMain
                 End Select
 
             Case Enums.TaskManagerEventType.SimpleMessage
-                SetStatus(eProgressValue.Message)
-                'tspbLoading.Value = e.ProgressPercentage
+                SetStatus(eProgressValue.SubTaskMessage)
 
             Case Else
                 logger.Warn("Callback for <{0}> with no handler.", eProgressValue.EventType)
@@ -11986,15 +11928,13 @@ Public Class frmMain
 
     Private Sub InfoDownloaded_Movie(ByRef DBMovie As Database.DBElement)
         If Not String.IsNullOrEmpty(DBMovie.Movie.Title) Then
-            tslLoading.Text = Master.eLang.GetString(576, "Verifying Movie Details:")
+            tslblSubTask.Text = Master.eLang.GetString(576, "Verifying Movie Details:")
             Application.DoEvents()
 
             Edit_Movie(DBMovie, Enums.ModuleEventType.ScraperSingle_Movie)
         End If
 
         pnlCancel.Visible = False
-        tslLoading.Visible = False
-        tspbLoading.Visible = False
         SetStatus(String.Empty)
         SetControlsEnabled(True)
         EnableFilters_Movies(True)
@@ -12006,7 +11946,7 @@ Public Class frmMain
     ''' <remarks></remarks>
     Private Sub InfoDownloadedPercent_Movie(ByVal iPercent As Integer)
         If ReportDownloadPercent = True Then
-            tspbLoading.Value = iPercent
+            tspbSubTask.Value = iPercent
             Refresh()
         End If
     End Sub
@@ -12091,56 +12031,56 @@ Public Class frmMain
         If Not ScrapeList.Count = 0 Then
             SetControlsEnabled(False)
 
-            tspbLoading.Value = 0
+            tspbSubTask.Value = 0
             If ScrapeList.Count > 1 Then
-                tspbLoading.Style = ProgressBarStyle.Continuous
-                tspbLoading.Maximum = ScrapeList.Count
+                tspbSubTask.Style = ProgressBarStyle.Continuous
+                tspbSubTask.Maximum = ScrapeList.Count
             Else
-                tspbLoading.Maximum = 100
-                tspbLoading.Style = ProgressBarStyle.Marquee
+                tspbSubTask.Maximum = 100
+                tspbSubTask.Style = ProgressBarStyle.Marquee
             End If
 
             Select Case sType
                 Case Enums.ScrapeType.AllAsk
-                    tslLoading.Text = Master.eLang.GetString(127, "Scraping Media (All Movies - Ask):")
+                    tslblSubTask.Text = Master.eLang.GetString(127, "Scraping Media (All Movies - Ask):")
                 Case Enums.ScrapeType.AllAuto
-                    tslLoading.Text = Master.eLang.GetString(128, "Scraping Media (All Movies - Auto):")
+                    tslblSubTask.Text = Master.eLang.GetString(128, "Scraping Media (All Movies - Auto):")
                 Case Enums.ScrapeType.AllSkip
-                    tslLoading.Text = Master.eLang.GetString(853, "Scraping Media (All Movies - Skip):")
+                    tslblSubTask.Text = Master.eLang.GetString(853, "Scraping Media (All Movies - Skip):")
                 Case Enums.ScrapeType.MissingAuto
-                    tslLoading.Text = Master.eLang.GetString(132, "Scraping Media (Movies Missing Items - Auto):")
+                    tslblSubTask.Text = Master.eLang.GetString(132, "Scraping Media (Movies Missing Items - Auto):")
                 Case Enums.ScrapeType.MissingAsk
-                    tslLoading.Text = Master.eLang.GetString(133, "Scraping Media (Movies Missing Items - Ask):")
+                    tslblSubTask.Text = Master.eLang.GetString(133, "Scraping Media (Movies Missing Items - Ask):")
                 Case Enums.ScrapeType.MissingSkip
-                    tslLoading.Text = Master.eLang.GetString(1042, "Scraping Media (Movies Missing Items - Skip):")
+                    tslblSubTask.Text = Master.eLang.GetString(1042, "Scraping Media (Movies Missing Items - Skip):")
                 Case Enums.ScrapeType.NewAsk
-                    tslLoading.Text = Master.eLang.GetString(134, "Scraping Media (New Movies - Ask):")
+                    tslblSubTask.Text = Master.eLang.GetString(134, "Scraping Media (New Movies - Ask):")
                 Case Enums.ScrapeType.NewAuto
-                    tslLoading.Text = Master.eLang.GetString(135, "Scraping Media (New Movies - Auto):")
+                    tslblSubTask.Text = Master.eLang.GetString(135, "Scraping Media (New Movies - Auto):")
                 Case Enums.ScrapeType.NewSkip
-                    tslLoading.Text = Master.eLang.GetString(1043, "Scraping Media (New Movies - Skip):")
+                    tslblSubTask.Text = Master.eLang.GetString(1043, "Scraping Media (New Movies - Skip):")
                 Case Enums.ScrapeType.MarkedAsk
-                    tslLoading.Text = Master.eLang.GetString(136, "Scraping Media (Marked Movies - Ask):")
+                    tslblSubTask.Text = Master.eLang.GetString(136, "Scraping Media (Marked Movies - Ask):")
                 Case Enums.ScrapeType.MarkedAuto
-                    tslLoading.Text = Master.eLang.GetString(137, "Scraping Media (Marked Movies - Auto):")
+                    tslblSubTask.Text = Master.eLang.GetString(137, "Scraping Media (Marked Movies - Auto):")
                 Case Enums.ScrapeType.MarkedSkip
-                    tslLoading.Text = Master.eLang.GetString(1044, "Scraping Media (Marked Movies - Skip):")
+                    tslblSubTask.Text = Master.eLang.GetString(1044, "Scraping Media (Marked Movies - Skip):")
                 Case Enums.ScrapeType.FilterAsk
-                    tslLoading.Text = Master.eLang.GetString(622, "Scraping Media (Current Filter - Ask):")
+                    tslblSubTask.Text = Master.eLang.GetString(622, "Scraping Media (Current Filter - Ask):")
                 Case Enums.ScrapeType.FilterAuto
-                    tslLoading.Text = Master.eLang.GetString(623, "Scraping Media (Current Filter - Auto):")
+                    tslblSubTask.Text = Master.eLang.GetString(623, "Scraping Media (Current Filter - Auto):")
                 Case Enums.ScrapeType.FilterAuto
-                    tslLoading.Text = Master.eLang.GetString(1045, "Scraping Media (Current Filter - Skip):")
+                    tslblSubTask.Text = Master.eLang.GetString(1045, "Scraping Media (Current Filter - Skip):")
                 Case Enums.ScrapeType.SelectedAsk
-                    tslLoading.Text = Master.eLang.GetString(1128, "Scraping Media (Selected Movies - Ask):")
+                    tslblSubTask.Text = Master.eLang.GetString(1128, "Scraping Media (Selected Movies - Ask):")
                 Case Enums.ScrapeType.SelectedAuto
-                    tslLoading.Text = Master.eLang.GetString(1129, "Scraping Media (Selected Movies - Auto):")
+                    tslblSubTask.Text = Master.eLang.GetString(1129, "Scraping Media (Selected Movies - Auto):")
                 Case Enums.ScrapeType.SelectedSkip
-                    tslLoading.Text = Master.eLang.GetString(1130, "Scraping Media (Selected Movies - Skip):")
+                    tslblSubTask.Text = Master.eLang.GetString(1130, "Scraping Media (Selected Movies - Skip):")
                 Case Enums.ScrapeType.SingleField
-                    tslLoading.Text = Master.eLang.GetString(1127, "Scraping Media (Selected Movies - Single Field):")
+                    tslblSubTask.Text = Master.eLang.GetString(1127, "Scraping Media (Selected Movies - Single Field):")
                 Case Enums.ScrapeType.SingleScrape, Enums.ScrapeType.SingleAuto
-                    tslLoading.Text = Master.eLang.GetString(139, "Scraping:")
+                    tslblSubTask.Text = Master.eLang.GetString(139, "Scraping:")
             End Select
 
             If Not sType = Enums.ScrapeType.SingleScrape Then
@@ -12152,8 +12092,6 @@ Public Class frmMain
                 pnlCancel.Visible = True
             End If
 
-            tslLoading.Visible = True
-            tspbLoading.Visible = True
             Application.DoEvents()
             bwMovieScraper.WorkerSupportsCancellation = True
             bwMovieScraper.WorkerReportsProgress = True
@@ -12163,15 +12101,13 @@ Public Class frmMain
 
     Private Sub InfoDownloaded_MovieSet(ByRef DBMovieSet As Database.DBElement)
         If Not String.IsNullOrEmpty(DBMovieSet.ListTitle) Then
-            tslLoading.Text = Master.eLang.GetString(1205, "Verifying MovieSet Details:")
+            tslblSubTask.Text = Master.eLang.GetString(1205, "Verifying MovieSet Details:")
             Application.DoEvents()
 
             Edit_MovieSet(DBMovieSet)
         End If
 
         pnlCancel.Visible = False
-        tslLoading.Visible = False
-        tspbLoading.Visible = False
         SetStatus(String.Empty)
         SetControlsEnabled(True)
         EnableFilters_MovieSets(True)
@@ -12183,7 +12119,7 @@ Public Class frmMain
     ''' <remarks></remarks>
     Private Sub InfoDownloadedPercent_MovieSet(ByVal iPercent As Integer)
         If ReportDownloadPercent = True Then
-            tspbLoading.Value = iPercent
+            tspbSubTask.Value = iPercent
             Refresh()
         End If
     End Sub
@@ -12252,56 +12188,56 @@ Public Class frmMain
         If Not ScrapeList.Count = 0 Then
             SetControlsEnabled(False)
 
-            tspbLoading.Value = 0
+            tspbSubTask.Value = 0
             If ScrapeList.Count > 1 Then
-                tspbLoading.Style = ProgressBarStyle.Continuous
-                tspbLoading.Maximum = ScrapeList.Count
+                tspbSubTask.Style = ProgressBarStyle.Continuous
+                tspbSubTask.Maximum = ScrapeList.Count
             Else
-                tspbLoading.Maximum = 100
-                tspbLoading.Style = ProgressBarStyle.Marquee
+                tspbSubTask.Maximum = 100
+                tspbSubTask.Style = ProgressBarStyle.Marquee
             End If
 
             Select Case sType
                 Case Enums.ScrapeType.AllAsk
-                    tslLoading.Text = Master.eLang.GetString(1215, "Scraping Media (All MovieSets - Ask):")
+                    tslblSubTask.Text = Master.eLang.GetString(1215, "Scraping Media (All MovieSets - Ask):")
                 Case Enums.ScrapeType.AllAuto
-                    tslLoading.Text = Master.eLang.GetString(1216, "Scraping Media (All MovieSets - Auto):")
+                    tslblSubTask.Text = Master.eLang.GetString(1216, "Scraping Media (All MovieSets - Auto):")
                 Case Enums.ScrapeType.AllSkip
-                    tslLoading.Text = Master.eLang.GetString(1217, "Scraping Media (All MovieSets - Skip):")
+                    tslblSubTask.Text = Master.eLang.GetString(1217, "Scraping Media (All MovieSets - Skip):")
                 Case Enums.ScrapeType.MissingAuto
-                    tslLoading.Text = Master.eLang.GetString(1218, "Scraping Media (MovieSets Missing Items - Auto):")
+                    tslblSubTask.Text = Master.eLang.GetString(1218, "Scraping Media (MovieSets Missing Items - Auto):")
                 Case Enums.ScrapeType.MissingAsk
-                    tslLoading.Text = Master.eLang.GetString(1219, "Scraping Media (MovieSets Missing Items - Ask):")
+                    tslblSubTask.Text = Master.eLang.GetString(1219, "Scraping Media (MovieSets Missing Items - Ask):")
                 Case Enums.ScrapeType.MissingSkip
-                    tslLoading.Text = Master.eLang.GetString(1220, "Scraping Media (MovieSets Missing Items - Skip):")
+                    tslblSubTask.Text = Master.eLang.GetString(1220, "Scraping Media (MovieSets Missing Items - Skip):")
                 Case Enums.ScrapeType.NewAsk
-                    tslLoading.Text = Master.eLang.GetString(1221, "Scraping Media (New MovieSets - Ask):")
+                    tslblSubTask.Text = Master.eLang.GetString(1221, "Scraping Media (New MovieSets - Ask):")
                 Case Enums.ScrapeType.NewAuto
-                    tslLoading.Text = Master.eLang.GetString(1222, "Scraping Media (New MovieSets - Auto):")
+                    tslblSubTask.Text = Master.eLang.GetString(1222, "Scraping Media (New MovieSets - Auto):")
                 Case Enums.ScrapeType.NewSkip
-                    tslLoading.Text = Master.eLang.GetString(1223, "Scraping Media (New MovieSets - Skip):")
+                    tslblSubTask.Text = Master.eLang.GetString(1223, "Scraping Media (New MovieSets - Skip):")
                 Case Enums.ScrapeType.MarkedAsk
-                    tslLoading.Text = Master.eLang.GetString(1224, "Scraping Media (Marked MovieSets - Ask):")
+                    tslblSubTask.Text = Master.eLang.GetString(1224, "Scraping Media (Marked MovieSets - Ask):")
                 Case Enums.ScrapeType.MarkedAuto
-                    tslLoading.Text = Master.eLang.GetString(1225, "Scraping Media (Marked MovieSets - Auto):")
+                    tslblSubTask.Text = Master.eLang.GetString(1225, "Scraping Media (Marked MovieSets - Auto):")
                 Case Enums.ScrapeType.MarkedSkip
-                    tslLoading.Text = Master.eLang.GetString(1226, "Scraping Media (Marked MovieSets - Skip):")
+                    tslblSubTask.Text = Master.eLang.GetString(1226, "Scraping Media (Marked MovieSets - Skip):")
                 Case Enums.ScrapeType.FilterAsk
-                    tslLoading.Text = Master.eLang.GetString(622, "Scraping Media (Current Filter - Ask):")
+                    tslblSubTask.Text = Master.eLang.GetString(622, "Scraping Media (Current Filter - Ask):")
                 Case Enums.ScrapeType.FilterAuto
-                    tslLoading.Text = Master.eLang.GetString(623, "Scraping Media (Current Filter - Auto):")
+                    tslblSubTask.Text = Master.eLang.GetString(623, "Scraping Media (Current Filter - Auto):")
                 Case Enums.ScrapeType.FilterAuto
-                    tslLoading.Text = Master.eLang.GetString(1045, "Scraping Media (Current Filter - Skip):")
+                    tslblSubTask.Text = Master.eLang.GetString(1045, "Scraping Media (Current Filter - Skip):")
                 Case Enums.ScrapeType.AllAsk
-                    tslLoading.Text = Master.eLang.GetString(1358, "Scraping Media (Selected MovieSets - Ask):")
+                    tslblSubTask.Text = Master.eLang.GetString(1358, "Scraping Media (Selected MovieSets - Ask):")
                 Case Enums.ScrapeType.AllAuto
-                    tslLoading.Text = Master.eLang.GetString(1359, "Scraping Media (Selected MovieSets - Auto):")
+                    tslblSubTask.Text = Master.eLang.GetString(1359, "Scraping Media (Selected MovieSets - Auto):")
                 Case Enums.ScrapeType.AllSkip
-                    tslLoading.Text = Master.eLang.GetString(1360, "Scraping Media (Selected MovieSets - Skip):")
+                    tslblSubTask.Text = Master.eLang.GetString(1360, "Scraping Media (Selected MovieSets - Skip):")
                 Case Enums.ScrapeType.SingleField
-                    tslLoading.Text = Master.eLang.GetString(1357, "Scraping Media (Selected MovieSets - Single Field):")
+                    tslblSubTask.Text = Master.eLang.GetString(1357, "Scraping Media (Selected MovieSets - Single Field):")
                 Case Enums.ScrapeType.SingleScrape, Enums.ScrapeType.SingleAuto
-                    tslLoading.Text = Master.eLang.GetString(139, "Scraping:")
+                    tslblSubTask.Text = Master.eLang.GetString(139, "Scraping:")
             End Select
 
 
@@ -12314,8 +12250,6 @@ Public Class frmMain
                 pnlCancel.Visible = True
             End If
 
-            tslLoading.Visible = True
-            tspbLoading.Visible = True
             Application.DoEvents()
             bwMovieSetScraper.WorkerSupportsCancellation = True
             bwMovieSetScraper.WorkerReportsProgress = True
@@ -12325,15 +12259,13 @@ Public Class frmMain
 
     Private Sub InfoDownloaded_TV(ByRef DBTVShow As Database.DBElement)
         If DBTVShow.TVShow.TitleSpecified Then
-            tslLoading.Text = Master.eLang.GetString(761, "Verifying TV Show Details:")
+            tslblSubTask.Text = Master.eLang.GetString(761, "Verifying TV Show Details:")
             Application.DoEvents()
 
             Edit_TVShow(DBTVShow, Enums.ModuleEventType.ScraperSingle_TVShow)
         End If
 
         pnlCancel.Visible = False
-        tslLoading.Visible = False
-        tspbLoading.Visible = False
         SetStatus(String.Empty)
         SetControlsEnabled(True)
         EnableFilters_Shows(True)
@@ -12345,7 +12277,7 @@ Public Class frmMain
     ''' <remarks></remarks>
     Private Sub InfoDownloadedPercent_TV(ByVal iPercent As Integer)
         If ReportDownloadPercent = True Then
-            tspbLoading.Value = iPercent
+            tspbSubTask.Value = iPercent
             Refresh()
         End If
     End Sub
@@ -12449,56 +12381,56 @@ Public Class frmMain
         If Not ScrapeList.Count = 0 Then
             SetControlsEnabled(False)
 
-            tspbLoading.Value = 0
+            tspbSubTask.Value = 0
             If ScrapeList.Count > 1 Then
-                tspbLoading.Style = ProgressBarStyle.Continuous
-                tspbLoading.Maximum = ScrapeList.Count
+                tspbSubTask.Style = ProgressBarStyle.Continuous
+                tspbSubTask.Maximum = ScrapeList.Count
             Else
-                tspbLoading.Maximum = 100
-                tspbLoading.Style = ProgressBarStyle.Marquee
+                tspbSubTask.Maximum = 100
+                tspbSubTask.Style = ProgressBarStyle.Marquee
             End If
 
             Select Case sType
                 Case Enums.ScrapeType.AllAsk
-                    tslLoading.Text = Master.eLang.GetString(127, "Scraping Media (All Movies - Ask):")
+                    tslblSubTask.Text = Master.eLang.GetString(127, "Scraping Media (All Movies - Ask):")
                 Case Enums.ScrapeType.AllAuto
-                    tslLoading.Text = Master.eLang.GetString(128, "Scraping Media (All Movies - Auto):")
+                    tslblSubTask.Text = Master.eLang.GetString(128, "Scraping Media (All Movies - Auto):")
                 Case Enums.ScrapeType.AllSkip
-                    tslLoading.Text = Master.eLang.GetString(853, "Scraping Media (All Movies - Skip):")
+                    tslblSubTask.Text = Master.eLang.GetString(853, "Scraping Media (All Movies - Skip):")
                 Case Enums.ScrapeType.MissingAuto
-                    tslLoading.Text = Master.eLang.GetString(132, "Scraping Media (Movies Missing Items - Auto):")
+                    tslblSubTask.Text = Master.eLang.GetString(132, "Scraping Media (Movies Missing Items - Auto):")
                 Case Enums.ScrapeType.MissingAsk
-                    tslLoading.Text = Master.eLang.GetString(133, "Scraping Media (Movies Missing Items - Ask):")
+                    tslblSubTask.Text = Master.eLang.GetString(133, "Scraping Media (Movies Missing Items - Ask):")
                 Case Enums.ScrapeType.MissingSkip
-                    tslLoading.Text = Master.eLang.GetString(1042, "Scraping Media (Movies Missing Items - Skip):")
+                    tslblSubTask.Text = Master.eLang.GetString(1042, "Scraping Media (Movies Missing Items - Skip):")
                 Case Enums.ScrapeType.NewAsk
-                    tslLoading.Text = Master.eLang.GetString(134, "Scraping Media (New Movies - Ask):")
+                    tslblSubTask.Text = Master.eLang.GetString(134, "Scraping Media (New Movies - Ask):")
                 Case Enums.ScrapeType.NewAuto
-                    tslLoading.Text = Master.eLang.GetString(135, "Scraping Media (New Movies - Auto):")
+                    tslblSubTask.Text = Master.eLang.GetString(135, "Scraping Media (New Movies - Auto):")
                 Case Enums.ScrapeType.NewSkip
-                    tslLoading.Text = Master.eLang.GetString(1043, "Scraping Media (New Movies - Skip):")
+                    tslblSubTask.Text = Master.eLang.GetString(1043, "Scraping Media (New Movies - Skip):")
                 Case Enums.ScrapeType.MarkedAsk
-                    tslLoading.Text = Master.eLang.GetString(136, "Scraping Media (Marked Movies - Ask):")
+                    tslblSubTask.Text = Master.eLang.GetString(136, "Scraping Media (Marked Movies - Ask):")
                 Case Enums.ScrapeType.MarkedAuto
-                    tslLoading.Text = Master.eLang.GetString(137, "Scraping Media (Marked Movies - Auto):")
+                    tslblSubTask.Text = Master.eLang.GetString(137, "Scraping Media (Marked Movies - Auto):")
                 Case Enums.ScrapeType.MarkedSkip
-                    tslLoading.Text = Master.eLang.GetString(1044, "Scraping Media (Marked Movies - Skip):")
+                    tslblSubTask.Text = Master.eLang.GetString(1044, "Scraping Media (Marked Movies - Skip):")
                 Case Enums.ScrapeType.FilterAsk
-                    tslLoading.Text = Master.eLang.GetString(622, "Scraping Media (Current Filter - Ask):")
+                    tslblSubTask.Text = Master.eLang.GetString(622, "Scraping Media (Current Filter - Ask):")
                 Case Enums.ScrapeType.FilterAuto
-                    tslLoading.Text = Master.eLang.GetString(623, "Scraping Media (Current Filter - Auto):")
+                    tslblSubTask.Text = Master.eLang.GetString(623, "Scraping Media (Current Filter - Auto):")
                 Case Enums.ScrapeType.FilterAuto
-                    tslLoading.Text = Master.eLang.GetString(1045, "Scraping Media (Current Filter - Skip):")
+                    tslblSubTask.Text = Master.eLang.GetString(1045, "Scraping Media (Current Filter - Skip):")
                 Case Enums.ScrapeType.SelectedAsk
-                    tslLoading.Text = Master.eLang.GetString(1128, "Scraping Media (Selected Movies - Ask):")
+                    tslblSubTask.Text = Master.eLang.GetString(1128, "Scraping Media (Selected Movies - Ask):")
                 Case Enums.ScrapeType.SelectedAuto
-                    tslLoading.Text = Master.eLang.GetString(1129, "Scraping Media (Selected Movies - Auto):")
+                    tslblSubTask.Text = Master.eLang.GetString(1129, "Scraping Media (Selected Movies - Auto):")
                 Case Enums.ScrapeType.SelectedSkip
-                    tslLoading.Text = Master.eLang.GetString(1130, "Scraping Media (Selected Movies - Skip):")
+                    tslblSubTask.Text = Master.eLang.GetString(1130, "Scraping Media (Selected Movies - Skip):")
                 Case Enums.ScrapeType.SingleField
-                    tslLoading.Text = Master.eLang.GetString(1127, "Scraping Media (Selected Movies - Single Field):")
+                    tslblSubTask.Text = Master.eLang.GetString(1127, "Scraping Media (Selected Movies - Single Field):")
                 Case Enums.ScrapeType.SingleScrape, Enums.ScrapeType.SingleAuto
-                    tslLoading.Text = Master.eLang.GetString(139, "Scraping:")
+                    tslblSubTask.Text = Master.eLang.GetString(139, "Scraping:")
             End Select
 
             If Not sType = Enums.ScrapeType.SingleScrape Then
@@ -12510,8 +12442,6 @@ Public Class frmMain
                 pnlCancel.Visible = True
             End If
 
-            tslLoading.Visible = True
-            tspbLoading.Visible = True
             Application.DoEvents()
             bwTVScraper.WorkerSupportsCancellation = True
             bwTVScraper.WorkerReportsProgress = True
@@ -12521,15 +12451,13 @@ Public Class frmMain
 
     Private Sub InfoDownloaded_TVEpisode(ByRef DBTVEpisode As Database.DBElement)
         If Not String.IsNullOrEmpty(DBTVEpisode.TVEpisode.Title) Then
-            tslLoading.Text = Master.eLang.GetString(762, "Verifying TV Episode Details:")
+            tslblSubTask.Text = Master.eLang.GetString(762, "Verifying TV Episode Details:")
             Application.DoEvents()
 
             Edit_TVEpisode(DBTVEpisode, Enums.ModuleEventType.ScraperSingle_TVEpisode)
         End If
 
         pnlCancel.Visible = False
-        tslLoading.Visible = False
-        tspbLoading.Visible = False
         SetStatus(String.Empty)
         SetControlsEnabled(True)
         EnableFilters_Shows(True)
@@ -12541,7 +12469,7 @@ Public Class frmMain
     ''' <remarks></remarks>
     Private Sub InfoDownloadedPercent_TVEpisode(ByVal iPercent As Integer)
         If ReportDownloadPercent = True Then
-            tspbLoading.Value = iPercent
+            tspbSubTask.Value = iPercent
             Refresh()
         End If
     End Sub
@@ -12599,56 +12527,56 @@ Public Class frmMain
         If Not ScrapeList.Count = 0 Then
             SetControlsEnabled(False)
 
-            tspbLoading.Value = 0
+            tspbSubTask.Value = 0
             If ScrapeList.Count > 1 Then
-                tspbLoading.Style = ProgressBarStyle.Continuous
-                tspbLoading.Maximum = ScrapeList.Count
+                tspbSubTask.Style = ProgressBarStyle.Continuous
+                tspbSubTask.Maximum = ScrapeList.Count
             Else
-                tspbLoading.Maximum = 100
-                tspbLoading.Style = ProgressBarStyle.Marquee
+                tspbSubTask.Maximum = 100
+                tspbSubTask.Style = ProgressBarStyle.Marquee
             End If
 
             Select Case sType
                 Case Enums.ScrapeType.AllAsk
-                    tslLoading.Text = Master.eLang.GetString(127, "Scraping Media (All Movies - Ask):")
+                    tslblSubTask.Text = Master.eLang.GetString(127, "Scraping Media (All Movies - Ask):")
                 Case Enums.ScrapeType.AllAuto
-                    tslLoading.Text = Master.eLang.GetString(128, "Scraping Media (All Movies - Auto):")
+                    tslblSubTask.Text = Master.eLang.GetString(128, "Scraping Media (All Movies - Auto):")
                 Case Enums.ScrapeType.AllSkip
-                    tslLoading.Text = Master.eLang.GetString(853, "Scraping Media (All Movies - Skip):")
+                    tslblSubTask.Text = Master.eLang.GetString(853, "Scraping Media (All Movies - Skip):")
                 Case Enums.ScrapeType.MissingAuto
-                    tslLoading.Text = Master.eLang.GetString(132, "Scraping Media (Movies Missing Items - Auto):")
+                    tslblSubTask.Text = Master.eLang.GetString(132, "Scraping Media (Movies Missing Items - Auto):")
                 Case Enums.ScrapeType.MissingAsk
-                    tslLoading.Text = Master.eLang.GetString(133, "Scraping Media (Movies Missing Items - Ask):")
+                    tslblSubTask.Text = Master.eLang.GetString(133, "Scraping Media (Movies Missing Items - Ask):")
                 Case Enums.ScrapeType.MissingSkip
-                    tslLoading.Text = Master.eLang.GetString(1042, "Scraping Media (Movies Missing Items - Skip):")
+                    tslblSubTask.Text = Master.eLang.GetString(1042, "Scraping Media (Movies Missing Items - Skip):")
                 Case Enums.ScrapeType.NewAsk
-                    tslLoading.Text = Master.eLang.GetString(134, "Scraping Media (New Movies - Ask):")
+                    tslblSubTask.Text = Master.eLang.GetString(134, "Scraping Media (New Movies - Ask):")
                 Case Enums.ScrapeType.NewAuto
-                    tslLoading.Text = Master.eLang.GetString(135, "Scraping Media (New Movies - Auto):")
+                    tslblSubTask.Text = Master.eLang.GetString(135, "Scraping Media (New Movies - Auto):")
                 Case Enums.ScrapeType.NewSkip
-                    tslLoading.Text = Master.eLang.GetString(1043, "Scraping Media (New Movies - Skip):")
+                    tslblSubTask.Text = Master.eLang.GetString(1043, "Scraping Media (New Movies - Skip):")
                 Case Enums.ScrapeType.MarkedAsk
-                    tslLoading.Text = Master.eLang.GetString(136, "Scraping Media (Marked Movies - Ask):")
+                    tslblSubTask.Text = Master.eLang.GetString(136, "Scraping Media (Marked Movies - Ask):")
                 Case Enums.ScrapeType.MarkedAuto
-                    tslLoading.Text = Master.eLang.GetString(137, "Scraping Media (Marked Movies - Auto):")
+                    tslblSubTask.Text = Master.eLang.GetString(137, "Scraping Media (Marked Movies - Auto):")
                 Case Enums.ScrapeType.MarkedSkip
-                    tslLoading.Text = Master.eLang.GetString(1044, "Scraping Media (Marked Movies - Skip):")
+                    tslblSubTask.Text = Master.eLang.GetString(1044, "Scraping Media (Marked Movies - Skip):")
                 Case Enums.ScrapeType.FilterAsk
-                    tslLoading.Text = Master.eLang.GetString(622, "Scraping Media (Current Filter - Ask):")
+                    tslblSubTask.Text = Master.eLang.GetString(622, "Scraping Media (Current Filter - Ask):")
                 Case Enums.ScrapeType.FilterAuto
-                    tslLoading.Text = Master.eLang.GetString(623, "Scraping Media (Current Filter - Auto):")
+                    tslblSubTask.Text = Master.eLang.GetString(623, "Scraping Media (Current Filter - Auto):")
                 Case Enums.ScrapeType.FilterAuto
-                    tslLoading.Text = Master.eLang.GetString(1045, "Scraping Media (Current Filter - Skip):")
+                    tslblSubTask.Text = Master.eLang.GetString(1045, "Scraping Media (Current Filter - Skip):")
                 Case Enums.ScrapeType.AllAsk
-                    tslLoading.Text = Master.eLang.GetString(1128, "Scraping Media (Selected Movies - Ask):")
+                    tslblSubTask.Text = Master.eLang.GetString(1128, "Scraping Media (Selected Movies - Ask):")
                 Case Enums.ScrapeType.AllAuto
-                    tslLoading.Text = Master.eLang.GetString(1129, "Scraping Media (Selected Movies - Auto):")
+                    tslblSubTask.Text = Master.eLang.GetString(1129, "Scraping Media (Selected Movies - Auto):")
                 Case Enums.ScrapeType.AllSkip
-                    tslLoading.Text = Master.eLang.GetString(1130, "Scraping Media (Selected Movies - Skip):")
+                    tslblSubTask.Text = Master.eLang.GetString(1130, "Scraping Media (Selected Movies - Skip):")
                 Case Enums.ScrapeType.SingleField
-                    tslLoading.Text = Master.eLang.GetString(1127, "Scraping Media (Selected Movies - Single Field):")
+                    tslblSubTask.Text = Master.eLang.GetString(1127, "Scraping Media (Selected Movies - Single Field):")
                 Case Enums.ScrapeType.SingleScrape, Enums.ScrapeType.SingleAuto
-                    tslLoading.Text = Master.eLang.GetString(139, "Scraping:")
+                    tslblSubTask.Text = Master.eLang.GetString(139, "Scraping:")
             End Select
 
             If Not sType = Enums.ScrapeType.SingleScrape Then
@@ -12660,8 +12588,6 @@ Public Class frmMain
                 pnlCancel.Visible = True
             End If
 
-            tslLoading.Visible = True
-            tspbLoading.Visible = True
             Application.DoEvents()
             bwTVEpisodeScraper.WorkerSupportsCancellation = True
             bwTVEpisodeScraper.WorkerReportsProgress = True
@@ -12671,15 +12597,13 @@ Public Class frmMain
 
     Private Sub InfoDownloaded_TVSeason(ByRef DBTVSeason As Database.DBElement)
         If Not String.IsNullOrEmpty(DBTVSeason.TVShow.Title) Then
-            tslLoading.Text = Master.eLang.GetString(80, "Verifying TV Season Details:")
+            tslblSubTask.Text = Master.eLang.GetString(80, "Verifying TV Season Details:")
             Application.DoEvents()
 
             Edit_TVSeason(DBTVSeason, Enums.ModuleEventType.ScraperSingle_TVSeason)
         End If
 
         pnlCancel.Visible = False
-        tslLoading.Visible = False
-        tspbLoading.Visible = False
         SetStatus(String.Empty)
         SetControlsEnabled(True)
         EnableFilters_Shows(True)
@@ -12691,7 +12615,7 @@ Public Class frmMain
     ''' <remarks></remarks>
     Private Sub InfoDownloadedPercent_TVSeason(ByVal iPercent As Integer)
         If ReportDownloadPercent = True Then
-            tspbLoading.Value = iPercent
+            tspbSubTask.Value = iPercent
             Refresh()
         End If
     End Sub
@@ -12758,56 +12682,56 @@ Public Class frmMain
         If Not ScrapeList.Count = 0 Then
             SetControlsEnabled(False)
 
-            tspbLoading.Value = 0
+            tspbSubTask.Value = 0
             If ScrapeList.Count > 1 Then
-                tspbLoading.Style = ProgressBarStyle.Continuous
-                tspbLoading.Maximum = ScrapeList.Count
+                tspbSubTask.Style = ProgressBarStyle.Continuous
+                tspbSubTask.Maximum = ScrapeList.Count
             Else
-                tspbLoading.Maximum = 100
-                tspbLoading.Style = ProgressBarStyle.Marquee
+                tspbSubTask.Maximum = 100
+                tspbSubTask.Style = ProgressBarStyle.Marquee
             End If
 
             Select Case sType
                 Case Enums.ScrapeType.AllAsk
-                    tslLoading.Text = Master.eLang.GetString(127, "Scraping Media (All Movies - Ask):")
+                    tslblSubTask.Text = Master.eLang.GetString(127, "Scraping Media (All Movies - Ask):")
                 Case Enums.ScrapeType.AllAuto
-                    tslLoading.Text = Master.eLang.GetString(128, "Scraping Media (All Movies - Auto):")
+                    tslblSubTask.Text = Master.eLang.GetString(128, "Scraping Media (All Movies - Auto):")
                 Case Enums.ScrapeType.AllSkip
-                    tslLoading.Text = Master.eLang.GetString(853, "Scraping Media (All Movies - Skip):")
+                    tslblSubTask.Text = Master.eLang.GetString(853, "Scraping Media (All Movies - Skip):")
                 Case Enums.ScrapeType.MissingAuto
-                    tslLoading.Text = Master.eLang.GetString(132, "Scraping Media (Movies Missing Items - Auto):")
+                    tslblSubTask.Text = Master.eLang.GetString(132, "Scraping Media (Movies Missing Items - Auto):")
                 Case Enums.ScrapeType.MissingAsk
-                    tslLoading.Text = Master.eLang.GetString(133, "Scraping Media (Movies Missing Items - Ask):")
+                    tslblSubTask.Text = Master.eLang.GetString(133, "Scraping Media (Movies Missing Items - Ask):")
                 Case Enums.ScrapeType.MissingSkip
-                    tslLoading.Text = Master.eLang.GetString(1042, "Scraping Media (Movies Missing Items - Skip):")
+                    tslblSubTask.Text = Master.eLang.GetString(1042, "Scraping Media (Movies Missing Items - Skip):")
                 Case Enums.ScrapeType.NewAsk
-                    tslLoading.Text = Master.eLang.GetString(134, "Scraping Media (New Movies - Ask):")
+                    tslblSubTask.Text = Master.eLang.GetString(134, "Scraping Media (New Movies - Ask):")
                 Case Enums.ScrapeType.NewAuto
-                    tslLoading.Text = Master.eLang.GetString(135, "Scraping Media (New Movies - Auto):")
+                    tslblSubTask.Text = Master.eLang.GetString(135, "Scraping Media (New Movies - Auto):")
                 Case Enums.ScrapeType.NewSkip
-                    tslLoading.Text = Master.eLang.GetString(1043, "Scraping Media (New Movies - Skip):")
+                    tslblSubTask.Text = Master.eLang.GetString(1043, "Scraping Media (New Movies - Skip):")
                 Case Enums.ScrapeType.MarkedAsk
-                    tslLoading.Text = Master.eLang.GetString(136, "Scraping Media (Marked Movies - Ask):")
+                    tslblSubTask.Text = Master.eLang.GetString(136, "Scraping Media (Marked Movies - Ask):")
                 Case Enums.ScrapeType.MarkedAuto
-                    tslLoading.Text = Master.eLang.GetString(137, "Scraping Media (Marked Movies - Auto):")
+                    tslblSubTask.Text = Master.eLang.GetString(137, "Scraping Media (Marked Movies - Auto):")
                 Case Enums.ScrapeType.MarkedSkip
-                    tslLoading.Text = Master.eLang.GetString(1044, "Scraping Media (Marked Movies - Skip):")
+                    tslblSubTask.Text = Master.eLang.GetString(1044, "Scraping Media (Marked Movies - Skip):")
                 Case Enums.ScrapeType.FilterAsk
-                    tslLoading.Text = Master.eLang.GetString(622, "Scraping Media (Current Filter - Ask):")
+                    tslblSubTask.Text = Master.eLang.GetString(622, "Scraping Media (Current Filter - Ask):")
                 Case Enums.ScrapeType.FilterAuto
-                    tslLoading.Text = Master.eLang.GetString(623, "Scraping Media (Current Filter - Auto):")
+                    tslblSubTask.Text = Master.eLang.GetString(623, "Scraping Media (Current Filter - Auto):")
                 Case Enums.ScrapeType.FilterAuto
-                    tslLoading.Text = Master.eLang.GetString(1045, "Scraping Media (Current Filter - Skip):")
+                    tslblSubTask.Text = Master.eLang.GetString(1045, "Scraping Media (Current Filter - Skip):")
                 Case Enums.ScrapeType.SelectedAsk
-                    tslLoading.Text = Master.eLang.GetString(1128, "Scraping Media (Selected Movies - Ask):")
+                    tslblSubTask.Text = Master.eLang.GetString(1128, "Scraping Media (Selected Movies - Ask):")
                 Case Enums.ScrapeType.SelectedAuto
-                    tslLoading.Text = Master.eLang.GetString(1129, "Scraping Media (Selected Movies - Auto):")
+                    tslblSubTask.Text = Master.eLang.GetString(1129, "Scraping Media (Selected Movies - Auto):")
                 Case Enums.ScrapeType.SelectedSkip
-                    tslLoading.Text = Master.eLang.GetString(1130, "Scraping Media (Selected Movies - Skip):")
+                    tslblSubTask.Text = Master.eLang.GetString(1130, "Scraping Media (Selected Movies - Skip):")
                 Case Enums.ScrapeType.SingleField
-                    tslLoading.Text = Master.eLang.GetString(1127, "Scraping Media (Selected Movies - Single Field):")
+                    tslblSubTask.Text = Master.eLang.GetString(1127, "Scraping Media (Selected Movies - Single Field):")
                 Case Enums.ScrapeType.SingleScrape, Enums.ScrapeType.SingleAuto
-                    tslLoading.Text = Master.eLang.GetString(139, "Scraping:")
+                    tslblSubTask.Text = Master.eLang.GetString(139, "Scraping:")
             End Select
 
             If Not sType = Enums.ScrapeType.SingleScrape Then
@@ -12819,8 +12743,8 @@ Public Class frmMain
                 pnlCancel.Visible = True
             End If
 
-            tslLoading.Visible = True
-            tspbLoading.Visible = True
+            tslblSubTask.Visible = True
+            tspbSubTask.Visible = True
             Application.DoEvents()
             bwTVSeasonScraper.WorkerSupportsCancellation = True
             bwTVSeasonScraper.WorkerReportsProgress = True
@@ -14554,16 +14478,14 @@ Public Class frmMain
         If dtMovies.Rows.Count > 0 Then
             Cursor = Cursors.WaitCursor
             SetControlsEnabled(False, True)
-            tspbLoading.Style = ProgressBarStyle.Continuous
+            tspbSubTask.Style = ProgressBarStyle.Continuous
             EnableFilters_Movies(False)
             EnableFilters_MovieSets(False)
             EnableFilters_Shows(False)
 
-            tspbLoading.Maximum = dtMovies.Rows.Count + 1
-            tspbLoading.Value = 0
-            tslLoading.Text = String.Concat(Master.eLang.GetString(110, "Refreshing Media"), ":")
-            tspbLoading.Visible = True
-            tslLoading.Visible = True
+            tspbSubTask.Maximum = dtMovies.Rows.Count + 1
+            tspbSubTask.Value = 0
+            tslblSubTask.Text = String.Concat(Master.eLang.GetString(110, "Refreshing Media"), ":")
             Application.DoEvents()
             bwReload_Movies.WorkerReportsProgress = True
             bwReload_Movies.WorkerSupportsCancellation = True
@@ -14577,16 +14499,14 @@ Public Class frmMain
         If dtMovieSets.Rows.Count > 0 Then
             Cursor = Cursors.WaitCursor
             SetControlsEnabled(False, True)
-            tspbLoading.Style = ProgressBarStyle.Continuous
+            tspbSubTask.Style = ProgressBarStyle.Continuous
             EnableFilters_Movies(False)
             EnableFilters_MovieSets(False)
             EnableFilters_Shows(False)
 
-            tspbLoading.Maximum = dtMovieSets.Rows.Count + 1
-            tspbLoading.Value = 0
-            tslLoading.Text = String.Concat(Master.eLang.GetString(110, "Refreshing Media"), ":")
-            tspbLoading.Visible = True
-            tslLoading.Visible = True
+            tspbSubTask.Maximum = dtMovieSets.Rows.Count + 1
+            tspbSubTask.Value = 0
+            tslblSubTask.Text = String.Concat(Master.eLang.GetString(110, "Refreshing Media"), ":")
             Application.DoEvents()
             bwReload_MovieSets.WorkerReportsProgress = True
             bwReload_MovieSets.WorkerSupportsCancellation = True
@@ -14600,16 +14520,14 @@ Public Class frmMain
         If dtTVShows.Rows.Count > 0 Then
             Cursor = Cursors.WaitCursor
             SetControlsEnabled(False, True)
-            tspbLoading.Style = ProgressBarStyle.Continuous
+            tspbSubTask.Style = ProgressBarStyle.Continuous
             EnableFilters_Movies(False)
             EnableFilters_MovieSets(False)
             EnableFilters_Shows(False)
 
-            tspbLoading.Maximum = dtTVShows.Rows.Count + 1
-            tspbLoading.Value = 0
-            tslLoading.Text = String.Concat(Master.eLang.GetString(110, "Refreshing Media"), ":")
-            tspbLoading.Visible = True
-            tslLoading.Visible = True
+            tspbSubTask.Maximum = dtTVShows.Rows.Count + 1
+            tspbSubTask.Value = 0
+            tslblSubTask.Text = String.Concat(Master.eLang.GetString(110, "Refreshing Media"), ":")
             Application.DoEvents()
             bwReload_TVShows.WorkerReportsProgress = True
             bwReload_TVShows.WorkerSupportsCancellation = True
@@ -14622,7 +14540,7 @@ Public Class frmMain
     Private Sub RewriteAll_Movie()
         If dtMovies.Rows.Count > 0 Then
             SetControlsEnabled(False)
-            tspbLoading.Style = ProgressBarStyle.Continuous
+            tspbSubTask.Style = ProgressBarStyle.Continuous
             EnableFilters_Movies(False)
             EnableFilters_MovieSets(False)
             EnableFilters_Shows(False)
@@ -14634,11 +14552,9 @@ Public Class frmMain
             prbCanceling.Visible = False
             pnlCancel.Visible = True
 
-            tspbLoading.Maximum = dtMovies.Rows.Count + 1
-            tspbLoading.Value = 0
-            tslLoading.Text = Master.eLang.GetString(1297, "Rewriting Media:")
-            tspbLoading.Visible = True
-            tslLoading.Visible = True
+            tspbSubTask.Maximum = dtMovies.Rows.Count + 1
+            tspbSubTask.Value = 0
+            tslblSubTask.Text = Master.eLang.GetString(1297, "Rewriting Media:")
             Application.DoEvents()
             bwRewrite_Movies.WorkerReportsProgress = True
             bwRewrite_Movies.WorkerSupportsCancellation = True
@@ -15442,8 +15358,6 @@ Public Class frmMain
         If Not Master.isCL Then
             SetStatus(String.Empty)
             FillList(False, True, True)
-            tspbLoading.Visible = False
-            tslLoading.Visible = False
             LoadingDone = True
         Else
             FillList(True, True, True)
@@ -16920,7 +16834,8 @@ Public Class frmMain
                 .rbFilterOr_Movies.Text = Master.eLang.GetString(46, "Or")
                 .rbFilterOr_MovieSets.Text = .rbFilterOr_Movies.Text
                 .rbFilterOr_Shows.Text = .rbFilterOr_Movies.Text
-                .tslLoading.Text = Master.eLang.GetString(7, "Loading Media:")
+                .tslblMainTask.Text = "No Pending Tasks"
+                .tslblSubTask.Text = "No Pending Sub-Tasks"
 
                 .cmnuEpisodeOpenFolder.Text = .cmnuMovieOpenFolder.Text
                 .cmnuMovieSetLock.Text = .cmnuMovieLock.Text

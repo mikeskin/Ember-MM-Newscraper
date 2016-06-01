@@ -891,14 +891,17 @@ Public Class Enums
     End Enum
 
     Public Enum TaskManagerEventType As Integer
-        RefreshRow = 0
-        SimpleMessage = 1
+        MainTaskUpdate = 0
+        RefreshRow = 1
+        SimpleMessage = 2
+        SubTaskUpdate = 3
     End Enum
 
     Public Enum TaskManagerType As Integer
-        CopyBackdrops = 0
-        Reload = 1
-        SetWatchedState = 2
+        CleanFiles = 0
+        CopyBackdrops = 1
+        Reload = 2
+        SetWatchedState = 3
     End Enum
 
     Public Enum TVBannerSize As Integer

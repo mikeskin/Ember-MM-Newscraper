@@ -24,11 +24,11 @@ Partial Class frmMain
     Private Sub InitializeComponent()
         Me.components = New System.ComponentModel.Container()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(frmMain))
+        Dim DataGridViewCellStyle6 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Dim DataGridViewCellStyle1 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Dim DataGridViewCellStyle2 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Dim DataGridViewCellStyle3 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Dim DataGridViewCellStyle4 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim DataGridViewCellStyle5 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Me.BottomToolStripPanel = New System.Windows.Forms.ToolStripPanel()
         Me.TopToolStripPanel = New System.Windows.Forms.ToolStripPanel()
         Me.RightToolStripPanel = New System.Windows.Forms.ToolStripPanel()
@@ -50,8 +50,10 @@ Partial Class frmMain
         Me.StatusStrip = New System.Windows.Forms.StatusStrip()
         Me.tslStatus = New System.Windows.Forms.ToolStripStatusLabel()
         Me.tsSpring = New System.Windows.Forms.ToolStripStatusLabel()
-        Me.tslLoading = New System.Windows.Forms.ToolStripStatusLabel()
-        Me.tspbLoading = New System.Windows.Forms.ToolStripProgressBar()
+        Me.tslblMainTask = New System.Windows.Forms.ToolStripStatusLabel()
+        Me.tspbMainTask = New System.Windows.Forms.ToolStripProgressBar()
+        Me.tslblSubTask = New System.Windows.Forms.ToolStripStatusLabel()
+        Me.tspbSubTask = New System.Windows.Forms.ToolStripProgressBar()
         Me.tmrAni = New System.Windows.Forms.Timer(Me.components)
         Me.mnuMain = New System.Windows.Forms.MenuStrip()
         Me.mnuMainTools = New System.Windows.Forms.ToolStripMenuItem()
@@ -182,9 +184,9 @@ Partial Class frmMain
         Me.cmnuMovieMarkAsCustom2 = New System.Windows.Forms.ToolStripMenuItem()
         Me.cmnuMovieMarkAsCustom3 = New System.Windows.Forms.ToolStripMenuItem()
         Me.cmnuMovieMarkAsCustom4 = New System.Windows.Forms.ToolStripMenuItem()
-        Me.cmnuMovieLock = New System.Windows.Forms.ToolStripMenuItem()
         Me.cmnuMovieWatched = New System.Windows.Forms.ToolStripMenuItem()
         Me.cmnuMovieUnwatched = New System.Windows.Forms.ToolStripMenuItem()
+        Me.cmnuMovieLock = New System.Windows.Forms.ToolStripMenuItem()
         Me.cmnuMovieEditSeparator = New System.Windows.Forms.ToolStripSeparator()
         Me.cmnuMovieEdit = New System.Windows.Forms.ToolStripMenuItem()
         Me.cmnuMovieEditMetaData = New System.Windows.Forms.ToolStripMenuItem()
@@ -234,6 +236,7 @@ Partial Class frmMain
         Me.mnuScrapeModifierTrailer = New System.Windows.Forms.ToolStripMenuItem()
         Me.mnuScrapeTypeAsk = New System.Windows.Forms.ToolStripMenuItem()
         Me.mnuScrapeTypeSkip = New System.Windows.Forms.ToolStripMenuItem()
+        Me.mnuScrapeSubmenuMarked = New System.Windows.Forms.ToolStripMenuItem()
         Me.cmnuMovieScrapeSingleDataField = New System.Windows.Forms.ToolStripMenuItem()
         Me.mnuScrapeOption = New System.Windows.Forms.ContextMenuStrip(Me.components)
         Me.mnuScrapeOptionActors = New System.Windows.Forms.ToolStripMenuItem()
@@ -262,6 +265,7 @@ Partial Class frmMain
         Me.mnuScrapeOptionTrailer = New System.Windows.Forms.ToolStripMenuItem()
         Me.mnuScrapeOptionWriters = New System.Windows.Forms.ToolStripMenuItem()
         Me.mnuScrapeOptionYear = New System.Windows.Forms.ToolStripMenuItem()
+        Me.cmnuSeasonScrapeSingleDataField = New System.Windows.Forms.ToolStripMenuItem()
         Me.cmnuMovieChange = New System.Windows.Forms.ToolStripMenuItem()
         Me.cmnuMovieChangeAuto = New System.Windows.Forms.ToolStripMenuItem()
         Me.cmnuMovieLanguage = New System.Windows.Forms.ToolStripMenuItem()
@@ -270,6 +274,7 @@ Partial Class frmMain
         Me.mnuLanguagesLanguage = New System.Windows.Forms.ToolStripComboBox()
         Me.mnuLanguagesSep1 = New System.Windows.Forms.ToolStripSeparator()
         Me.mnuLanguagesSet = New System.Windows.Forms.ToolStripMenuItem()
+        Me.cmnuMovieSetLanguage = New System.Windows.Forms.ToolStripMenuItem()
         Me.cmnuMovieSep3 = New System.Windows.Forms.ToolStripSeparator()
         Me.cmnuMovieBrowseIMDB = New System.Windows.Forms.ToolStripMenuItem()
         Me.cmnuMovieBrowseTMDB = New System.Windows.Forms.ToolStripMenuItem()
@@ -296,7 +301,6 @@ Partial Class frmMain
         Me.cmnuMovieSetScrape = New System.Windows.Forms.ToolStripMenuItem()
         Me.cmnuMovieSetScrapeSelected = New System.Windows.Forms.ToolStripMenuItem()
         Me.cmnuMovieSetScrapeSingleDataField = New System.Windows.Forms.ToolStripMenuItem()
-        Me.cmnuMovieSetLanguage = New System.Windows.Forms.ToolStripMenuItem()
         Me.cmnuMovieSetSep3 = New System.Windows.Forms.ToolStripSeparator()
         Me.cmnuMovieSetBrowseTMDB = New System.Windows.Forms.ToolStripMenuItem()
         Me.cmnuMovieSetRemoveSeparator = New System.Windows.Forms.ToolStripSeparator()
@@ -309,8 +313,9 @@ Partial Class frmMain
         Me.cmnuShowReload = New System.Windows.Forms.ToolStripMenuItem()
         Me.cmnuShowReloadFull = New System.Windows.Forms.ToolStripMenuItem()
         Me.cmnuShowMark = New System.Windows.Forms.ToolStripMenuItem()
-        Me.cmnuShowLock = New System.Windows.Forms.ToolStripMenuItem()
         Me.cmnuShowWatched = New System.Windows.Forms.ToolStripMenuItem()
+        Me.cmnuShowUnwatched = New System.Windows.Forms.ToolStripMenuItem()
+        Me.cmnuShowLock = New System.Windows.Forms.ToolStripMenuItem()
         Me.cmnuShowEditSeparator = New System.Windows.Forms.ToolStripSeparator()
         Me.cmnuShowEdit = New System.Windows.Forms.ToolStripMenuItem()
         Me.cmnuShowEditGenres = New System.Windows.Forms.ToolStripMenuItem()
@@ -345,14 +350,14 @@ Partial Class frmMain
         Me.cmnuSeasonReload = New System.Windows.Forms.ToolStripMenuItem()
         Me.cmnuSeasonReloadFull = New System.Windows.Forms.ToolStripMenuItem()
         Me.cmnuSeasonMark = New System.Windows.Forms.ToolStripMenuItem()
-        Me.cmnuSeasonLock = New System.Windows.Forms.ToolStripMenuItem()
         Me.cmnuSeasonWatched = New System.Windows.Forms.ToolStripMenuItem()
+        Me.cmnuSeasonUnwatched = New System.Windows.Forms.ToolStripMenuItem()
+        Me.cmnuSeasonLock = New System.Windows.Forms.ToolStripMenuItem()
         Me.cmnuSeasonEditSeparator = New System.Windows.Forms.ToolStripSeparator()
         Me.cmnuSeasonEdit = New System.Windows.Forms.ToolStripMenuItem()
         Me.cmnuSeasonScrapeSeparator = New System.Windows.Forms.ToolStripSeparator()
         Me.cmnuSeasonScrape = New System.Windows.Forms.ToolStripMenuItem()
         Me.cmnuSeasonScrapeSelected = New System.Windows.Forms.ToolStripMenuItem()
-        Me.cmnuSeasonScrapeSingleDataField = New System.Windows.Forms.ToolStripMenuItem()
         Me.cmnuSeasonSep3 = New System.Windows.Forms.ToolStripSeparator()
         Me.cmnuSeasonBrowseIMDB = New System.Windows.Forms.ToolStripMenuItem()
         Me.cmnuSeasonBrowseTMDB = New System.Windows.Forms.ToolStripMenuItem()
@@ -368,8 +373,9 @@ Partial Class frmMain
         Me.cmnuEpisodeDatabaseSeparator = New System.Windows.Forms.ToolStripSeparator()
         Me.cmnuEpisodeReload = New System.Windows.Forms.ToolStripMenuItem()
         Me.cmnuEpisodeMark = New System.Windows.Forms.ToolStripMenuItem()
-        Me.cmnuEpisodeLock = New System.Windows.Forms.ToolStripMenuItem()
         Me.cmnuEpisodeWatched = New System.Windows.Forms.ToolStripMenuItem()
+        Me.cmnuEpisodeUnwatched = New System.Windows.Forms.ToolStripMenuItem()
+        Me.cmnuEpisodeLock = New System.Windows.Forms.ToolStripMenuItem()
         Me.cmnuEpisodeEditSeparator = New System.Windows.Forms.ToolStripSeparator()
         Me.cmnuEpisodeEdit = New System.Windows.Forms.ToolStripMenuItem()
         Me.cmnuEpisodeScrapeSeparator = New System.Windows.Forms.ToolStripSeparator()
@@ -705,17 +711,16 @@ Partial Class frmMain
         Me.mnuScrapeSubmenuAll = New System.Windows.Forms.ToolStripMenuItem()
         Me.mnuScrapeSubmenuMissing = New System.Windows.Forms.ToolStripMenuItem()
         Me.mnuScrapeSubmenuNew = New System.Windows.Forms.ToolStripMenuItem()
-        Me.mnuScrapeSubmenuMarked = New System.Windows.Forms.ToolStripMenuItem()
         Me.mnuScrapeSubmenuFilter = New System.Windows.Forms.ToolStripMenuItem()
         Me.mnuScrapeSubmenuCustom = New System.Windows.Forms.ToolStripMenuItem()
-        Me.cmnuTrayScrapeTVShows = New System.Windows.Forms.ToolStripMenuItem()
+        Me.cmnuTrayScrapeMovies = New System.Windows.Forms.ToolStripMenuItem()
         Me.mnuScrapeMovieSets = New System.Windows.Forms.ToolStripSplitButton()
         Me.mnuScrapeTVShows = New System.Windows.Forms.ToolStripSplitButton()
         Me.mnuUpdate = New System.Windows.Forms.ToolStripSplitButton()
         Me.mnuUpdateMovies = New System.Windows.Forms.ToolStripMenuItem()
         Me.mnuUpdateShows = New System.Windows.Forms.ToolStripMenuItem()
-        Me.cmnuTrayScrapeMovies = New System.Windows.Forms.ToolStripMenuItem()
         Me.cmnuTrayScrapeMovieSets = New System.Windows.Forms.ToolStripMenuItem()
+        Me.cmnuTrayScrapeTVShows = New System.Windows.Forms.ToolStripMenuItem()
         Me.ilColumnIcons = New System.Windows.Forms.ImageList(Me.components)
         Me.tmrWait_Movie = New System.Windows.Forms.Timer(Me.components)
         Me.tmrLoad_Movie = New System.Windows.Forms.Timer(Me.components)
@@ -767,9 +772,6 @@ Partial Class frmMain
         Me.tmrSearchWait_Shows = New System.Windows.Forms.Timer(Me.components)
         Me.tmrSearch_Shows = New System.Windows.Forms.Timer(Me.components)
         Me.tmrRunTasks = New System.Windows.Forms.Timer(Me.components)
-        Me.cmnuShowUnwatched = New System.Windows.Forms.ToolStripMenuItem()
-        Me.cmnuSeasonUnwatched = New System.Windows.Forms.ToolStripMenuItem()
-        Me.cmnuEpisodeUnwatched = New System.Windows.Forms.ToolStripMenuItem()
         Me.StatusStrip.SuspendLayout()
         Me.mnuMain.SuspendLayout()
         CType(Me.scMain, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -1155,7 +1157,7 @@ Partial Class frmMain
         'StatusStrip
         '
         Me.StatusStrip.GripStyle = System.Windows.Forms.ToolStripGripStyle.Visible
-        Me.StatusStrip.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.tslStatus, Me.tsSpring, Me.tslLoading, Me.tspbLoading})
+        Me.StatusStrip.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.tslStatus, Me.tsSpring, Me.tslblMainTask, Me.tspbMainTask, Me.tslblSubTask, Me.tspbSubTask})
         Me.StatusStrip.Location = New System.Drawing.Point(5, 923)
         Me.StatusStrip.Name = "StatusStrip"
         Me.StatusStrip.Size = New System.Drawing.Size(1344, 22)
@@ -1165,35 +1167,47 @@ Partial Class frmMain
         'tslStatus
         '
         Me.tslStatus.Name = "tslStatus"
-        Me.tslStatus.Size = New System.Drawing.Size(0, 17)
+        Me.tslStatus.Size = New System.Drawing.Size(39, 17)
+        Me.tslStatus.Text = "Status"
         Me.tslStatus.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
         '
         'tsSpring
         '
         Me.tsSpring.Name = "tsSpring"
-        Me.tsSpring.Size = New System.Drawing.Size(1329, 17)
+        Me.tsSpring.Size = New System.Drawing.Size(652, 17)
         Me.tsSpring.Spring = True
         Me.tsSpring.Text = "  "
         '
-        'tslLoading
+        'tslblMainTask
         '
-        Me.tslLoading.AutoSize = False
-        Me.tslLoading.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.tslLoading.Name = "tslLoading"
-        Me.tslLoading.Size = New System.Drawing.Size(424, 17)
-        Me.tslLoading.Text = "Loading Media:"
-        Me.tslLoading.TextAlign = System.Drawing.ContentAlignment.MiddleRight
-        Me.tslLoading.Visible = False
+        Me.tslblMainTask.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.tslblMainTask.Name = "tslblMainTask"
+        Me.tslblMainTask.Size = New System.Drawing.Size(103, 17)
+        Me.tslblMainTask.Text = "No Pending Tasks"
+        Me.tslblMainTask.TextAlign = System.Drawing.ContentAlignment.MiddleRight
         '
-        'tspbLoading
+        'tspbMainTask
         '
-        Me.tspbLoading.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right
-        Me.tspbLoading.AutoSize = False
-        Me.tspbLoading.MarqueeAnimationSpeed = 25
-        Me.tspbLoading.Name = "tspbLoading"
-        Me.tspbLoading.Size = New System.Drawing.Size(150, 16)
-        Me.tspbLoading.Style = System.Windows.Forms.ProgressBarStyle.Continuous
-        Me.tspbLoading.Visible = False
+        Me.tspbMainTask.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right
+        Me.tspbMainTask.AutoSize = False
+        Me.tspbMainTask.Name = "tspbMainTask"
+        Me.tspbMainTask.Size = New System.Drawing.Size(100, 16)
+        '
+        'tslblSubTask
+        '
+        Me.tslblSubTask.AutoSize = False
+        Me.tslblSubTask.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.tslblSubTask.Name = "tslblSubTask"
+        Me.tslblSubTask.Size = New System.Drawing.Size(300, 17)
+        Me.tslblSubTask.Text = "No Pending Sub-Tasks"
+        Me.tslblSubTask.TextAlign = System.Drawing.ContentAlignment.MiddleRight
+        '
+        'tspbSubTask
+        '
+        Me.tspbSubTask.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right
+        Me.tspbSubTask.AutoSize = False
+        Me.tspbSubTask.Name = "tspbSubTask"
+        Me.tspbSubTask.Size = New System.Drawing.Size(100, 16)
         '
         'tmrAni
         '
@@ -2670,8 +2684,8 @@ Partial Class frmMain
         Me.dgvMovies.AllowUserToAddRows = False
         Me.dgvMovies.AllowUserToDeleteRows = False
         Me.dgvMovies.AllowUserToResizeRows = False
-        DataGridViewCellStyle1.BackColor = System.Drawing.Color.FromArgb(CType(CType(230, Byte), Integer), CType(CType(230, Byte), Integer), CType(CType(230, Byte), Integer))
-        Me.dgvMovies.AlternatingRowsDefaultCellStyle = DataGridViewCellStyle1
+        DataGridViewCellStyle6.BackColor = System.Drawing.Color.FromArgb(CType(CType(230, Byte), Integer), CType(CType(230, Byte), Integer), CType(CType(230, Byte), Integer))
+        Me.dgvMovies.AlternatingRowsDefaultCellStyle = DataGridViewCellStyle6
         Me.dgvMovies.BackgroundColor = System.Drawing.Color.White
         Me.dgvMovies.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
         Me.dgvMovies.CellBorderStyle = System.Windows.Forms.DataGridViewCellBorderStyle.SingleHorizontal
@@ -2695,7 +2709,7 @@ Partial Class frmMain
         '
         Me.cmnuMovie.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.cmnuMovieTitle, Me.cmnuMovieDatabaseSeparator, Me.cmnuMovieReload, Me.cmnuMovieMark, Me.cmnuMovieMarkAs, Me.cmnuMovieWatched, Me.cmnuMovieUnwatched, Me.cmnuMovieLock, Me.cmnuMovieEditSeparator, Me.cmnuMovieEdit, Me.cmnuMovieEditMetaData, Me.cmnuMovieEditGenres, Me.cmnuMovieEditTags, Me.cmnuMovieRescrapeSeparator, Me.cmnuMovieScrape, Me.cmnuMovieScrapeSelected, Me.cmnuMovieScrapeSingleDataField, Me.cmnuMovieChange, Me.cmnuMovieChangeAuto, Me.cmnuMovieLanguage, Me.cmnuMovieSep3, Me.cmnuMovieBrowseIMDB, Me.cmnuMovieBrowseTMDB, Me.cmnuMovieOpenFolder, Me.cmnuMovieRemoveSeparator, Me.cmnuMovieRemove})
         Me.cmnuMovie.Name = "mnuMediaList"
-        Me.cmnuMovie.Size = New System.Drawing.Size(249, 518)
+        Me.cmnuMovie.Size = New System.Drawing.Size(249, 496)
         '
         'cmnuMovieTitle
         '
@@ -2762,14 +2776,6 @@ Partial Class frmMain
         Me.cmnuMovieMarkAsCustom4.Size = New System.Drawing.Size(174, 22)
         Me.cmnuMovieMarkAsCustom4.Text = "Custom #4"
         '
-        'cmnuMovieLock
-        '
-        Me.cmnuMovieLock.Image = CType(resources.GetObject("cmnuMovieLock.Image"), System.Drawing.Image)
-        Me.cmnuMovieLock.Name = "cmnuMovieLock"
-        Me.cmnuMovieLock.ShortcutKeys = CType((System.Windows.Forms.Keys.Control Or System.Windows.Forms.Keys.L), System.Windows.Forms.Keys)
-        Me.cmnuMovieLock.Size = New System.Drawing.Size(248, 22)
-        Me.cmnuMovieLock.Text = "Lock"
-        '
         'cmnuMovieWatched
         '
         Me.cmnuMovieWatched.Image = Global.Ember_Media_Manager.My.Resources.Resources.haswatched
@@ -2786,6 +2792,14 @@ Partial Class frmMain
             Or System.Windows.Forms.Keys.W), System.Windows.Forms.Keys)
         Me.cmnuMovieUnwatched.Size = New System.Drawing.Size(248, 22)
         Me.cmnuMovieUnwatched.Text = "Mark as Unwatched"
+        '
+        'cmnuMovieLock
+        '
+        Me.cmnuMovieLock.Image = CType(resources.GetObject("cmnuMovieLock.Image"), System.Drawing.Image)
+        Me.cmnuMovieLock.Name = "cmnuMovieLock"
+        Me.cmnuMovieLock.ShortcutKeys = CType((System.Windows.Forms.Keys.Control Or System.Windows.Forms.Keys.L), System.Windows.Forms.Keys)
+        Me.cmnuMovieLock.Size = New System.Drawing.Size(248, 22)
+        Me.cmnuMovieLock.Text = "Lock"
         '
         'cmnuMovieEditSeparator
         '
@@ -3138,6 +3152,14 @@ Partial Class frmMain
         Me.mnuScrapeTypeSkip.Tag = "skip"
         Me.mnuScrapeTypeSkip.Text = "Skip (Skip If More Than One Match)"
         '
+        'mnuScrapeSubmenuMarked
+        '
+        Me.mnuScrapeSubmenuMarked.DropDown = Me.mnuScrapeType
+        Me.mnuScrapeSubmenuMarked.Name = "mnuScrapeSubmenuMarked"
+        Me.mnuScrapeSubmenuMarked.Size = New System.Drawing.Size(167, 22)
+        Me.mnuScrapeSubmenuMarked.Tag = "marked"
+        Me.mnuScrapeSubmenuMarked.Text = "Marked"
+        '
         'cmnuMovieScrapeSingleDataField
         '
         Me.cmnuMovieScrapeSingleDataField.DropDown = Me.mnuScrapeOption
@@ -3335,6 +3357,14 @@ Partial Class frmMain
         Me.mnuScrapeOptionYear.Tag = "year"
         Me.mnuScrapeOptionYear.Text = "Year"
         '
+        'cmnuSeasonScrapeSingleDataField
+        '
+        Me.cmnuSeasonScrapeSingleDataField.DropDown = Me.mnuScrapeOption
+        Me.cmnuSeasonScrapeSingleDataField.Name = "cmnuSeasonScrapeSingleDataField"
+        Me.cmnuSeasonScrapeSingleDataField.Size = New System.Drawing.Size(248, 22)
+        Me.cmnuSeasonScrapeSingleDataField.Tag = "tvseason"
+        Me.cmnuSeasonScrapeSingleDataField.Text = "(Re)Scrape Single Data Field"
+        '
         'cmnuMovieChange
         '
         Me.cmnuMovieChange.Image = CType(resources.GetObject("cmnuMovieChange.Image"), System.Drawing.Image)
@@ -3389,6 +3419,14 @@ Partial Class frmMain
         Me.mnuLanguagesSet.Name = "mnuLanguagesSet"
         Me.mnuLanguagesSet.Size = New System.Drawing.Size(198, 22)
         Me.mnuLanguagesSet.Text = "Set"
+        '
+        'cmnuMovieSetLanguage
+        '
+        Me.cmnuMovieSetLanguage.DropDown = Me.mnuLanguages
+        Me.cmnuMovieSetLanguage.Name = "cmnuMovieSetLanguage"
+        Me.cmnuMovieSetLanguage.Size = New System.Drawing.Size(234, 22)
+        Me.cmnuMovieSetLanguage.Tag = "movieset"
+        Me.cmnuMovieSetLanguage.Text = "Change Language"
         '
         'cmnuMovieSep3
         '
@@ -3453,8 +3491,8 @@ Partial Class frmMain
         Me.dgvMovieSets.AllowUserToAddRows = False
         Me.dgvMovieSets.AllowUserToDeleteRows = False
         Me.dgvMovieSets.AllowUserToResizeRows = False
-        DataGridViewCellStyle2.BackColor = System.Drawing.Color.FromArgb(CType(CType(230, Byte), Integer), CType(CType(230, Byte), Integer), CType(CType(230, Byte), Integer))
-        Me.dgvMovieSets.AlternatingRowsDefaultCellStyle = DataGridViewCellStyle2
+        DataGridViewCellStyle1.BackColor = System.Drawing.Color.FromArgb(CType(CType(230, Byte), Integer), CType(CType(230, Byte), Integer), CType(CType(230, Byte), Integer))
+        Me.dgvMovieSets.AlternatingRowsDefaultCellStyle = DataGridViewCellStyle1
         Me.dgvMovieSets.BackgroundColor = System.Drawing.Color.White
         Me.dgvMovieSets.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
         Me.dgvMovieSets.CellBorderStyle = System.Windows.Forms.DataGridViewCellBorderStyle.SingleHorizontal
@@ -3593,14 +3631,6 @@ Partial Class frmMain
         Me.cmnuMovieSetScrapeSingleDataField.Tag = "movieset"
         Me.cmnuMovieSetScrapeSingleDataField.Text = "(Re)Scrape Single Data Field"
         '
-        'cmnuMovieSetLanguage
-        '
-        Me.cmnuMovieSetLanguage.DropDown = Me.mnuLanguages
-        Me.cmnuMovieSetLanguage.Name = "cmnuMovieSetLanguage"
-        Me.cmnuMovieSetLanguage.Size = New System.Drawing.Size(234, 22)
-        Me.cmnuMovieSetLanguage.Tag = "movieset"
-        Me.cmnuMovieSetLanguage.Text = "Change Language"
-        '
         'cmnuMovieSetSep3
         '
         Me.cmnuMovieSetSep3.Name = "cmnuMovieSetSep3"
@@ -3655,8 +3685,8 @@ Partial Class frmMain
         Me.dgvTVShows.AllowUserToAddRows = False
         Me.dgvTVShows.AllowUserToDeleteRows = False
         Me.dgvTVShows.AllowUserToResizeRows = False
-        DataGridViewCellStyle3.BackColor = System.Drawing.Color.FromArgb(CType(CType(230, Byte), Integer), CType(CType(230, Byte), Integer), CType(CType(230, Byte), Integer))
-        Me.dgvTVShows.AlternatingRowsDefaultCellStyle = DataGridViewCellStyle3
+        DataGridViewCellStyle2.BackColor = System.Drawing.Color.FromArgb(CType(CType(230, Byte), Integer), CType(CType(230, Byte), Integer), CType(CType(230, Byte), Integer))
+        Me.dgvTVShows.AlternatingRowsDefaultCellStyle = DataGridViewCellStyle2
         Me.dgvTVShows.BackgroundColor = System.Drawing.Color.White
         Me.dgvTVShows.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
         Me.dgvTVShows.CellBorderStyle = System.Windows.Forms.DataGridViewCellBorderStyle.SingleHorizontal
@@ -3719,14 +3749,6 @@ Partial Class frmMain
         Me.cmnuShowMark.Size = New System.Drawing.Size(248, 22)
         Me.cmnuShowMark.Text = "Mark"
         '
-        'cmnuShowLock
-        '
-        Me.cmnuShowLock.Image = CType(resources.GetObject("cmnuShowLock.Image"), System.Drawing.Image)
-        Me.cmnuShowLock.Name = "cmnuShowLock"
-        Me.cmnuShowLock.ShortcutKeys = CType((System.Windows.Forms.Keys.Control Or System.Windows.Forms.Keys.L), System.Windows.Forms.Keys)
-        Me.cmnuShowLock.Size = New System.Drawing.Size(248, 22)
-        Me.cmnuShowLock.Text = "Lock"
-        '
         'cmnuShowWatched
         '
         Me.cmnuShowWatched.Image = Global.Ember_Media_Manager.My.Resources.Resources.haswatched
@@ -3734,6 +3756,23 @@ Partial Class frmMain
         Me.cmnuShowWatched.ShortcutKeys = CType((System.Windows.Forms.Keys.Control Or System.Windows.Forms.Keys.W), System.Windows.Forms.Keys)
         Me.cmnuShowWatched.Size = New System.Drawing.Size(248, 22)
         Me.cmnuShowWatched.Text = "Mark as Watched"
+        '
+        'cmnuShowUnwatched
+        '
+        Me.cmnuShowUnwatched.Image = Global.Ember_Media_Manager.My.Resources.Resources.haswatched
+        Me.cmnuShowUnwatched.Name = "cmnuShowUnwatched"
+        Me.cmnuShowUnwatched.ShortcutKeys = CType(((System.Windows.Forms.Keys.Control Or System.Windows.Forms.Keys.Alt) _
+            Or System.Windows.Forms.Keys.W), System.Windows.Forms.Keys)
+        Me.cmnuShowUnwatched.Size = New System.Drawing.Size(248, 22)
+        Me.cmnuShowUnwatched.Text = "Mark as Unwatched"
+        '
+        'cmnuShowLock
+        '
+        Me.cmnuShowLock.Image = CType(resources.GetObject("cmnuShowLock.Image"), System.Drawing.Image)
+        Me.cmnuShowLock.Name = "cmnuShowLock"
+        Me.cmnuShowLock.ShortcutKeys = CType((System.Windows.Forms.Keys.Control Or System.Windows.Forms.Keys.L), System.Windows.Forms.Keys)
+        Me.cmnuShowLock.Size = New System.Drawing.Size(248, 22)
+        Me.cmnuShowLock.Text = "Lock"
         '
         'cmnuShowEditSeparator
         '
@@ -3946,8 +3985,8 @@ Partial Class frmMain
         Me.dgvTVSeasons.AllowUserToAddRows = False
         Me.dgvTVSeasons.AllowUserToDeleteRows = False
         Me.dgvTVSeasons.AllowUserToResizeRows = False
-        DataGridViewCellStyle4.BackColor = System.Drawing.Color.FromArgb(CType(CType(230, Byte), Integer), CType(CType(230, Byte), Integer), CType(CType(230, Byte), Integer))
-        Me.dgvTVSeasons.AlternatingRowsDefaultCellStyle = DataGridViewCellStyle4
+        DataGridViewCellStyle3.BackColor = System.Drawing.Color.FromArgb(CType(CType(230, Byte), Integer), CType(CType(230, Byte), Integer), CType(CType(230, Byte), Integer))
+        Me.dgvTVSeasons.AlternatingRowsDefaultCellStyle = DataGridViewCellStyle3
         Me.dgvTVSeasons.BackgroundColor = System.Drawing.Color.White
         Me.dgvTVSeasons.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
         Me.dgvTVSeasons.CellBorderStyle = System.Windows.Forms.DataGridViewCellBorderStyle.SingleHorizontal
@@ -4010,14 +4049,6 @@ Partial Class frmMain
         Me.cmnuSeasonMark.Size = New System.Drawing.Size(248, 22)
         Me.cmnuSeasonMark.Text = "Mark"
         '
-        'cmnuSeasonLock
-        '
-        Me.cmnuSeasonLock.Image = CType(resources.GetObject("cmnuSeasonLock.Image"), System.Drawing.Image)
-        Me.cmnuSeasonLock.Name = "cmnuSeasonLock"
-        Me.cmnuSeasonLock.ShortcutKeys = CType((System.Windows.Forms.Keys.Control Or System.Windows.Forms.Keys.L), System.Windows.Forms.Keys)
-        Me.cmnuSeasonLock.Size = New System.Drawing.Size(248, 22)
-        Me.cmnuSeasonLock.Text = "Lock"
-        '
         'cmnuSeasonWatched
         '
         Me.cmnuSeasonWatched.Image = Global.Ember_Media_Manager.My.Resources.Resources.haswatched
@@ -4025,6 +4056,23 @@ Partial Class frmMain
         Me.cmnuSeasonWatched.ShortcutKeys = CType((System.Windows.Forms.Keys.Control Or System.Windows.Forms.Keys.W), System.Windows.Forms.Keys)
         Me.cmnuSeasonWatched.Size = New System.Drawing.Size(248, 22)
         Me.cmnuSeasonWatched.Text = "Mark as Watched"
+        '
+        'cmnuSeasonUnwatched
+        '
+        Me.cmnuSeasonUnwatched.Image = Global.Ember_Media_Manager.My.Resources.Resources.haswatched
+        Me.cmnuSeasonUnwatched.Name = "cmnuSeasonUnwatched"
+        Me.cmnuSeasonUnwatched.ShortcutKeys = CType(((System.Windows.Forms.Keys.Control Or System.Windows.Forms.Keys.Alt) _
+            Or System.Windows.Forms.Keys.W), System.Windows.Forms.Keys)
+        Me.cmnuSeasonUnwatched.Size = New System.Drawing.Size(248, 22)
+        Me.cmnuSeasonUnwatched.Text = "Mark as Unwatched"
+        '
+        'cmnuSeasonLock
+        '
+        Me.cmnuSeasonLock.Image = CType(resources.GetObject("cmnuSeasonLock.Image"), System.Drawing.Image)
+        Me.cmnuSeasonLock.Name = "cmnuSeasonLock"
+        Me.cmnuSeasonLock.ShortcutKeys = CType((System.Windows.Forms.Keys.Control Or System.Windows.Forms.Keys.L), System.Windows.Forms.Keys)
+        Me.cmnuSeasonLock.Size = New System.Drawing.Size(248, 22)
+        Me.cmnuSeasonLock.Text = "Lock"
         '
         'cmnuSeasonEditSeparator
         '
@@ -4060,14 +4108,6 @@ Partial Class frmMain
         Me.cmnuSeasonScrapeSelected.Size = New System.Drawing.Size(248, 22)
         Me.cmnuSeasonScrapeSelected.Tag = "tvseason"
         Me.cmnuSeasonScrapeSelected.Text = "(Re)Scrape Selected Seasons"
-        '
-        'cmnuSeasonScrapeSingleDataField
-        '
-        Me.cmnuSeasonScrapeSingleDataField.DropDown = Me.mnuScrapeOption
-        Me.cmnuSeasonScrapeSingleDataField.Name = "cmnuSeasonScrapeSingleDataField"
-        Me.cmnuSeasonScrapeSingleDataField.Size = New System.Drawing.Size(248, 22)
-        Me.cmnuSeasonScrapeSingleDataField.Tag = "tvseason"
-        Me.cmnuSeasonScrapeSingleDataField.Text = "(Re)Scrape Single Data Field"
         '
         'cmnuSeasonSep3
         '
@@ -4140,8 +4180,8 @@ Partial Class frmMain
         Me.dgvTVEpisodes.AllowUserToAddRows = False
         Me.dgvTVEpisodes.AllowUserToDeleteRows = False
         Me.dgvTVEpisodes.AllowUserToResizeRows = False
-        DataGridViewCellStyle5.BackColor = System.Drawing.Color.FromArgb(CType(CType(230, Byte), Integer), CType(CType(230, Byte), Integer), CType(CType(230, Byte), Integer))
-        Me.dgvTVEpisodes.AlternatingRowsDefaultCellStyle = DataGridViewCellStyle5
+        DataGridViewCellStyle4.BackColor = System.Drawing.Color.FromArgb(CType(CType(230, Byte), Integer), CType(CType(230, Byte), Integer), CType(CType(230, Byte), Integer))
+        Me.dgvTVEpisodes.AlternatingRowsDefaultCellStyle = DataGridViewCellStyle4
         Me.dgvTVEpisodes.BackgroundColor = System.Drawing.Color.White
         Me.dgvTVEpisodes.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
         Me.dgvTVEpisodes.CellBorderStyle = System.Windows.Forms.DataGridViewCellBorderStyle.SingleHorizontal
@@ -4196,14 +4236,6 @@ Partial Class frmMain
         Me.cmnuEpisodeMark.Size = New System.Drawing.Size(248, 22)
         Me.cmnuEpisodeMark.Text = "Mark"
         '
-        'cmnuEpisodeLock
-        '
-        Me.cmnuEpisodeLock.Image = CType(resources.GetObject("cmnuEpisodeLock.Image"), System.Drawing.Image)
-        Me.cmnuEpisodeLock.Name = "cmnuEpisodeLock"
-        Me.cmnuEpisodeLock.ShortcutKeys = CType((System.Windows.Forms.Keys.Control Or System.Windows.Forms.Keys.L), System.Windows.Forms.Keys)
-        Me.cmnuEpisodeLock.Size = New System.Drawing.Size(248, 22)
-        Me.cmnuEpisodeLock.Text = "Lock"
-        '
         'cmnuEpisodeWatched
         '
         Me.cmnuEpisodeWatched.Image = Global.Ember_Media_Manager.My.Resources.Resources.haswatched
@@ -4211,6 +4243,23 @@ Partial Class frmMain
         Me.cmnuEpisodeWatched.ShortcutKeys = CType((System.Windows.Forms.Keys.Control Or System.Windows.Forms.Keys.W), System.Windows.Forms.Keys)
         Me.cmnuEpisodeWatched.Size = New System.Drawing.Size(248, 22)
         Me.cmnuEpisodeWatched.Text = "Mark as Watched"
+        '
+        'cmnuEpisodeUnwatched
+        '
+        Me.cmnuEpisodeUnwatched.Image = Global.Ember_Media_Manager.My.Resources.Resources.haswatched
+        Me.cmnuEpisodeUnwatched.Name = "cmnuEpisodeUnwatched"
+        Me.cmnuEpisodeUnwatched.ShortcutKeys = CType(((System.Windows.Forms.Keys.Control Or System.Windows.Forms.Keys.Alt) _
+            Or System.Windows.Forms.Keys.W), System.Windows.Forms.Keys)
+        Me.cmnuEpisodeUnwatched.Size = New System.Drawing.Size(248, 22)
+        Me.cmnuEpisodeUnwatched.Text = "Mark as Unwatched"
+        '
+        'cmnuEpisodeLock
+        '
+        Me.cmnuEpisodeLock.Image = CType(resources.GetObject("cmnuEpisodeLock.Image"), System.Drawing.Image)
+        Me.cmnuEpisodeLock.Name = "cmnuEpisodeLock"
+        Me.cmnuEpisodeLock.ShortcutKeys = CType((System.Windows.Forms.Keys.Control Or System.Windows.Forms.Keys.L), System.Windows.Forms.Keys)
+        Me.cmnuEpisodeLock.Size = New System.Drawing.Size(248, 22)
+        Me.cmnuEpisodeLock.Text = "Lock"
         '
         'cmnuEpisodeEditSeparator
         '
@@ -8500,7 +8549,7 @@ Partial Class frmMain
         '
         Me.mnuScrapeSubmenu.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.mnuScrapeSubmenuAll, Me.mnuScrapeSubmenuMissing, Me.mnuScrapeSubmenuNew, Me.mnuScrapeSubmenuMarked, Me.mnuScrapeSubmenuFilter, Me.mnuScrapeSubmenuCustom})
         Me.mnuScrapeSubmenu.Name = "mnuScrapeSubmenu"
-        Me.mnuScrapeSubmenu.OwnerItem = Me.cmnuTrayScrapeMovieSets
+        Me.mnuScrapeSubmenu.OwnerItem = Me.cmnuTrayScrapeTVShows
         Me.mnuScrapeSubmenu.Size = New System.Drawing.Size(168, 136)
         '
         'mnuScrapeSubmenuAll
@@ -8527,14 +8576,6 @@ Partial Class frmMain
         Me.mnuScrapeSubmenuNew.Tag = "new"
         Me.mnuScrapeSubmenuNew.Text = "New"
         '
-        'mnuScrapeSubmenuMarked
-        '
-        Me.mnuScrapeSubmenuMarked.DropDown = Me.mnuScrapeType
-        Me.mnuScrapeSubmenuMarked.Name = "mnuScrapeSubmenuMarked"
-        Me.mnuScrapeSubmenuMarked.Size = New System.Drawing.Size(167, 22)
-        Me.mnuScrapeSubmenuMarked.Tag = "marked"
-        Me.mnuScrapeSubmenuMarked.Text = "Marked"
-        '
         'mnuScrapeSubmenuFilter
         '
         Me.mnuScrapeSubmenuFilter.DropDown = Me.mnuScrapeType
@@ -8550,14 +8591,14 @@ Partial Class frmMain
         Me.mnuScrapeSubmenuCustom.Tag = "custom"
         Me.mnuScrapeSubmenuCustom.Text = "Custom Scraper..."
         '
-        'cmnuTrayScrapeTVShows
+        'cmnuTrayScrapeMovies
         '
-        Me.cmnuTrayScrapeTVShows.DropDown = Me.mnuScrapeSubmenu
-        Me.cmnuTrayScrapeTVShows.Image = CType(resources.GetObject("cmnuTrayScrapeTVShows.Image"), System.Drawing.Image)
-        Me.cmnuTrayScrapeTVShows.Name = "cmnuTrayScrapeTVShows"
-        Me.cmnuTrayScrapeTVShows.Size = New System.Drawing.Size(194, 22)
-        Me.cmnuTrayScrapeTVShows.Tag = "tvshow"
-        Me.cmnuTrayScrapeTVShows.Text = "Scrape TV Shows"
+        Me.cmnuTrayScrapeMovies.DropDown = Me.mnuScrapeSubmenu
+        Me.cmnuTrayScrapeMovies.Image = CType(resources.GetObject("cmnuTrayScrapeMovies.Image"), System.Drawing.Image)
+        Me.cmnuTrayScrapeMovies.Name = "cmnuTrayScrapeMovies"
+        Me.cmnuTrayScrapeMovies.Size = New System.Drawing.Size(194, 22)
+        Me.cmnuTrayScrapeMovies.Tag = "movie"
+        Me.cmnuTrayScrapeMovies.Text = "Scrape Movies"
         '
         'mnuScrapeMovieSets
         '
@@ -8605,15 +8646,6 @@ Partial Class frmMain
         Me.mnuUpdateShows.Size = New System.Drawing.Size(123, 22)
         Me.mnuUpdateShows.Text = "TV Shows"
         '
-        'cmnuTrayScrapeMovies
-        '
-        Me.cmnuTrayScrapeMovies.DropDown = Me.mnuScrapeSubmenu
-        Me.cmnuTrayScrapeMovies.Image = CType(resources.GetObject("cmnuTrayScrapeMovies.Image"), System.Drawing.Image)
-        Me.cmnuTrayScrapeMovies.Name = "cmnuTrayScrapeMovies"
-        Me.cmnuTrayScrapeMovies.Size = New System.Drawing.Size(194, 22)
-        Me.cmnuTrayScrapeMovies.Tag = "movie"
-        Me.cmnuTrayScrapeMovies.Text = "Scrape Movies"
-        '
         'cmnuTrayScrapeMovieSets
         '
         Me.cmnuTrayScrapeMovieSets.DropDown = Me.mnuScrapeSubmenu
@@ -8622,6 +8654,15 @@ Partial Class frmMain
         Me.cmnuTrayScrapeMovieSets.Size = New System.Drawing.Size(194, 22)
         Me.cmnuTrayScrapeMovieSets.Tag = "movieset"
         Me.cmnuTrayScrapeMovieSets.Text = "Scrape MovieSets"
+        '
+        'cmnuTrayScrapeTVShows
+        '
+        Me.cmnuTrayScrapeTVShows.DropDown = Me.mnuScrapeSubmenu
+        Me.cmnuTrayScrapeTVShows.Image = CType(resources.GetObject("cmnuTrayScrapeTVShows.Image"), System.Drawing.Image)
+        Me.cmnuTrayScrapeTVShows.Name = "cmnuTrayScrapeTVShows"
+        Me.cmnuTrayScrapeTVShows.Size = New System.Drawing.Size(194, 22)
+        Me.cmnuTrayScrapeTVShows.Tag = "tvshow"
+        Me.cmnuTrayScrapeTVShows.Text = "Scrape TV Shows"
         '
         'ilColumnIcons
         '
@@ -8932,33 +8973,6 @@ Partial Class frmMain
         '
         'tmrRunTasks
         '
-        '
-        'cmnuShowUnwatched
-        '
-        Me.cmnuShowUnwatched.Image = Global.Ember_Media_Manager.My.Resources.Resources.haswatched
-        Me.cmnuShowUnwatched.Name = "cmnuShowUnwatched"
-        Me.cmnuShowUnwatched.ShortcutKeys = CType(((System.Windows.Forms.Keys.Control Or System.Windows.Forms.Keys.Alt) _
-            Or System.Windows.Forms.Keys.W), System.Windows.Forms.Keys)
-        Me.cmnuShowUnwatched.Size = New System.Drawing.Size(248, 22)
-        Me.cmnuShowUnwatched.Text = "Mark as Unwatched"
-        '
-        'cmnuSeasonUnwatched
-        '
-        Me.cmnuSeasonUnwatched.Image = Global.Ember_Media_Manager.My.Resources.Resources.haswatched
-        Me.cmnuSeasonUnwatched.Name = "cmnuSeasonUnwatched"
-        Me.cmnuSeasonUnwatched.ShortcutKeys = CType(((System.Windows.Forms.Keys.Control Or System.Windows.Forms.Keys.Alt) _
-            Or System.Windows.Forms.Keys.W), System.Windows.Forms.Keys)
-        Me.cmnuSeasonUnwatched.Size = New System.Drawing.Size(248, 22)
-        Me.cmnuSeasonUnwatched.Text = "Mark as Unwatched"
-        '
-        'cmnuEpisodeUnwatched
-        '
-        Me.cmnuEpisodeUnwatched.Image = Global.Ember_Media_Manager.My.Resources.Resources.haswatched
-        Me.cmnuEpisodeUnwatched.Name = "cmnuEpisodeUnwatched"
-        Me.cmnuEpisodeUnwatched.ShortcutKeys = CType(((System.Windows.Forms.Keys.Control Or System.Windows.Forms.Keys.Alt) _
-            Or System.Windows.Forms.Keys.W), System.Windows.Forms.Keys)
-        Me.cmnuEpisodeUnwatched.Size = New System.Drawing.Size(248, 22)
-        Me.cmnuEpisodeUnwatched.Text = "Mark as Unwatched"
         '
         'frmMain
         '
@@ -9383,8 +9397,8 @@ End Sub
     Friend WithEvents mnuMainHelp As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents StatusStrip As System.Windows.Forms.StatusStrip
     Friend WithEvents tslStatus As System.Windows.Forms.ToolStripStatusLabel
-    Friend WithEvents tslLoading As System.Windows.Forms.ToolStripStatusLabel
-    Friend WithEvents tspbLoading As System.Windows.Forms.ToolStripProgressBar
+    Friend WithEvents tslblSubTask As System.Windows.Forms.ToolStripStatusLabel
+    Friend WithEvents tspbSubTask As System.Windows.Forms.ToolStripProgressBar
     Friend WithEvents tmrAni As System.Windows.Forms.Timer
     Friend WithEvents mnuMainHelpAbout As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents mnuMain As System.Windows.Forms.MenuStrip
@@ -10113,4 +10127,6 @@ End Sub
     Friend WithEvents cmnuShowUnwatched As ToolStripMenuItem
     Friend WithEvents cmnuSeasonUnwatched As ToolStripMenuItem
     Friend WithEvents cmnuEpisodeUnwatched As ToolStripMenuItem
+    Friend WithEvents tslblMainTask As ToolStripStatusLabel
+    Friend WithEvents tspbMainTask As ToolStripProgressBar
 End Class
