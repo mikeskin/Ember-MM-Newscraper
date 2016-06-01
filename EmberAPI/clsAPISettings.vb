@@ -209,141 +209,6 @@ Public Class Settings
         End Set
     End Property
 
-    Public Property CleanDotFanartJPG() As Boolean
-        Get
-            Return Settings._XMLSettings.CleanDotFanartJPG
-        End Get
-        Set(ByVal value As Boolean)
-            Settings._XMLSettings.CleanDotFanartJPG = value
-        End Set
-    End Property
-
-    Public Property CleanExtrathumbs() As Boolean
-        Get
-            Return Settings._XMLSettings.CleanExtrathumbs
-        End Get
-        Set(ByVal value As Boolean)
-            Settings._XMLSettings.CleanExtrathumbs = value
-        End Set
-    End Property
-
-    Public Property CleanFanartJPG() As Boolean
-        Get
-            Return Settings._XMLSettings.CleanFanartJPG
-        End Get
-        Set(ByVal value As Boolean)
-            Settings._XMLSettings.CleanFanartJPG = value
-        End Set
-    End Property
-
-    Public Property CleanFolderJPG() As Boolean
-        Get
-            Return Settings._XMLSettings.CleanFolderJPG
-        End Get
-        Set(ByVal value As Boolean)
-            Settings._XMLSettings.CleanFolderJPG = value
-        End Set
-    End Property
-
-    Public Property CleanMovieFanartJPG() As Boolean
-        Get
-            Return Settings._XMLSettings.CleanMovieFanartJPG
-        End Get
-        Set(ByVal value As Boolean)
-            Settings._XMLSettings.CleanMovieFanartJPG = value
-        End Set
-    End Property
-
-    Public Property CleanMovieJPG() As Boolean
-        Get
-            Return Settings._XMLSettings.CleanMovieJPG
-        End Get
-        Set(ByVal value As Boolean)
-            Settings._XMLSettings.CleanMovieJPG = value
-        End Set
-    End Property
-
-    Public Property CleanMovieNameJPG() As Boolean
-        Get
-            Return Settings._XMLSettings.CleanMovieNameJPG
-        End Get
-        Set(ByVal value As Boolean)
-            Settings._XMLSettings.CleanMovieNameJPG = value
-        End Set
-    End Property
-
-    Public Property CleanMovieNFO() As Boolean
-        Get
-            Return Settings._XMLSettings.CleanMovieNFO
-        End Get
-        Set(ByVal value As Boolean)
-            Settings._XMLSettings.CleanMovieNFO = value
-        End Set
-    End Property
-
-    Public Property CleanMovieNFOB() As Boolean
-        Get
-            Return Settings._XMLSettings.CleanMovieNFOB
-        End Get
-        Set(ByVal value As Boolean)
-            Settings._XMLSettings.CleanMovieNFOB = value
-        End Set
-    End Property
-
-    Public Property CleanMovieTBN() As Boolean
-        Get
-            Return Settings._XMLSettings.CleanMovieTBN
-        End Get
-        Set(ByVal value As Boolean)
-            Settings._XMLSettings.CleanMovieTBN = value
-        End Set
-    End Property
-
-    Public Property CleanMovieTBNB() As Boolean
-        Get
-            Return Settings._XMLSettings.CleanMovieTBNB
-        End Get
-        Set(ByVal value As Boolean)
-            Settings._XMLSettings.CleanMovieTBNB = value
-        End Set
-    End Property
-
-    Public Property CleanPosterJPG() As Boolean
-        Get
-            Return Settings._XMLSettings.CleanPosterJPG
-        End Get
-        Set(ByVal value As Boolean)
-            Settings._XMLSettings.CleanPosterJPG = value
-        End Set
-    End Property
-
-    Public Property CleanPosterTBN() As Boolean
-        Get
-            Return Settings._XMLSettings.CleanPosterTBN
-        End Get
-        Set(ByVal value As Boolean)
-            Settings._XMLSettings.CleanPosterTBN = value
-        End Set
-    End Property
-
-    Public Property FileSystemCleanerWhitelistExts() As List(Of String)
-        Get
-            Return Settings._XMLSettings.FileSystemCleanerWhitelistExts
-        End Get
-        Set(ByVal value As List(Of String))
-            Settings._XMLSettings.FileSystemCleanerWhitelistExts = value
-        End Set
-    End Property
-
-    Public Property FileSystemCleanerWhitelist() As Boolean
-        Get
-            Return Settings._XMLSettings.FileSystemCleanerWhitelist
-        End Get
-        Set(ByVal value As Boolean)
-            Settings._XMLSettings.FileSystemCleanerWhitelist = value
-        End Set
-    End Property
-
     Public Property TVDisplayMissingEpisodes() As Boolean
         Get
             Return Settings._XMLSettings.TVDisplayMissingEpisodes
@@ -577,15 +442,6 @@ Public Class Settings
         End Get
         Set(ByVal value As Boolean)
             Settings._XMLSettings.TVEpisodeProperCase = value
-        End Set
-    End Property
-
-    Public Property FileSystemExpertCleaner() As Boolean
-        Get
-            Return Settings._XMLSettings.FileSystemExpertCleaner
-        End Get
-        Set(ByVal value As Boolean)
-            Settings._XMLSettings.FileSystemExpertCleaner = value
         End Set
     End Property
 
@@ -6815,23 +6671,7 @@ Public Class Settings
     ''' </summary>
     ''' <remarks></remarks>
     Public Sub SetDefaults()
-        CleanDotFanartJPG = False
-        CleanExtrathumbs = False
-        CleanFanartJPG = False
-        CleanFolderJPG = False
-        CleanMovieJPG = False
-        CleanMovieNFO = False
-        CleanMovieNFOB = False
-        CleanMovieTBN = False
-        CleanMovieTBNB = False
-        CleanMovieFanartJPG = False
-        CleanMovieNameJPG = False
-        CleanPosterJPG = False
-        CleanPosterTBN = False
         EmberModules = New List(Of ModulesManager._XMLEmberModuleClass)
-        FileSystemCleanerWhitelist = False
-        FileSystemCleanerWhitelistExts = New List(Of String)
-        FileSystemExpertCleaner = False
         FileSystemNoStackExts = New List(Of String)
         FileSystemValidExts = New List(Of String)
         FileSystemValidSubtitlesExts = New List(Of String)

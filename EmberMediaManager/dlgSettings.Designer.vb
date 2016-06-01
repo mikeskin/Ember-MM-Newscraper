@@ -66,30 +66,6 @@ Partial Class dlgSettings
         Me.cbGeneralMovieTheme = New System.Windows.Forms.ComboBox()
         Me.lblGeneralntLang = New System.Windows.Forms.Label()
         Me.cbGeneralLanguage = New System.Windows.Forms.ComboBox()
-        Me.gbFileSystemCleanFiles = New System.Windows.Forms.GroupBox()
-        Me.tcFileSystemCleaner = New System.Windows.Forms.TabControl()
-        Me.tpFileSystemCleanerStandard = New System.Windows.Forms.TabPage()
-        Me.chkCleanFolderJPG = New System.Windows.Forms.CheckBox()
-        Me.chkCleanExtrathumbs = New System.Windows.Forms.CheckBox()
-        Me.chkCleanMovieTBN = New System.Windows.Forms.CheckBox()
-        Me.chkCleanMovieNameJPG = New System.Windows.Forms.CheckBox()
-        Me.chkCleanMovieTBNb = New System.Windows.Forms.CheckBox()
-        Me.chkCleanMovieJPG = New System.Windows.Forms.CheckBox()
-        Me.chkCleanFanartJPG = New System.Windows.Forms.CheckBox()
-        Me.chkCleanPosterJPG = New System.Windows.Forms.CheckBox()
-        Me.chkCleanMovieFanartJPG = New System.Windows.Forms.CheckBox()
-        Me.chkCleanPosterTBN = New System.Windows.Forms.CheckBox()
-        Me.chkCleanMovieNFO = New System.Windows.Forms.CheckBox()
-        Me.chkCleanDotFanartJPG = New System.Windows.Forms.CheckBox()
-        Me.chkCleanMovieNFOb = New System.Windows.Forms.CheckBox()
-        Me.tpFileSystemCleanerExpert = New System.Windows.Forms.TabPage()
-        Me.chkFileSystemCleanerWhitelist = New System.Windows.Forms.CheckBox()
-        Me.lblFileSystemCleanerWhitelist = New System.Windows.Forms.Label()
-        Me.btnFileSystemCleanerWhitelistRemove = New System.Windows.Forms.Button()
-        Me.btnFileSystemCleanerWhitelistAdd = New System.Windows.Forms.Button()
-        Me.txtFileSystemCleanerWhitelist = New System.Windows.Forms.TextBox()
-        Me.lstFileSystemCleanerWhitelist = New System.Windows.Forms.ListBox()
-        Me.lblFileSystemCleanerWarning = New System.Windows.Forms.Label()
         Me.gbMovieGeneralMiscOpts = New System.Windows.Forms.GroupBox()
         Me.tblMovieGeneralMiscOpts = New System.Windows.Forms.TableLayoutPanel()
         Me.chkMovieClickScrapeAsk = New System.Windows.Forms.CheckBox()
@@ -730,6 +706,7 @@ Partial Class dlgSettings
         Me.colTVSourcesOrdering = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
         Me.colTVSourcesExclude = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
         Me.colTVSourcesSorting = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
+        Me.colTVSourcesSingle = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
         Me.gbTVSourcesFilenamingOpts = New System.Windows.Forms.GroupBox()
         Me.tcTVSourcesFileNaming = New System.Windows.Forms.TabControl()
         Me.tpTVSourcesFileNamingKodi = New System.Windows.Forms.TabPage()
@@ -1616,15 +1593,10 @@ Partial Class dlgSettings
         Me.scSettingsBody = New System.Windows.Forms.SplitContainer()
         Me.scSettingsMain = New System.Windows.Forms.SplitContainer()
         Me.tblSettingsFooter = New System.Windows.Forms.TableLayoutPanel()
-        Me.colTVSourcesSingle = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
         Me.gbGeneralMiscOpts.SuspendLayout()
         Me.tblGeneralMisc.SuspendLayout()
         Me.gbGeneralThemes.SuspendLayout()
         Me.tblGeneralThemes.SuspendLayout()
-        Me.gbFileSystemCleanFiles.SuspendLayout()
-        Me.tcFileSystemCleaner.SuspendLayout()
-        Me.tpFileSystemCleanerStandard.SuspendLayout()
-        Me.tpFileSystemCleanerExpert.SuspendLayout()
         Me.gbMovieGeneralMiscOpts.SuspendLayout()
         Me.tblMovieGeneralMiscOpts.SuspendLayout()
         Me.pnlMovieImages.SuspendLayout()
@@ -2510,287 +2482,6 @@ Partial Class dlgSettings
         Me.cbGeneralLanguage.Name = "cbGeneralLanguage"
         Me.cbGeneralLanguage.Size = New System.Drawing.Size(216, 21)
         Me.cbGeneralLanguage.TabIndex = 1
-        '
-        'gbFileSystemCleanFiles
-        '
-        Me.gbFileSystemCleanFiles.AutoSize = True
-        Me.gbFileSystemCleanFiles.Controls.Add(Me.tcFileSystemCleaner)
-        Me.gbFileSystemCleanFiles.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.gbFileSystemCleanFiles.Font = New System.Drawing.Font("Segoe UI", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(238, Byte))
-        Me.gbFileSystemCleanFiles.Location = New System.Drawing.Point(339, 134)
-        Me.gbFileSystemCleanFiles.Name = "gbFileSystemCleanFiles"
-        Me.tblFileSystem.SetRowSpan(Me.gbFileSystemCleanFiles, 2)
-        Me.gbFileSystemCleanFiles.Size = New System.Drawing.Size(192, 215)
-        Me.gbFileSystemCleanFiles.TabIndex = 2
-        Me.gbFileSystemCleanFiles.TabStop = False
-        Me.gbFileSystemCleanFiles.Text = "Clean Files"
-        Me.gbFileSystemCleanFiles.Visible = False
-        '
-        'tcFileSystemCleaner
-        '
-        Me.tcFileSystemCleaner.Appearance = System.Windows.Forms.TabAppearance.FlatButtons
-        Me.tcFileSystemCleaner.Controls.Add(Me.tpFileSystemCleanerStandard)
-        Me.tcFileSystemCleaner.Controls.Add(Me.tpFileSystemCleanerExpert)
-        Me.tcFileSystemCleaner.Font = New System.Drawing.Font("Segoe UI", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(238, Byte))
-        Me.tcFileSystemCleaner.Location = New System.Drawing.Point(6, 19)
-        Me.tcFileSystemCleaner.Name = "tcFileSystemCleaner"
-        Me.tcFileSystemCleaner.SelectedIndex = 0
-        Me.tcFileSystemCleaner.Size = New System.Drawing.Size(180, 161)
-        Me.tcFileSystemCleaner.TabIndex = 0
-        '
-        'tpFileSystemCleanerStandard
-        '
-        Me.tpFileSystemCleanerStandard.BackColor = System.Drawing.Color.White
-        Me.tpFileSystemCleanerStandard.Controls.Add(Me.chkCleanFolderJPG)
-        Me.tpFileSystemCleanerStandard.Controls.Add(Me.chkCleanExtrathumbs)
-        Me.tpFileSystemCleanerStandard.Controls.Add(Me.chkCleanMovieTBN)
-        Me.tpFileSystemCleanerStandard.Controls.Add(Me.chkCleanMovieNameJPG)
-        Me.tpFileSystemCleanerStandard.Controls.Add(Me.chkCleanMovieTBNb)
-        Me.tpFileSystemCleanerStandard.Controls.Add(Me.chkCleanMovieJPG)
-        Me.tpFileSystemCleanerStandard.Controls.Add(Me.chkCleanFanartJPG)
-        Me.tpFileSystemCleanerStandard.Controls.Add(Me.chkCleanPosterJPG)
-        Me.tpFileSystemCleanerStandard.Controls.Add(Me.chkCleanMovieFanartJPG)
-        Me.tpFileSystemCleanerStandard.Controls.Add(Me.chkCleanPosterTBN)
-        Me.tpFileSystemCleanerStandard.Controls.Add(Me.chkCleanMovieNFO)
-        Me.tpFileSystemCleanerStandard.Controls.Add(Me.chkCleanDotFanartJPG)
-        Me.tpFileSystemCleanerStandard.Controls.Add(Me.chkCleanMovieNFOb)
-        Me.tpFileSystemCleanerStandard.Location = New System.Drawing.Point(4, 25)
-        Me.tpFileSystemCleanerStandard.Name = "tpFileSystemCleanerStandard"
-        Me.tpFileSystemCleanerStandard.Padding = New System.Windows.Forms.Padding(3)
-        Me.tpFileSystemCleanerStandard.Size = New System.Drawing.Size(172, 132)
-        Me.tpFileSystemCleanerStandard.TabIndex = 0
-        Me.tpFileSystemCleanerStandard.Text = "Standard"
-        Me.tpFileSystemCleanerStandard.UseVisualStyleBackColor = True
-        '
-        'chkCleanFolderJPG
-        '
-        Me.chkCleanFolderJPG.AutoSize = True
-        Me.chkCleanFolderJPG.Font = New System.Drawing.Font("Segoe UI", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.chkCleanFolderJPG.Location = New System.Drawing.Point(7, 10)
-        Me.chkCleanFolderJPG.Name = "chkCleanFolderJPG"
-        Me.chkCleanFolderJPG.Size = New System.Drawing.Size(81, 17)
-        Me.chkCleanFolderJPG.TabIndex = 0
-        Me.chkCleanFolderJPG.Text = "/folder.jpg"
-        Me.chkCleanFolderJPG.UseVisualStyleBackColor = True
-        '
-        'chkCleanExtrathumbs
-        '
-        Me.chkCleanExtrathumbs.AutoSize = True
-        Me.chkCleanExtrathumbs.Font = New System.Drawing.Font("Segoe UI", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.chkCleanExtrathumbs.Location = New System.Drawing.Point(7, 238)
-        Me.chkCleanExtrathumbs.Name = "chkCleanExtrathumbs"
-        Me.chkCleanExtrathumbs.Size = New System.Drawing.Size(98, 17)
-        Me.chkCleanExtrathumbs.TabIndex = 12
-        Me.chkCleanExtrathumbs.Text = "/extrathumbs/"
-        Me.chkCleanExtrathumbs.UseVisualStyleBackColor = True
-        '
-        'chkCleanMovieTBN
-        '
-        Me.chkCleanMovieTBN.AutoSize = True
-        Me.chkCleanMovieTBN.Font = New System.Drawing.Font("Segoe UI", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.chkCleanMovieTBN.Location = New System.Drawing.Point(7, 29)
-        Me.chkCleanMovieTBN.Name = "chkCleanMovieTBN"
-        Me.chkCleanMovieTBN.Size = New System.Drawing.Size(81, 17)
-        Me.chkCleanMovieTBN.TabIndex = 1
-        Me.chkCleanMovieTBN.Text = "/movie.tbn"
-        Me.chkCleanMovieTBN.UseVisualStyleBackColor = True
-        '
-        'chkCleanMovieNameJPG
-        '
-        Me.chkCleanMovieNameJPG.AutoSize = True
-        Me.chkCleanMovieNameJPG.Font = New System.Drawing.Font("Segoe UI", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.chkCleanMovieNameJPG.Location = New System.Drawing.Point(7, 124)
-        Me.chkCleanMovieNameJPG.Name = "chkCleanMovieNameJPG"
-        Me.chkCleanMovieNameJPG.Size = New System.Drawing.Size(96, 17)
-        Me.chkCleanMovieNameJPG.TabIndex = 6
-        Me.chkCleanMovieNameJPG.Text = "/<movie>.jpg"
-        Me.chkCleanMovieNameJPG.UseVisualStyleBackColor = True
-        '
-        'chkCleanMovieTBNb
-        '
-        Me.chkCleanMovieTBNb.AutoSize = True
-        Me.chkCleanMovieTBNb.Font = New System.Drawing.Font("Segoe UI", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.chkCleanMovieTBNb.Location = New System.Drawing.Point(7, 48)
-        Me.chkCleanMovieTBNb.Name = "chkCleanMovieTBNb"
-        Me.chkCleanMovieTBNb.Size = New System.Drawing.Size(97, 17)
-        Me.chkCleanMovieTBNb.TabIndex = 2
-        Me.chkCleanMovieTBNb.Text = "/<movie>.tbn"
-        Me.chkCleanMovieTBNb.UseVisualStyleBackColor = True
-        '
-        'chkCleanMovieJPG
-        '
-        Me.chkCleanMovieJPG.AutoSize = True
-        Me.chkCleanMovieJPG.Font = New System.Drawing.Font("Segoe UI", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.chkCleanMovieJPG.Location = New System.Drawing.Point(7, 105)
-        Me.chkCleanMovieJPG.Name = "chkCleanMovieJPG"
-        Me.chkCleanMovieJPG.Size = New System.Drawing.Size(80, 17)
-        Me.chkCleanMovieJPG.TabIndex = 5
-        Me.chkCleanMovieJPG.Text = "/movie.jpg"
-        Me.chkCleanMovieJPG.UseVisualStyleBackColor = True
-        '
-        'chkCleanFanartJPG
-        '
-        Me.chkCleanFanartJPG.AutoSize = True
-        Me.chkCleanFanartJPG.Font = New System.Drawing.Font("Segoe UI", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.chkCleanFanartJPG.Location = New System.Drawing.Point(7, 143)
-        Me.chkCleanFanartJPG.Name = "chkCleanFanartJPG"
-        Me.chkCleanFanartJPG.Size = New System.Drawing.Size(81, 17)
-        Me.chkCleanFanartJPG.TabIndex = 7
-        Me.chkCleanFanartJPG.Text = "/fanart.jpg"
-        Me.chkCleanFanartJPG.UseVisualStyleBackColor = True
-        '
-        'chkCleanPosterJPG
-        '
-        Me.chkCleanPosterJPG.AutoSize = True
-        Me.chkCleanPosterJPG.Font = New System.Drawing.Font("Segoe UI", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.chkCleanPosterJPG.Location = New System.Drawing.Point(7, 86)
-        Me.chkCleanPosterJPG.Name = "chkCleanPosterJPG"
-        Me.chkCleanPosterJPG.Size = New System.Drawing.Size(83, 17)
-        Me.chkCleanPosterJPG.TabIndex = 4
-        Me.chkCleanPosterJPG.Text = "/poster.jpg"
-        Me.chkCleanPosterJPG.UseVisualStyleBackColor = True
-        '
-        'chkCleanMovieFanartJPG
-        '
-        Me.chkCleanMovieFanartJPG.AutoSize = True
-        Me.chkCleanMovieFanartJPG.Font = New System.Drawing.Font("Segoe UI", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.chkCleanMovieFanartJPG.Location = New System.Drawing.Point(7, 162)
-        Me.chkCleanMovieFanartJPG.Name = "chkCleanMovieFanartJPG"
-        Me.chkCleanMovieFanartJPG.Size = New System.Drawing.Size(131, 17)
-        Me.chkCleanMovieFanartJPG.TabIndex = 8
-        Me.chkCleanMovieFanartJPG.Text = "/<movie>-fanart.jpg"
-        Me.chkCleanMovieFanartJPG.UseVisualStyleBackColor = True
-        '
-        'chkCleanPosterTBN
-        '
-        Me.chkCleanPosterTBN.AutoSize = True
-        Me.chkCleanPosterTBN.Font = New System.Drawing.Font("Segoe UI", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.chkCleanPosterTBN.Location = New System.Drawing.Point(7, 67)
-        Me.chkCleanPosterTBN.Name = "chkCleanPosterTBN"
-        Me.chkCleanPosterTBN.Size = New System.Drawing.Size(84, 17)
-        Me.chkCleanPosterTBN.TabIndex = 3
-        Me.chkCleanPosterTBN.Text = "/poster.tbn"
-        Me.chkCleanPosterTBN.UseVisualStyleBackColor = True
-        '
-        'chkCleanMovieNFO
-        '
-        Me.chkCleanMovieNFO.AutoSize = True
-        Me.chkCleanMovieNFO.Font = New System.Drawing.Font("Segoe UI", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.chkCleanMovieNFO.Location = New System.Drawing.Point(7, 200)
-        Me.chkCleanMovieNFO.Name = "chkCleanMovieNFO"
-        Me.chkCleanMovieNFO.Size = New System.Drawing.Size(81, 17)
-        Me.chkCleanMovieNFO.TabIndex = 10
-        Me.chkCleanMovieNFO.Text = "/movie.nfo"
-        Me.chkCleanMovieNFO.UseVisualStyleBackColor = True
-        '
-        'chkCleanDotFanartJPG
-        '
-        Me.chkCleanDotFanartJPG.AutoSize = True
-        Me.chkCleanDotFanartJPG.Font = New System.Drawing.Font("Segoe UI", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.chkCleanDotFanartJPG.Location = New System.Drawing.Point(7, 181)
-        Me.chkCleanDotFanartJPG.Name = "chkCleanDotFanartJPG"
-        Me.chkCleanDotFanartJPG.Size = New System.Drawing.Size(130, 17)
-        Me.chkCleanDotFanartJPG.TabIndex = 9
-        Me.chkCleanDotFanartJPG.Text = "/<movie>.fanart.jpg"
-        Me.chkCleanDotFanartJPG.UseVisualStyleBackColor = True
-        '
-        'chkCleanMovieNFOb
-        '
-        Me.chkCleanMovieNFOb.AutoSize = True
-        Me.chkCleanMovieNFOb.Font = New System.Drawing.Font("Segoe UI", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.chkCleanMovieNFOb.Location = New System.Drawing.Point(7, 219)
-        Me.chkCleanMovieNFOb.Name = "chkCleanMovieNFOb"
-        Me.chkCleanMovieNFOb.Size = New System.Drawing.Size(97, 17)
-        Me.chkCleanMovieNFOb.TabIndex = 11
-        Me.chkCleanMovieNFOb.Text = "/<movie>.nfo"
-        Me.chkCleanMovieNFOb.UseVisualStyleBackColor = True
-        '
-        'tpFileSystemCleanerExpert
-        '
-        Me.tpFileSystemCleanerExpert.BackColor = System.Drawing.Color.White
-        Me.tpFileSystemCleanerExpert.Controls.Add(Me.chkFileSystemCleanerWhitelist)
-        Me.tpFileSystemCleanerExpert.Controls.Add(Me.lblFileSystemCleanerWhitelist)
-        Me.tpFileSystemCleanerExpert.Controls.Add(Me.btnFileSystemCleanerWhitelistRemove)
-        Me.tpFileSystemCleanerExpert.Controls.Add(Me.btnFileSystemCleanerWhitelistAdd)
-        Me.tpFileSystemCleanerExpert.Controls.Add(Me.txtFileSystemCleanerWhitelist)
-        Me.tpFileSystemCleanerExpert.Controls.Add(Me.lstFileSystemCleanerWhitelist)
-        Me.tpFileSystemCleanerExpert.Controls.Add(Me.lblFileSystemCleanerWarning)
-        Me.tpFileSystemCleanerExpert.Location = New System.Drawing.Point(4, 25)
-        Me.tpFileSystemCleanerExpert.Name = "tpFileSystemCleanerExpert"
-        Me.tpFileSystemCleanerExpert.Padding = New System.Windows.Forms.Padding(3)
-        Me.tpFileSystemCleanerExpert.Size = New System.Drawing.Size(172, 132)
-        Me.tpFileSystemCleanerExpert.TabIndex = 1
-        Me.tpFileSystemCleanerExpert.Text = "Expert"
-        Me.tpFileSystemCleanerExpert.UseVisualStyleBackColor = True
-        '
-        'chkFileSystemCleanerWhitelist
-        '
-        Me.chkFileSystemCleanerWhitelist.AutoSize = True
-        Me.chkFileSystemCleanerWhitelist.Font = New System.Drawing.Font("Segoe UI", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.chkFileSystemCleanerWhitelist.Location = New System.Drawing.Point(4, 85)
-        Me.chkFileSystemCleanerWhitelist.Name = "chkFileSystemCleanerWhitelist"
-        Me.chkFileSystemCleanerWhitelist.Size = New System.Drawing.Size(163, 17)
-        Me.chkFileSystemCleanerWhitelist.TabIndex = 1
-        Me.chkFileSystemCleanerWhitelist.Text = "Whitelist Video Extensions"
-        Me.chkFileSystemCleanerWhitelist.UseVisualStyleBackColor = True
-        '
-        'lblFileSystemCleanerWhitelist
-        '
-        Me.lblFileSystemCleanerWhitelist.AutoSize = True
-        Me.lblFileSystemCleanerWhitelist.Font = New System.Drawing.Font("Segoe UI", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.lblFileSystemCleanerWhitelist.Location = New System.Drawing.Point(19, 107)
-        Me.lblFileSystemCleanerWhitelist.Name = "lblFileSystemCleanerWhitelist"
-        Me.lblFileSystemCleanerWhitelist.Size = New System.Drawing.Size(127, 13)
-        Me.lblFileSystemCleanerWhitelist.TabIndex = 2
-        Me.lblFileSystemCleanerWhitelist.Text = "Whitelisted Extensions:"
-        '
-        'btnFileSystemCleanerWhitelistRemove
-        '
-        Me.btnFileSystemCleanerWhitelistRemove.Image = CType(resources.GetObject("btnFileSystemCleanerWhitelistRemove.Image"), System.Drawing.Image)
-        Me.btnFileSystemCleanerWhitelistRemove.Location = New System.Drawing.Point(134, 251)
-        Me.btnFileSystemCleanerWhitelistRemove.Name = "btnFileSystemCleanerWhitelistRemove"
-        Me.btnFileSystemCleanerWhitelistRemove.Size = New System.Drawing.Size(23, 23)
-        Me.btnFileSystemCleanerWhitelistRemove.TabIndex = 6
-        Me.btnFileSystemCleanerWhitelistRemove.UseVisualStyleBackColor = True
-        '
-        'btnFileSystemCleanerWhitelistAdd
-        '
-        Me.btnFileSystemCleanerWhitelistAdd.Image = CType(resources.GetObject("btnFileSystemCleanerWhitelistAdd.Image"), System.Drawing.Image)
-        Me.btnFileSystemCleanerWhitelistAdd.Location = New System.Drawing.Point(82, 251)
-        Me.btnFileSystemCleanerWhitelistAdd.Name = "btnFileSystemCleanerWhitelistAdd"
-        Me.btnFileSystemCleanerWhitelistAdd.Size = New System.Drawing.Size(23, 23)
-        Me.btnFileSystemCleanerWhitelistAdd.TabIndex = 5
-        Me.btnFileSystemCleanerWhitelistAdd.UseVisualStyleBackColor = True
-        '
-        'txtFileSystemCleanerWhitelist
-        '
-        Me.txtFileSystemCleanerWhitelist.Font = New System.Drawing.Font("Segoe UI", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.txtFileSystemCleanerWhitelist.Location = New System.Drawing.Point(20, 252)
-        Me.txtFileSystemCleanerWhitelist.Name = "txtFileSystemCleanerWhitelist"
-        Me.txtFileSystemCleanerWhitelist.Size = New System.Drawing.Size(61, 22)
-        Me.txtFileSystemCleanerWhitelist.TabIndex = 4
-        '
-        'lstFileSystemCleanerWhitelist
-        '
-        Me.lstFileSystemCleanerWhitelist.Font = New System.Drawing.Font("Segoe UI", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(238, Byte))
-        Me.lstFileSystemCleanerWhitelist.FormattingEnabled = True
-        Me.lstFileSystemCleanerWhitelist.Location = New System.Drawing.Point(19, 126)
-        Me.lstFileSystemCleanerWhitelist.Name = "lstFileSystemCleanerWhitelist"
-        Me.lstFileSystemCleanerWhitelist.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended
-        Me.lstFileSystemCleanerWhitelist.Size = New System.Drawing.Size(138, 108)
-        Me.lstFileSystemCleanerWhitelist.TabIndex = 3
-        '
-        'lblFileSystemCleanerWarning
-        '
-        Me.lblFileSystemCleanerWarning.Font = New System.Drawing.Font("Segoe UI", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(238, Byte))
-        Me.lblFileSystemCleanerWarning.ForeColor = System.Drawing.Color.Red
-        Me.lblFileSystemCleanerWarning.Location = New System.Drawing.Point(6, 10)
-        Me.lblFileSystemCleanerWarning.Name = "lblFileSystemCleanerWarning"
-        Me.lblFileSystemCleanerWarning.Size = New System.Drawing.Size(160, 68)
-        Me.lblFileSystemCleanerWarning.TabIndex = 0
-        Me.lblFileSystemCleanerWarning.Text = "WARNING: Using the Expert Mode Cleaner could potentially delete wanted files. Tak" &
-    "e care when using this tool."
-        Me.lblFileSystemCleanerWarning.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
         '
         'gbMovieGeneralMiscOpts
         '
@@ -5661,7 +5352,6 @@ Partial Class dlgSettings
         Me.tblFileSystem.Controls.Add(Me.gbFileSystemExcludedDirs, 0, 3)
         Me.tblFileSystem.Controls.Add(Me.gbFileSystemValidSubtitlesExts, 1, 0)
         Me.tblFileSystem.Controls.Add(Me.gbFileSystemValidThemeExts, 1, 2)
-        Me.tblFileSystem.Controls.Add(Me.gbFileSystemCleanFiles, 2, 1)
         Me.tblFileSystem.Dock = System.Windows.Forms.DockStyle.Fill
         Me.tblFileSystem.Location = New System.Drawing.Point(0, 0)
         Me.tblFileSystem.Name = "tblFileSystem"
@@ -11064,6 +10754,10 @@ Partial Class dlgSettings
         'colTVSourcesSorting
         '
         Me.colTVSourcesSorting.Text = "Sorting"
+        '
+        'colTVSourcesSingle
+        '
+        Me.colTVSourcesSingle.Text = "Single TV Show"
         '
         'gbTVSourcesFilenamingOpts
         '
@@ -22653,10 +22347,6 @@ Partial Class dlgSettings
         Me.tblSettingsFooter.Size = New System.Drawing.Size(1207, 74)
         Me.tblSettingsFooter.TabIndex = 0
         '
-        'colTVSourcesSingle
-        '
-        Me.colTVSourcesSingle.Text = "Single TV Show"
-        '
         'dlgSettings
         '
         Me.AcceptButton = Me.btnOK
@@ -22697,12 +22387,6 @@ Partial Class dlgSettings
         Me.gbGeneralThemes.PerformLayout()
         Me.tblGeneralThemes.ResumeLayout(False)
         Me.tblGeneralThemes.PerformLayout()
-        Me.gbFileSystemCleanFiles.ResumeLayout(False)
-        Me.tcFileSystemCleaner.ResumeLayout(False)
-        Me.tpFileSystemCleanerStandard.ResumeLayout(False)
-        Me.tpFileSystemCleanerStandard.PerformLayout()
-        Me.tpFileSystemCleanerExpert.ResumeLayout(False)
-        Me.tpFileSystemCleanerExpert.PerformLayout()
         Me.gbMovieGeneralMiscOpts.ResumeLayout(False)
         Me.gbMovieGeneralMiscOpts.PerformLayout()
         Me.tblMovieGeneralMiscOpts.ResumeLayout(False)
@@ -23482,14 +23166,6 @@ End Sub
     Friend WithEvents lblSettingsTopDetails As System.Windows.Forms.Label
     Friend WithEvents lblSettingsTopTitle As System.Windows.Forms.Label
     Friend WithEvents pbSettingsTopLogo As System.Windows.Forms.PictureBox
-    Friend WithEvents gbFileSystemCleanFiles As System.Windows.Forms.GroupBox
-    Friend WithEvents chkCleanFolderJPG As System.Windows.Forms.CheckBox
-    Friend WithEvents chkCleanFanartJPG As System.Windows.Forms.CheckBox
-    Friend WithEvents chkCleanMovieTBNb As System.Windows.Forms.CheckBox
-    Friend WithEvents chkCleanMovieTBN As System.Windows.Forms.CheckBox
-    Friend WithEvents chkCleanMovieNFOb As System.Windows.Forms.CheckBox
-    Friend WithEvents chkCleanMovieNFO As System.Windows.Forms.CheckBox
-    Friend WithEvents chkCleanMovieFanartJPG As System.Windows.Forms.CheckBox
     Friend WithEvents gbGeneralMiscOpts As System.Windows.Forms.GroupBox
     Friend WithEvents lblGeneralOverwriteNfo As System.Windows.Forms.Label
     Friend WithEvents chkGeneralOverwriteNfo As System.Windows.Forms.CheckBox
@@ -23506,11 +23182,6 @@ End Sub
     Friend WithEvents btnMovieSourceRemove As System.Windows.Forms.Button
     Friend WithEvents btnMovieSourceAdd As System.Windows.Forms.Button
     Friend WithEvents gbMovieImagesOpts As System.Windows.Forms.GroupBox
-    Friend WithEvents chkCleanMovieNameJPG As System.Windows.Forms.CheckBox
-    Friend WithEvents chkCleanMovieJPG As System.Windows.Forms.CheckBox
-    Friend WithEvents chkCleanPosterJPG As System.Windows.Forms.CheckBox
-    Friend WithEvents chkCleanPosterTBN As System.Windows.Forms.CheckBox
-    Friend WithEvents chkCleanDotFanartJPG As System.Windows.Forms.CheckBox
     Friend WithEvents gbMovieGeneralMiscOpts As System.Windows.Forms.GroupBox
     Friend WithEvents chkMovieGeneralMarkNew As System.Windows.Forms.CheckBox
     Friend WithEvents gbMovieImagesFanartOpts As System.Windows.Forms.GroupBox
@@ -23532,7 +23203,6 @@ End Sub
     Friend WithEvents pnlMovieGeneral As System.Windows.Forms.Panel
     Friend WithEvents lblSettingsCurrent As System.Windows.Forms.Label
     Friend WithEvents pnlSettingsCurrent As System.Windows.Forms.Panel
-    Friend WithEvents chkCleanExtrathumbs As System.Windows.Forms.CheckBox
     Friend WithEvents pnlFileSystem As System.Windows.Forms.Panel
     Friend WithEvents gbFileSystemValidVideoExts As System.Windows.Forms.GroupBox
     Friend WithEvents btnFileSystemValidVideoExtsRemove As System.Windows.Forms.Button
@@ -23553,16 +23223,6 @@ End Sub
     Friend WithEvents chkMovieSkipStackedSizeCheck As System.Windows.Forms.CheckBox
     Friend WithEvents chkMovieFanartPrefOnly As System.Windows.Forms.CheckBox
     Friend WithEvents chkMovieImagesNotSaveURLToNfo As System.Windows.Forms.CheckBox
-    Friend WithEvents tcFileSystemCleaner As System.Windows.Forms.TabControl
-    Friend WithEvents tpFileSystemCleanerStandard As System.Windows.Forms.TabPage
-    Friend WithEvents tpFileSystemCleanerExpert As System.Windows.Forms.TabPage
-    Friend WithEvents lblFileSystemCleanerWarning As System.Windows.Forms.Label
-    Friend WithEvents btnFileSystemCleanerWhitelistRemove As System.Windows.Forms.Button
-    Friend WithEvents btnFileSystemCleanerWhitelistAdd As System.Windows.Forms.Button
-    Friend WithEvents txtFileSystemCleanerWhitelist As System.Windows.Forms.TextBox
-    Friend WithEvents lstFileSystemCleanerWhitelist As System.Windows.Forms.ListBox
-    Friend WithEvents lblFileSystemCleanerWhitelist As System.Windows.Forms.Label
-    Friend WithEvents chkFileSystemCleanerWhitelist As System.Windows.Forms.CheckBox
     Friend WithEvents chkGeneralDisplayImgDims As System.Windows.Forms.CheckBox
     Friend WithEvents chkGeneralDisplayFanart As System.Windows.Forms.CheckBox
     Friend WithEvents chkGeneralDisplayPoster As System.Windows.Forms.CheckBox

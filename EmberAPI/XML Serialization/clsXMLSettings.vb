@@ -10,23 +10,7 @@ Imports System.Drawing
 Partial Public Class clsXMLSettings
 
 #Region "Fields"
-    Private _cleandotfanartjpg As Boolean
-    Private _cleanextrathumbs As Boolean
-    Private _cleanfanartjpg As Boolean
-    Private _cleanfolderjpg As Boolean
-    Private _cleanmoviejpg As Boolean
-    Private _cleanmovienfo As Boolean
-    Private _cleanmovienfob As Boolean
-    Private _cleanmovietbn As Boolean
-    Private _cleanmovietbnb As Boolean
-    Private _cleanmoviefanartjpg As Boolean
-    Private _cleanmovienamejpg As Boolean
-    Private _cleanposterjpg As Boolean
-    Private _cleanpostertbn As Boolean
     Private _embermodules As List(Of ModulesManager._XMLEmberModuleClass)
-    Private _filesystemcleanerwhitelist As Boolean
-    Private _filesystemcleanerwhitelistexts As List(Of String)
-    Private _filesystemexpertcleaner As Boolean
     Private _filesystemnostackexts As List(Of String)
     Private _filesystemvalidexts As List(Of String)
     Private _filesystemvalidsubtitlesexts As List(Of String)
@@ -1153,141 +1137,6 @@ Partial Public Class clsXMLSettings
         End Set
     End Property
 
-    Public Property CleanDotFanartJPG() As Boolean
-        Get
-            Return Me._cleandotfanartjpg
-        End Get
-        Set(ByVal value As Boolean)
-            Me._cleandotfanartjpg = value
-        End Set
-    End Property
-
-    Public Property CleanExtrathumbs() As Boolean
-        Get
-            Return Me._cleanextrathumbs
-        End Get
-        Set(ByVal value As Boolean)
-            Me._cleanextrathumbs = value
-        End Set
-    End Property
-
-    Public Property CleanFanartJPG() As Boolean
-        Get
-            Return Me._cleanfanartjpg
-        End Get
-        Set(ByVal value As Boolean)
-            Me._cleanfanartjpg = value
-        End Set
-    End Property
-
-    Public Property CleanFolderJPG() As Boolean
-        Get
-            Return Me._cleanfolderjpg
-        End Get
-        Set(ByVal value As Boolean)
-            Me._cleanfolderjpg = value
-        End Set
-    End Property
-
-    Public Property CleanMovieFanartJPG() As Boolean
-        Get
-            Return Me._cleanmoviefanartjpg
-        End Get
-        Set(ByVal value As Boolean)
-            Me._cleanmoviefanartjpg = value
-        End Set
-    End Property
-
-    Public Property CleanMovieJPG() As Boolean
-        Get
-            Return Me._cleanmoviejpg
-        End Get
-        Set(ByVal value As Boolean)
-            Me._cleanmoviejpg = value
-        End Set
-    End Property
-
-    Public Property CleanMovieNameJPG() As Boolean
-        Get
-            Return Me._cleanmovienamejpg
-        End Get
-        Set(ByVal value As Boolean)
-            Me._cleanmovienamejpg = value
-        End Set
-    End Property
-
-    Public Property CleanMovieNFO() As Boolean
-        Get
-            Return Me._cleanmovienfo
-        End Get
-        Set(ByVal value As Boolean)
-            Me._cleanmovienfo = value
-        End Set
-    End Property
-
-    Public Property CleanMovieNFOB() As Boolean
-        Get
-            Return Me._cleanmovienfob
-        End Get
-        Set(ByVal value As Boolean)
-            Me._cleanmovienfob = value
-        End Set
-    End Property
-
-    Public Property CleanMovieTBN() As Boolean
-        Get
-            Return _cleanmovietbn
-        End Get
-        Set(ByVal value As Boolean)
-            _cleanmovietbn = value
-        End Set
-    End Property
-
-    Public Property CleanMovieTBNB() As Boolean
-        Get
-            Return Me._cleanmovietbnb
-        End Get
-        Set(ByVal value As Boolean)
-            Me._cleanmovietbnb = value
-        End Set
-    End Property
-
-    Public Property CleanPosterJPG() As Boolean
-        Get
-            Return Me._cleanposterjpg
-        End Get
-        Set(ByVal value As Boolean)
-            Me._cleanposterjpg = value
-        End Set
-    End Property
-
-    Public Property CleanPosterTBN() As Boolean
-        Get
-            Return Me._cleanpostertbn
-        End Get
-        Set(ByVal value As Boolean)
-            Me._cleanpostertbn = value
-        End Set
-    End Property
-
-    Public Property FileSystemCleanerWhitelistExts() As List(Of String)
-        Get
-            Return Me._filesystemcleanerwhitelistexts
-        End Get
-        Set(ByVal value As List(Of String))
-            Me._filesystemcleanerwhitelistexts = value
-        End Set
-    End Property
-
-    Public Property FileSystemCleanerWhitelist() As Boolean
-        Get
-            Return Me._filesystemcleanerwhitelist
-        End Get
-        Set(ByVal value As Boolean)
-            Me._filesystemcleanerwhitelist = value
-        End Set
-    End Property
-
     Public Property TVDisplayMissingEpisodes() As Boolean
         Get
             Return Me._tvdisplaymissingepisodes
@@ -1548,15 +1397,6 @@ Partial Public Class clsXMLSettings
         End Get
         Set(ByVal value As Boolean)
             Me._tvepisodepropercase = value
-        End Set
-    End Property
-
-    Public Property FileSystemExpertCleaner() As Boolean
-        Get
-            Return Me._filesystemexpertcleaner
-        End Get
-        Set(ByVal value As Boolean)
-            Me._filesystemexpertcleaner = value
         End Set
     End Property
 
