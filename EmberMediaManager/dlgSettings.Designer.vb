@@ -1593,6 +1593,11 @@ Partial Class dlgSettings
         Me.scSettingsBody = New System.Windows.Forms.SplitContainer()
         Me.scSettingsMain = New System.Windows.Forms.SplitContainer()
         Me.tblSettingsFooter = New System.Windows.Forms.TableLayoutPanel()
+        Me.gbTVSourcesBackdropsFolderOpts = New System.Windows.Forms.GroupBox()
+        Me.TableLayoutPanel5 = New System.Windows.Forms.TableLayoutPanel()
+        Me.chkTVSourcesBackdropsAuto = New System.Windows.Forms.CheckBox()
+        Me.txtTVSourcesBackdropsFolderPath = New System.Windows.Forms.TextBox()
+        Me.btnTVSourcesBackdropsFolderPathBrowse = New System.Windows.Forms.Button()
         Me.gbGeneralMiscOpts.SuspendLayout()
         Me.tblGeneralMisc.SuspendLayout()
         Me.gbGeneralThemes.SuspendLayout()
@@ -2003,6 +2008,8 @@ Partial Class dlgSettings
         Me.scSettingsMain.Panel2.SuspendLayout()
         Me.scSettingsMain.SuspendLayout()
         Me.tblSettingsFooter.SuspendLayout()
+        Me.gbTVSourcesBackdropsFolderOpts.SuspendLayout()
+        Me.TableLayoutPanel5.SuspendLayout()
         Me.SuspendLayout()
         '
         'gbGeneralMiscOpts
@@ -10633,7 +10640,7 @@ Partial Class dlgSettings
         Me.pnlTVSources.Controls.Add(Me.tblTVSources)
         Me.pnlTVSources.Location = New System.Drawing.Point(900, 900)
         Me.pnlTVSources.Name = "pnlTVSources"
-        Me.pnlTVSources.Size = New System.Drawing.Size(836, 506)
+        Me.pnlTVSources.Size = New System.Drawing.Size(870, 533)
         Me.pnlTVSources.TabIndex = 11
         Me.pnlTVSources.Visible = False
         '
@@ -10651,7 +10658,7 @@ Partial Class dlgSettings
         Me.tblTVSources.RowCount = 2
         Me.tblTVSources.RowStyles.Add(New System.Windows.Forms.RowStyle())
         Me.tblTVSources.RowStyles.Add(New System.Windows.Forms.RowStyle())
-        Me.tblTVSources.Size = New System.Drawing.Size(836, 506)
+        Me.tblTVSources.Size = New System.Drawing.Size(870, 533)
         Me.tblTVSources.TabIndex = 1
         '
         'tcTVSources
@@ -10684,7 +10691,7 @@ Partial Class dlgSettings
         Me.tblTVSourcesGeneral.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle())
         Me.tblTVSourcesGeneral.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle())
         Me.tblTVSourcesGeneral.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle())
-        Me.tblTVSourcesGeneral.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20.0!))
+        Me.tblTVSourcesGeneral.Controls.Add(Me.gbTVSourcesBackdropsFolderOpts, 1, 5)
         Me.tblTVSourcesGeneral.Controls.Add(Me.lvTVSources, 0, 0)
         Me.tblTVSourcesGeneral.Controls.Add(Me.gbTVSourcesFilenamingOpts, 0, 3)
         Me.tblTVSourcesGeneral.Controls.Add(Me.gbTVSourcesMiscOpts, 1, 4)
@@ -10695,7 +10702,8 @@ Partial Class dlgSettings
         Me.tblTVSourcesGeneral.Dock = System.Windows.Forms.DockStyle.Fill
         Me.tblTVSourcesGeneral.Location = New System.Drawing.Point(0, 0)
         Me.tblTVSourcesGeneral.Name = "tblTVSourcesGeneral"
-        Me.tblTVSourcesGeneral.RowCount = 7
+        Me.tblTVSourcesGeneral.RowCount = 8
+        Me.tblTVSourcesGeneral.RowStyles.Add(New System.Windows.Forms.RowStyle())
         Me.tblTVSourcesGeneral.RowStyles.Add(New System.Windows.Forms.RowStyle())
         Me.tblTVSourcesGeneral.RowStyles.Add(New System.Windows.Forms.RowStyle())
         Me.tblTVSourcesGeneral.RowStyles.Add(New System.Windows.Forms.RowStyle())
@@ -10717,7 +10725,7 @@ Partial Class dlgSettings
         Me.lvTVSources.Location = New System.Drawing.Point(3, 3)
         Me.lvTVSources.Name = "lvTVSources"
         Me.tblTVSourcesGeneral.SetRowSpan(Me.lvTVSources, 3)
-        Me.lvTVSources.Size = New System.Drawing.Size(690, 105)
+        Me.lvTVSources.Size = New System.Drawing.Size(705, 105)
         Me.lvTVSources.Sorting = System.Windows.Forms.SortOrder.Ascending
         Me.lvTVSources.TabIndex = 0
         Me.lvTVSources.UseCompatibleStateImageBehavior = False
@@ -10766,7 +10774,7 @@ Partial Class dlgSettings
         Me.gbTVSourcesFilenamingOpts.Dock = System.Windows.Forms.DockStyle.Fill
         Me.gbTVSourcesFilenamingOpts.Location = New System.Drawing.Point(3, 114)
         Me.gbTVSourcesFilenamingOpts.Name = "gbTVSourcesFilenamingOpts"
-        Me.tblTVSourcesGeneral.SetRowSpan(Me.gbTVSourcesFilenamingOpts, 3)
+        Me.tblTVSourcesGeneral.SetRowSpan(Me.gbTVSourcesFilenamingOpts, 4)
         Me.gbTVSourcesFilenamingOpts.Size = New System.Drawing.Size(532, 379)
         Me.gbTVSourcesFilenamingOpts.TabIndex = 6
         Me.gbTVSourcesFilenamingOpts.TabStop = False
@@ -13330,7 +13338,7 @@ Partial Class dlgSettings
         Me.btnRemTVSource.Font = New System.Drawing.Font("Segoe UI", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(238, Byte))
         Me.btnRemTVSource.Image = CType(resources.GetObject("btnRemTVSource.Image"), System.Drawing.Image)
         Me.btnRemTVSource.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft
-        Me.btnRemTVSource.Location = New System.Drawing.Point(699, 85)
+        Me.btnRemTVSource.Location = New System.Drawing.Point(714, 85)
         Me.btnRemTVSource.Name = "btnRemTVSource"
         Me.btnRemTVSource.Size = New System.Drawing.Size(104, 23)
         Me.btnRemTVSource.TabIndex = 3
@@ -13343,7 +13351,7 @@ Partial Class dlgSettings
         Me.btnTVSourceEdit.Font = New System.Drawing.Font("Segoe UI", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(238, Byte))
         Me.btnTVSourceEdit.Image = CType(resources.GetObject("btnTVSourceEdit.Image"), System.Drawing.Image)
         Me.btnTVSourceEdit.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft
-        Me.btnTVSourceEdit.Location = New System.Drawing.Point(699, 32)
+        Me.btnTVSourceEdit.Location = New System.Drawing.Point(714, 32)
         Me.btnTVSourceEdit.Name = "btnTVSourceEdit"
         Me.btnTVSourceEdit.Size = New System.Drawing.Size(104, 23)
         Me.btnTVSourceEdit.TabIndex = 2
@@ -13356,7 +13364,7 @@ Partial Class dlgSettings
         Me.btnTVSourceAdd.Font = New System.Drawing.Font("Segoe UI", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(238, Byte))
         Me.btnTVSourceAdd.Image = CType(resources.GetObject("btnTVSourceAdd.Image"), System.Drawing.Image)
         Me.btnTVSourceAdd.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft
-        Me.btnTVSourceAdd.Location = New System.Drawing.Point(699, 3)
+        Me.btnTVSourceAdd.Location = New System.Drawing.Point(714, 3)
         Me.btnTVSourceAdd.Name = "btnTVSourceAdd"
         Me.btnTVSourceAdd.Size = New System.Drawing.Size(104, 23)
         Me.btnTVSourceAdd.TabIndex = 1
@@ -21763,7 +21771,7 @@ Partial Class dlgSettings
         Me.chkMovieSetPosterPrefOnly.AutoSize = True
         Me.tblMovieSetImagesPosterOpts.SetColumnSpan(Me.chkMovieSetPosterPrefOnly, 2)
         Me.chkMovieSetPosterPrefOnly.Font = New System.Drawing.Font("Segoe UI", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.chkMovieSetPosterPrefOnly.Location = New System.Drawing.Point(186, 25)
+        Me.chkMovieSetPosterPrefOnly.Location = New System.Drawing.Point(158, 25)
         Me.chkMovieSetPosterPrefOnly.Name = "chkMovieSetPosterPrefOnly"
         Me.chkMovieSetPosterPrefOnly.Size = New System.Drawing.Size(50, 17)
         Me.chkMovieSetPosterPrefOnly.TabIndex = 2
@@ -22346,6 +22354,75 @@ Partial Class dlgSettings
         Me.tblSettingsFooter.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
         Me.tblSettingsFooter.Size = New System.Drawing.Size(1207, 74)
         Me.tblSettingsFooter.TabIndex = 0
+        '
+        'gbTVSourcesBackdropsFolderOpts
+        '
+        Me.gbTVSourcesBackdropsFolderOpts.AutoSize = True
+        Me.tblTVSourcesGeneral.SetColumnSpan(Me.gbTVSourcesBackdropsFolderOpts, 2)
+        Me.gbTVSourcesBackdropsFolderOpts.Controls.Add(Me.TableLayoutPanel5)
+        Me.gbTVSourcesBackdropsFolderOpts.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.gbTVSourcesBackdropsFolderOpts.Font = New System.Drawing.Font("Segoe UI", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(238, Byte))
+        Me.gbTVSourcesBackdropsFolderOpts.Location = New System.Drawing.Point(541, 359)
+        Me.gbTVSourcesBackdropsFolderOpts.Name = "gbTVSourcesBackdropsFolderOpts"
+        Me.gbTVSourcesBackdropsFolderOpts.Size = New System.Drawing.Size(277, 72)
+        Me.gbTVSourcesBackdropsFolderOpts.TabIndex = 7
+        Me.gbTVSourcesBackdropsFolderOpts.TabStop = False
+        Me.gbTVSourcesBackdropsFolderOpts.Text = "Backdrops Folder"
+        '
+        'TableLayoutPanel5
+        '
+        Me.TableLayoutPanel5.AutoSize = True
+        Me.TableLayoutPanel5.ColumnCount = 3
+        Me.TableLayoutPanel5.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle())
+        Me.TableLayoutPanel5.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle())
+        Me.TableLayoutPanel5.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle())
+        Me.TableLayoutPanel5.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20.0!))
+        Me.TableLayoutPanel5.Controls.Add(Me.chkTVSourcesBackdropsAuto, 0, 1)
+        Me.TableLayoutPanel5.Controls.Add(Me.txtTVSourcesBackdropsFolderPath, 0, 0)
+        Me.TableLayoutPanel5.Controls.Add(Me.btnTVSourcesBackdropsFolderPathBrowse, 1, 0)
+        Me.TableLayoutPanel5.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.TableLayoutPanel5.Location = New System.Drawing.Point(3, 18)
+        Me.TableLayoutPanel5.Name = "TableLayoutPanel5"
+        Me.TableLayoutPanel5.RowCount = 3
+        Me.TableLayoutPanel5.RowStyles.Add(New System.Windows.Forms.RowStyle())
+        Me.TableLayoutPanel5.RowStyles.Add(New System.Windows.Forms.RowStyle())
+        Me.TableLayoutPanel5.RowStyles.Add(New System.Windows.Forms.RowStyle())
+        Me.TableLayoutPanel5.Size = New System.Drawing.Size(271, 51)
+        Me.TableLayoutPanel5.TabIndex = 9
+        '
+        'chkTVSourcesBackdropsAuto
+        '
+        Me.chkTVSourcesBackdropsAuto.Anchor = System.Windows.Forms.AnchorStyles.Left
+        Me.chkTVSourcesBackdropsAuto.AutoSize = True
+        Me.TableLayoutPanel5.SetColumnSpan(Me.chkTVSourcesBackdropsAuto, 2)
+        Me.chkTVSourcesBackdropsAuto.Enabled = False
+        Me.chkTVSourcesBackdropsAuto.Font = New System.Drawing.Font("Segoe UI", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.chkTVSourcesBackdropsAuto.Location = New System.Drawing.Point(3, 31)
+        Me.chkTVSourcesBackdropsAuto.Name = "chkTVSourcesBackdropsAuto"
+        Me.chkTVSourcesBackdropsAuto.Size = New System.Drawing.Size(265, 17)
+        Me.chkTVSourcesBackdropsAuto.TabIndex = 2
+        Me.chkTVSourcesBackdropsAuto.Text = "Automatically Save Fanart To Backdrops Folder"
+        Me.chkTVSourcesBackdropsAuto.UseVisualStyleBackColor = True
+        '
+        'txtTVSourcesBackdropsFolderPath
+        '
+        Me.txtTVSourcesBackdropsFolderPath.Anchor = System.Windows.Forms.AnchorStyles.Left
+        Me.txtTVSourcesBackdropsFolderPath.Font = New System.Drawing.Font("Segoe UI", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.txtTVSourcesBackdropsFolderPath.Location = New System.Drawing.Point(3, 3)
+        Me.txtTVSourcesBackdropsFolderPath.Name = "txtTVSourcesBackdropsFolderPath"
+        Me.txtTVSourcesBackdropsFolderPath.Size = New System.Drawing.Size(230, 22)
+        Me.txtTVSourcesBackdropsFolderPath.TabIndex = 0
+        '
+        'btnTVSourcesBackdropsFolderPathBrowse
+        '
+        Me.btnTVSourcesBackdropsFolderPathBrowse.Anchor = System.Windows.Forms.AnchorStyles.Left
+        Me.btnTVSourcesBackdropsFolderPathBrowse.Font = New System.Drawing.Font("Segoe UI", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(238, Byte))
+        Me.btnTVSourcesBackdropsFolderPathBrowse.Location = New System.Drawing.Point(239, 3)
+        Me.btnTVSourcesBackdropsFolderPathBrowse.Name = "btnTVSourcesBackdropsFolderPathBrowse"
+        Me.btnTVSourcesBackdropsFolderPathBrowse.Size = New System.Drawing.Size(25, 22)
+        Me.btnTVSourcesBackdropsFolderPathBrowse.TabIndex = 1
+        Me.btnTVSourcesBackdropsFolderPathBrowse.Text = "..."
+        Me.btnTVSourcesBackdropsFolderPathBrowse.UseVisualStyleBackColor = True
         '
         'dlgSettings
         '
@@ -23155,6 +23232,10 @@ Partial Class dlgSettings
         CType(Me.scSettingsMain, System.ComponentModel.ISupportInitialize).EndInit()
         Me.scSettingsMain.ResumeLayout(False)
         Me.tblSettingsFooter.ResumeLayout(False)
+        Me.gbTVSourcesBackdropsFolderOpts.ResumeLayout(False)
+        Me.gbTVSourcesBackdropsFolderOpts.PerformLayout()
+        Me.TableLayoutPanel5.ResumeLayout(False)
+        Me.TableLayoutPanel5.PerformLayout()
         Me.ResumeLayout(False)
         Me.PerformLayout
 
@@ -24724,4 +24805,9 @@ End Sub
     Friend WithEvents chkMovieSetImagesForceLanguage As CheckBox
     Friend WithEvents cbMovieSetImagesForcedLanguage As ComboBox
     Friend WithEvents colTVSourcesSingle As ColumnHeader
+    Friend WithEvents gbTVSourcesBackdropsFolderOpts As GroupBox
+    Friend WithEvents TableLayoutPanel5 As TableLayoutPanel
+    Friend WithEvents chkTVSourcesBackdropsAuto As CheckBox
+    Friend WithEvents txtTVSourcesBackdropsFolderPath As TextBox
+    Friend WithEvents btnTVSourcesBackdropsFolderPathBrowse As Button
 End Class

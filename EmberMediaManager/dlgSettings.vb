@@ -815,6 +815,17 @@ Public Class dlgSettings
         End With
     End Sub
 
+    Private Sub btnTVSourcesBackdropsFolderPathBrowse_Click(ByVal sender As Object, ByVal e As EventArgs) Handles btnTVSourcesBackdropsFolderPathBrowse.Click
+        With fbdBrowse
+            fbdBrowse.Description = Master.eLang.GetString(552, "Select the folder where you wish to store your backdrops...")
+            If .ShowDialog = DialogResult.OK Then
+                If Not String.IsNullOrEmpty(.SelectedPath.ToString) AndAlso Directory.Exists(.SelectedPath) Then
+                    txtTVSourcesBackdropsFolderPath.Text = .SelectedPath.ToString
+                End If
+            End If
+        End With
+    End Sub
+
     Private Sub btnCancel_Click(ByVal sender As Object, ByVal e As EventArgs) Handles btnCancel.Click
         If Not didApply Then sResult.DidCancel = True
         RemoveScraperPanels()
@@ -3186,6 +3197,7 @@ Public Class dlgSettings
             End If
             chkTVShowProperCase.Checked = .TVShowProperCase
             chkTVShowThemeKeepExisting.Checked = .TVShowThemeKeepExisting
+            chkTVSourcesBackdropsAuto.Checked = .TVBackdropsAuto
             lstFileSystemNoStackExts.Items.AddRange(.FileSystemNoStackExts.ToArray)
             If .MovieGeneralCustomScrapeButtonEnabled Then
                 rbMovieGeneralCustomScrapeButtonEnabled.Checked = True
@@ -3204,15 +3216,15 @@ Public Class dlgSettings
             End If
             txtGeneralImageFilterPosterMatchRate.Text = .GeneralImageFilterPosterMatchTolerance.ToString
             txtGeneralImageFilterFanartMatchRate.Text = .GeneralImageFilterFanartMatchTolerance.ToString
-            txtGeneralDaemonPath.Text = .GeneralDaemonPath.ToString
-            txtMovieSourcesBackdropsFolderPath.Text = .MovieBackdropsPath.ToString
+            txtGeneralDaemonPath.Text = .GeneralDaemonPath
+            txtMovieSourcesBackdropsFolderPath.Text = .MovieBackdropsPath
             txtMovieExtrafanartsLimit.Text = .MovieExtrafanartsLimit.ToString
             txtMovieExtrathumbsLimit.Text = .MovieExtrathumbsLimit.ToString
-            txtMovieGeneralCustomMarker1.Text = .MovieGeneralCustomMarker1Name.ToString
-            txtMovieGeneralCustomMarker2.Text = .MovieGeneralCustomMarker2Name.ToString
-            txtMovieGeneralCustomMarker3.Text = .MovieGeneralCustomMarker3Name.ToString
-            txtMovieGeneralCustomMarker4.Text = .MovieGeneralCustomMarker4Name.ToString
-            txtMovieIMDBURL.Text = .MovieIMDBURL.ToString
+            txtMovieGeneralCustomMarker1.Text = .MovieGeneralCustomMarker1Name
+            txtMovieGeneralCustomMarker2.Text = .MovieGeneralCustomMarker2Name
+            txtMovieGeneralCustomMarker3.Text = .MovieGeneralCustomMarker3Name
+            txtMovieGeneralCustomMarker4.Text = .MovieGeneralCustomMarker4Name
+            txtMovieIMDBURL.Text = .MovieIMDBURL
             txtMovieScraperCastLimit.Text = .MovieScraperCastLimit.ToString
             txtMovieScraperDurationRuntimeFormat.Text = .MovieScraperDurationRuntimeFormat
             txtMovieScraperGenreLimit.Text = .MovieScraperGenreLimit.ToString
@@ -3220,10 +3232,11 @@ Public Class dlgSettings
             txtMovieScraperOutlineLimit.Text = .MovieScraperOutlineLimit.ToString
             txtMovieScraperStudioLimit.Text = .MovieScraperStudioLimit.ToString
             txtMovieSkipLessThan.Text = .MovieSkipLessThan.ToString
-            txtMovieTrailerDefaultSearch.Text = .MovieTrailerDefaultSearch.ToString
-            txtTVScraperDurationRuntimeFormat.Text = .TVScraperDurationRuntimeFormat.ToString
+            txtMovieTrailerDefaultSearch.Text = .MovieTrailerDefaultSearch
+            txtTVScraperDurationRuntimeFormat.Text = .TVScraperDurationRuntimeFormat
             txtTVScraperShowMPAANotRated.Text = .TVScraperShowMPAANotRated
             txtTVShowExtrafanartsLimit.Text = .TVShowExtrafanartsLimit.ToString
+            txtTVSourcesBackdropsFolderPath.Text = .TVBackdropsPath
             txtTVSourcesRegexMultiPartMatching.Text = .TVMultiPartMatching
             txtTVSkipLessThan.Text = .TVSkipLessThan.ToString
 
@@ -5144,6 +5157,12 @@ Public Class dlgSettings
             .TVAllSeasonsPosterPrefSizeOnly = chkTVAllSeasonsPosterPrefSizeOnly.Checked
             .TVAllSeasonsPosterResize = chkTVAllSeasonsPosterResize.Checked
             .TVAllSeasonsPosterWidth = If(Not String.IsNullOrEmpty(txtTVAllSeasonsPosterWidth.Text), Convert.ToInt32(txtTVAllSeasonsPosterWidth.Text), 0)
+            .TVBackdropsPath = txtTVSourcesBackdropsFolderPath.Text
+            If Not String.IsNullOrEmpty(txtTVSourcesBackdropsFolderPath.Text) Then
+                .TVBackdropsAuto = chkTVSourcesBackdropsAuto.Checked
+            Else
+                .TVBackdropsAuto = False
+            End If
             .TVCleanDB = chkTVCleanDB.Checked
             .TVDisplayMissingEpisodes = chkTVDisplayMissingEpisodes.Checked
             .TVDisplayStatus = chkTVDisplayStatus.Checked
@@ -5830,6 +5849,16 @@ Public Class dlgSettings
         chkTVShowExtrafanartsResize.Text = strAutomaticallyResize
         chkTVShowFanartResize.Text = strAutomaticallyResize
         chkTVShowPosterResize.Text = strAutomaticallyResize
+
+        'Automatically Save Fanart To Backdrops Folder
+        Dim strAutoBackdrops As String = Master.eLang.GetString(521, "Automatically Save Fanart To Backdrops Folder")
+        chkMovieSourcesBackdropsAuto.Text = strAutoBackdrops
+        chkTVSourcesBackdropsAuto.Text = strAutoBackdrops
+
+        'Backdrops Folder
+        Dim strBackdropsFolder As String = Master.eLang.GetString(520, "Backdrops Folder")
+        gbMovieSourcesBackdropsFolderOpts.Text = strBackdropsFolder
+        gbTVSourcesBackdropsFolderOpts.Text = strBackdropsFolder
 
         'Banner
         Dim strBanner As String = Master.eLang.GetString(838, "Banner")
@@ -6756,7 +6785,6 @@ Public Class dlgSettings
         chkGeneralDisplayImgDims.Text = Master.eLang.GetString(457, "Display Image Dimensions")
         chkGeneralDisplayImgNames.Text = Master.eLang.GetString(1255, "Display Image Names")
         chkGeneralSourceFromFolder.Text = Master.eLang.GetString(711, "Include Folder Name in Source Type Check")
-        chkMovieSourcesBackdropsAuto.Text = Master.eLang.GetString(521, "Automatically Save Fanart To Backdrops Folder")
         chkMovieCleanDB.Text = Master.eLang.GetString(668, "Clean database after updating library")
         chkMovieDisplayYear.Text = Master.eLang.GetString(464, "Display Year in List Title")
         chkMovieExtrathumbsCreatorAutoThumbs.Text = Master.eLang.GetString(1475, "Create thumbs instead of using fanarts")
@@ -6812,7 +6840,6 @@ Public Class dlgSettings
         gbGeneralInterface.Text = Master.eLang.GetString(795, "Interface")
         gbGeneralThemes.Text = Master.eLang.GetString(629, "GUI Themes")
         gbMovieGeneralCustomMarker.Text = Master.eLang.GetString(1190, "Custom Marker")
-        gbMovieSourcesBackdropsFolderOpts.Text = Master.eLang.GetString(520, "Backdrops Folder")
         gbMovieImagesFanartOpts.Text = Master.eLang.GetString(149, "Fanart")
         gbMovieImagesExtrathumbsCreatorOpts.Text = Master.eLang.GetString(1477, "Create Thumbnails")
         gbMovieGeneralFiltersOpts.Text = Master.eLang.GetString(451, "Folder/File Name Filters")
@@ -6955,6 +6982,17 @@ Public Class dlgSettings
             chkMovieSourcesBackdropsAuto.Enabled = False
         Else
             chkMovieSourcesBackdropsAuto.Enabled = True
+        End If
+    End Sub
+
+    Private Sub txtTVSourcesBackdropsFolderPath_TextChanged(ByVal sender As Object, ByVal e As EventArgs) Handles txtTVSourcesBackdropsFolderPath.TextChanged
+        SetApplyButton(True)
+
+        If String.IsNullOrEmpty(txtTVSourcesBackdropsFolderPath.Text) Then
+            chkTVSourcesBackdropsAuto.Checked = False
+            chkTVSourcesBackdropsAuto.Enabled = False
+        Else
+            chkTVSourcesBackdropsAuto.Enabled = True
         End If
     End Sub
 

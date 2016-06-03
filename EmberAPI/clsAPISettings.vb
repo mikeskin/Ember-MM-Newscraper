@@ -137,6 +137,15 @@ Public Class Settings
         End Set
     End Property
 
+    Public Property TVBackdropsAuto() As Boolean
+        Get
+            Return Settings._XMLSettings.TVBackdropsAuto
+        End Get
+        Set(ByVal value As Boolean)
+            Settings._XMLSettings.TVBackdropsAuto = value
+        End Set
+    End Property
+
     Public Property MovieIMDBURL() As String
         Get
             Return Settings._XMLSettings.MovieIMDBURL
@@ -152,6 +161,15 @@ Public Class Settings
         End Get
         Set(ByVal value As String)
             Settings._XMLSettings.MovieBackdropsPath = value
+        End Set
+    End Property
+
+    Public Property TVBackdropsPath() As String
+        Get
+            Return Settings._XMLSettings.TVBackdropsPath
+        End Get
+        Set(ByVal value As String)
+            Settings._XMLSettings.TVBackdropsPath = value
         End Set
     End Property
 
@@ -6988,6 +7006,8 @@ Public Class Settings
         TVAllSeasonsPosterPrefSizeOnly = False
         TVAllSeasonsPosterResize = False
         TVAllSeasonsPosterWidth = 0
+        TVBackdropsAuto = False
+        TVBackdropsPath = String.Empty
         TVCleanDB = False
         TVDisplayMissingEpisodes = True
         TVDisplayStatus = False

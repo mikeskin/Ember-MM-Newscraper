@@ -89,6 +89,9 @@ Namespace FileUtils
                         Else
                             strDestinationFilename = Path.Combine(Master.eSettings.MovieBackdropsPath, String.Concat(Directory.GetParent(strSourceFilename).Name, "-fanart.jpg"))
                         End If
+                    Case Enums.ContentType.TVShow
+                        If String.IsNullOrEmpty(Master.eSettings.TVBackdropsPath) Then Return
+                        strDestinationFilename = Path.Combine(Master.eSettings.TVBackdropsPath, String.Concat(Directory.GetParent(strSourceFilename).Name, "-fanart.jpg"))
                 End Select
 
                 If Not String.IsNullOrEmpty(strDestinationFilename) Then

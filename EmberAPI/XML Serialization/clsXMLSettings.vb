@@ -322,6 +322,8 @@ Partial Public Class clsXMLSettings
     Private _tvallseasonsposterprefsizeonly As Boolean
     Private _tvallseasonsposterresize As Boolean
     Private _tvallseasonsposterwidth As Integer
+    Private _tvbackdropsauto As Boolean
+    Private _tvbackdropspath As String
     Private _tvcleandb As Boolean
     Private _tvdisplaymissingepisodes As Boolean
     Private _tvdisplaystatus As Boolean
@@ -1065,6 +1067,15 @@ Partial Public Class clsXMLSettings
         End Set
     End Property
 
+    Public Property TVBackdropsAuto() As Boolean
+        Get
+            Return Me._tvbackdropsauto
+        End Get
+        Set(ByVal value As Boolean)
+            Me._tvbackdropsauto = value
+        End Set
+    End Property
+
     Public Property MovieIMDBURL() As String
         Get
             Return Me._movieimdburl
@@ -1080,6 +1091,15 @@ Partial Public Class clsXMLSettings
         End Get
         Set(ByVal value As String)
             Me._moviebackdropspath = value
+        End Set
+    End Property
+
+    Public Property TVBackdropsPath() As String
+        Get
+            Return Me._tvbackdropspath
+        End Get
+        Set(ByVal value As String)
+            Me._tvbackdropspath = value
         End Set
     End Property
 

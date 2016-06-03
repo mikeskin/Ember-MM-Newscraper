@@ -710,6 +710,11 @@ Public Class Images
                 SaveToFile(a)
                 strReturn = a
             Next
+
+            If tImageType = Enums.ModifierType.MainFanart AndAlso Not String.IsNullOrEmpty(strReturn) AndAlso
+                Not String.IsNullOrEmpty(Master.eSettings.TVBackdropsPath) AndAlso Master.eSettings.TVBackdropsAuto Then
+                FileUtils.Common.CopyFanartToBackdropsPath(strReturn, tDBElement.ContentType)
+            End If
         Catch ex As Exception
             logger.Error(ex, New StackFrame().GetMethod().Name)
         End Try
