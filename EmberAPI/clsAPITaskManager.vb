@@ -34,7 +34,7 @@ Public Class TaskManager
 
 #Region "Events"
 
-    Public Event ProgressUpdate(ByVal eProgressValue As ProgressValue)
+    Public Event ProgressUpdate(ByVal eProgressValue As ProgressStatus)
     Public Event TaskManagerDone()
 
 #End Region 'Events
@@ -53,9 +53,9 @@ Public Class TaskManager
 
     Public Sub AddTask(ByVal tTaskItem As TaskItem)
         TaskList.Enqueue(tTaskItem)
-        RaiseEvent ProgressUpdate(New ProgressValue With {
+        RaiseEvent ProgressUpdate(New ProgressStatus With {
                                   .EventType = Enums.TaskManagerEventType.MainTaskUpdate,
-                                  .MainTaskProgressbar = New ProgressValue.ProgressBar With {
+                                  .MainTaskProgressbar = New ProgressStatus.ProgressBar With {
                                   .Maximum = TaskList.Count + 1,
                                   .Style = Windows.Forms.ProgressBarStyle.Continuous,
                                   .Value = 1}})
@@ -74,31 +74,31 @@ Public Class TaskManager
             Dim currTask As TaskItem = TaskList.Dequeue()
 
             Select Case currTask.TaskType
-                Case Enums.TaskManagerType.CleanFiles
-                    bwTaskManager.ReportProgress(-1, New ProgressValue With {
+                Case Enums.TaskType.CleanFiles
+                    bwTaskManager.ReportProgress(-1, New ProgressStatus With {
                                                      .EventType = Enums.TaskManagerEventType.MainTaskUpdate,
                                                      .MainTaskMessage = "Clean Files",
-                                                     .MainTaskProgressbar = New ProgressValue.ProgressBar With {
+                                                     .MainTaskProgressbar = New ProgressStatus.ProgressBar With {
                                                      .Maximum = TaskList.Count + 1,
                                                      .Style = Windows.Forms.ProgressBarStyle.Continuous,
                                                      .Value = 1}})
                     Task_CleanFiles(currTask)
 
-                Case Enums.TaskManagerType.CopyBackdrops
-                    bwTaskManager.ReportProgress(-1, New ProgressValue With {
+                Case Enums.TaskType.CopyBackdrops
+                    bwTaskManager.ReportProgress(-1, New ProgressStatus With {
                                                      .EventType = Enums.TaskManagerEventType.MainTaskUpdate,
                                                      .MainTaskMessage = "Copy Backdrops",
-                                                     .MainTaskProgressbar = New ProgressValue.ProgressBar With {
+                                                     .MainTaskProgressbar = New ProgressStatus.ProgressBar With {
                                                      .Maximum = TaskList.Count + 1,
                                                      .Style = Windows.Forms.ProgressBarStyle.Continuous,
                                                      .Value = 1}})
                     Task_CopyBackdrops(currTask)
 
-                Case Enums.TaskManagerType.SetWatchedState
-                    bwTaskManager.ReportProgress(-1, New ProgressValue With {
+                Case Enums.TaskType.SetWatchedState
+                    bwTaskManager.ReportProgress(-1, New ProgressStatus With {
                                                      .EventType = Enums.TaskManagerEventType.MainTaskUpdate,
                                                      .MainTaskMessage = "Set Watched State",
-                                                     .MainTaskProgressbar = New ProgressValue.ProgressBar With {
+                                                     .MainTaskProgressbar = New ProgressStatus.ProgressBar With {
                                                      .Maximum = TaskList.Count + 1,
                                                      .Style = Windows.Forms.ProgressBarStyle.Continuous,
                                                      .Value = 1}})
@@ -108,16 +108,16 @@ Public Class TaskManager
                     End Using
             End Select
         End While
-        RaiseEvent ProgressUpdate(New ProgressValue With {
+        RaiseEvent ProgressUpdate(New ProgressStatus With {
                                   .EventType = Enums.TaskManagerEventType.MainTaskUpdate,
-                                  .MainTaskProgressbar = New ProgressValue.ProgressBar With {
+                                  .MainTaskProgressbar = New ProgressStatus.ProgressBar With {
                                   .Maximum = 1,
                                   .Style = Windows.Forms.ProgressBarStyle.Continuous,
                                   .Value = 1}})
     End Sub
 
     Private Sub bwTaskManager_ProgressChanged(ByVal sender As Object, ByVal e As System.ComponentModel.ProgressChangedEventArgs) Handles bwTaskManager.ProgressChanged
-        RaiseEvent ProgressUpdate(DirectCast(e.UserState, ProgressValue))
+        RaiseEvent ProgressUpdate(DirectCast(e.UserState, ProgressStatus))
     End Sub
 
     Private Sub bwTaskManager_RunWorkerCompleted(ByVal sender As Object, ByVal e As System.ComponentModel.RunWorkerCompletedEventArgs) Handles bwTaskManager.RunWorkerCompleted
@@ -157,11 +157,26 @@ Public Class TaskManager
                     Using SQLreader As SQLite.SQLiteDataReader = SQLcommand.ExecuteReader()
                         While SQLreader.Read
                             If bwTaskManager.CancellationPending Then Return
-                            bwTaskManager.ReportProgress(-1, New ProgressValue With {
+                            bwTaskManager.ReportProgress(-1, New ProgressStatus With {
                                              .EventType = Enums.TaskManagerEventType.SubTaskUpdate,
                                              .SubTaskMessage = SQLreader("ListTitle").ToString})
 
-                            FileUtils.Common.CopyFanartToBackdropsPath(SQLreader("FanartPath").ToString, Enums.ContentType.Movie)
+                            FileUtils.Common.CopyFanartToBackdropsPath(SQLreader("FanartPath").ToString, tTaskItem.ContentType)
+                        End While
+                    End Using
+                End Using
+
+            Case Enums.ContentType.TVShow
+                Using SQLcommand As SQLite.SQLiteCommand = Master.DB.MyVideosDBConn.CreateCommand()
+                    SQLcommand.CommandText = "SELECT ListTitle, FanartPath FROM tvshowlist WHERE FanartPath IS NOT NULL AND NOT FanartPath='' ORDER BY ListTitle;"
+                    Using SQLreader As SQLite.SQLiteDataReader = SQLcommand.ExecuteReader()
+                        While SQLreader.Read
+                            If bwTaskManager.CancellationPending Then Return
+                            bwTaskManager.ReportProgress(-1, New ProgressStatus With {
+                                             .EventType = Enums.TaskManagerEventType.SubTaskUpdate,
+                                             .SubTaskMessage = SQLreader("ListTitle").ToString})
+
+                            FileUtils.Common.CopyFanartToBackdropsPath(SQLreader("FanartPath").ToString, tTaskItem.ContentType)
                         End While
                     End Using
                 End Using
@@ -172,15 +187,15 @@ Public Class TaskManager
         Select Case tTaskItem.ContentType
 
             Case Enums.ContentType.Movie
-                For Each tID In tTaskItem.ListOfID
+                For Each tID In tTaskItem.Container_WatchedState.IDs
                     If bwTaskManager.CancellationPending Then Return
                     Dim tmpDBElement As Database.DBElement = Master.DB.Load_Movie(tID)
 
-                    bwTaskManager.ReportProgress(-1, New ProgressValue With {
+                    bwTaskManager.ReportProgress(-1, New ProgressStatus With {
                                                      .EventType = Enums.TaskManagerEventType.SubTaskUpdate,
                                                      .SubTaskMessage = tmpDBElement.Movie.Title})
 
-                    If tTaskItem.CommonBoolean Then
+                    If tTaskItem.Container_WatchedState.SetWached Then
                         tmpDBElement.Movie.LastPlayed = If(tmpDBElement.Movie.LastPlayedSpecified, tmpDBElement.Movie.LastPlayed, Date.Now.ToString("yyyy-MM-dd HH:mm:ss"))
                         tmpDBElement.Movie.PlayCount = If(tmpDBElement.Movie.PlayCountSpecified, tmpDBElement.Movie.PlayCount, 1)
                     Else
@@ -190,22 +205,22 @@ Public Class TaskManager
 
                     Master.DB.Save_Movie(tmpDBElement, True, True, False, False)
 
-                    bwTaskManager.ReportProgress(-1, New ProgressValue With {
+                    bwTaskManager.ReportProgress(-1, New ProgressStatus With {
                                                  .ContentType = Enums.ContentType.Movie,
                                                  .EventType = Enums.TaskManagerEventType.RefreshRow,
                                                  .ID = tmpDBElement.ID})
                 Next
 
             Case Enums.ContentType.TVEpisode
-                For Each tID In tTaskItem.ListOfID
+                For Each tID In tTaskItem.Container_WatchedState.IDs
                     If bwTaskManager.CancellationPending Then Return
                     Dim tmpDBElement As Database.DBElement = Master.DB.Load_TVEpisode(tID, True)
 
-                    bwTaskManager.ReportProgress(-1, New ProgressValue With {
+                    bwTaskManager.ReportProgress(-1, New ProgressStatus With {
                                                          .EventType = Enums.TaskManagerEventType.SubTaskUpdate,
                                                          .SubTaskMessage = tmpDBElement.TVEpisode.Title})
 
-                    If tTaskItem.CommonBoolean Then
+                    If tTaskItem.Container_WatchedState.SetWached Then
                         tmpDBElement.TVEpisode.LastPlayed = If(tmpDBElement.TVEpisode.LastPlayedSpecified, tmpDBElement.TVEpisode.LastPlayed, Date.Now.ToString("yyyy-MM-dd HH:mm:ss"))
                         tmpDBElement.TVEpisode.Playcount = If(tmpDBElement.TVEpisode.PlaycountSpecified, tmpDBElement.TVEpisode.Playcount, 1)
                     Else
@@ -215,23 +230,23 @@ Public Class TaskManager
 
                     Master.DB.Save_TVEpisode(tmpDBElement, True, True, False, False, True)
 
-                    bwTaskManager.ReportProgress(-1, New ProgressValue With {
+                    bwTaskManager.ReportProgress(-1, New ProgressStatus With {
                                                  .ContentType = Enums.ContentType.TVEpisode,
                                                  .EventType = Enums.TaskManagerEventType.RefreshRow,
                                                  .ID = tmpDBElement.ID})
                 Next
 
             Case Enums.ContentType.TVSeason
-                For Each tID In tTaskItem.ListOfID
+                For Each tID In tTaskItem.Container_WatchedState.IDs
                     If bwTaskManager.CancellationPending Then Return
                     Dim tmpDBElement_TVSeason As Database.DBElement = Master.DB.Load_TVSeason(tID, True, True)
                     For Each tmpDBElement As Database.DBElement In tmpDBElement_TVSeason.Episodes.OrderBy(Function(f) f.TVEpisode.Episode)
                         If bwTaskManager.CancellationPending Then Exit For
-                        bwTaskManager.ReportProgress(-1, New ProgressValue With {
+                        bwTaskManager.ReportProgress(-1, New ProgressStatus With {
                                                      .EventType = Enums.TaskManagerEventType.SubTaskUpdate,
                                                      .SubTaskMessage = tmpDBElement.TVEpisode.Title})
 
-                        If tTaskItem.CommonBoolean Then
+                        If tTaskItem.Container_WatchedState.SetWached Then
                             tmpDBElement.TVEpisode.LastPlayed = If(tmpDBElement.TVEpisode.LastPlayedSpecified, tmpDBElement.TVEpisode.LastPlayed, Date.Now.ToString("yyyy-MM-dd HH:mm:ss"))
                             tmpDBElement.TVEpisode.Playcount = If(tmpDBElement.TVEpisode.PlaycountSpecified, tmpDBElement.TVEpisode.Playcount, 1)
                         Else
@@ -241,34 +256,34 @@ Public Class TaskManager
 
                         Master.DB.Save_TVEpisode(tmpDBElement, True, True, False, False, True)
 
-                        bwTaskManager.ReportProgress(-1, New ProgressValue With {
+                        bwTaskManager.ReportProgress(-1, New ProgressStatus With {
                                                      .ContentType = Enums.ContentType.TVEpisode,
                                                      .EventType = Enums.TaskManagerEventType.RefreshRow,
                                                      .ID = tmpDBElement.ID})
                     Next
 
-                    bwTaskManager.ReportProgress(-1, New ProgressValue With {
+                    bwTaskManager.ReportProgress(-1, New ProgressStatus With {
                                                      .ContentType = Enums.ContentType.TVSeason,
                                                      .EventType = Enums.TaskManagerEventType.RefreshRow,
                                                      .ID = tmpDBElement_TVSeason.ID})
 
-                    bwTaskManager.ReportProgress(-1, New ProgressValue With {
+                    bwTaskManager.ReportProgress(-1, New ProgressStatus With {
                                                      .ContentType = Enums.ContentType.TVShow,
                                                      .EventType = Enums.TaskManagerEventType.RefreshRow,
                                                      .ID = tmpDBElement_TVSeason.ShowID})
                 Next
 
             Case Enums.ContentType.TVShow
-                For Each tID In tTaskItem.ListOfID
+                For Each tID In tTaskItem.Container_WatchedState.IDs
                     If bwTaskManager.CancellationPending Then Return
                     Dim tmpDBElement_TVShow As Database.DBElement = Master.DB.Load_TVShow(tID, True, True)
                     For Each tmpDBElement As Database.DBElement In tmpDBElement_TVShow.Episodes.OrderBy(Function(f) f.TVEpisode.Season).OrderBy(Function(f) f.TVEpisode.Episode)
                         If bwTaskManager.CancellationPending Then Exit For
-                        bwTaskManager.ReportProgress(-1, New ProgressValue With {
+                        bwTaskManager.ReportProgress(-1, New ProgressStatus With {
                                                      .EventType = Enums.TaskManagerEventType.SubTaskUpdate,
                                                      .SubTaskMessage = tmpDBElement.TVEpisode.Title})
 
-                        If tTaskItem.CommonBoolean Then
+                        If tTaskItem.Container_WatchedState.SetWached Then
                             tmpDBElement.TVEpisode.LastPlayed = If(tmpDBElement.TVEpisode.LastPlayedSpecified, tmpDBElement.TVEpisode.LastPlayed, Date.Now.ToString("yyyy-MM-dd HH:mm:ss"))
                             tmpDBElement.TVEpisode.Playcount = If(tmpDBElement.TVEpisode.PlaycountSpecified, tmpDBElement.TVEpisode.Playcount, 1)
                         Else
@@ -278,20 +293,20 @@ Public Class TaskManager
 
                         Master.DB.Save_TVEpisode(tmpDBElement, True, True, False, False, True)
 
-                        bwTaskManager.ReportProgress(-1, New ProgressValue With {
+                        bwTaskManager.ReportProgress(-1, New ProgressStatus With {
                                                      .ContentType = Enums.ContentType.TVEpisode,
                                                      .EventType = Enums.TaskManagerEventType.RefreshRow,
                                                      .ID = tmpDBElement.ID})
                     Next
 
                     For Each tSeason In tmpDBElement_TVShow.Seasons.OrderBy(Function(f) f.TVSeason.Season)
-                        bwTaskManager.ReportProgress(-1, New ProgressValue With {
+                        bwTaskManager.ReportProgress(-1, New ProgressStatus With {
                                                          .ContentType = Enums.ContentType.TVSeason,
                                                          .EventType = Enums.TaskManagerEventType.RefreshRow,
                                                          .ID = tSeason.ID})
                     Next
 
-                    bwTaskManager.ReportProgress(-1, New ProgressValue With {
+                    bwTaskManager.ReportProgress(-1, New ProgressStatus With {
                                                      .ContentType = Enums.ContentType.TVShow,
                                                      .EventType = Enums.TaskManagerEventType.RefreshRow,
                                                      .ID = tmpDBElement_TVShow.ID})
@@ -304,7 +319,7 @@ Public Class TaskManager
 
 #Region "Nested Types"
 
-    Public Structure ProgressValue
+    Public Structure ProgressStatus
 
 #Region "Fields"
 
@@ -341,12 +356,52 @@ Public Class TaskManager
 
 #Region "Fields"
 
-        Dim CommonBoolean As Boolean
         Dim ContentType As Enums.ContentType
-        Dim ListOfID As List(Of Long)
-        Dim TaskType As Enums.TaskManagerType
+        Dim Container_Scan As ScanContainer
+        Dim Container_Scrape As ScrapeContainer
+        Dim Container_WatchedState As WatchedStateContainer
+        Dim TaskType As Enums.TaskType
 
 #End Region
+
+#Region "Nested Types"
+
+        Public Structure ScanContainer
+
+#Region "Fields"
+
+            Dim ID As Long
+            Dim Options As Structures.ScanOrClean
+            Dim SpecifiedPath As String
+
+#End Region 'Fields
+
+        End Structure
+
+        Public Structure ScrapeContainer
+
+#Region "Fields"
+
+            Dim IDs As List(Of Long)
+            Dim Modifiers As Structures.ScrapeModifiers
+            Dim Options As Structures.ScrapeOptions
+
+#End Region 'Fields
+
+        End Structure
+
+        Public Structure WatchedStateContainer
+
+#Region "Fields"
+
+            Dim IDs As List(Of Long)
+            Dim SetWached As Boolean
+
+#End Region 'Fields
+
+        End Structure
+
+#End Region 'Nested Types
 
     End Structure
 

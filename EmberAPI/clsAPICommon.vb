@@ -897,11 +897,16 @@ Public Class Enums
         SubTaskUpdate = 3
     End Enum
 
-    Public Enum TaskManagerType As Integer
-        CleanFiles = 0
-        CopyBackdrops = 1
-        Reload = 2
-        SetWatchedState = 3
+    Public Enum TaskType As Integer
+        AddSource = 0
+        CleanDB = 1
+        CleanFiles = 2
+        CopyBackdrops = 3
+        Reload = 4
+        RunModule = 5
+        Scan = 6
+        Scrape = 7
+        SetWatchedState = 8
     End Enum
 
     Public Enum TVBannerSize As Integer

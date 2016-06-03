@@ -3829,7 +3829,7 @@ Public Class frmMain
     End Sub
 
     Private Sub mnuMainToolsCleanFiles_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles mnuMainToolsCleanFiles.Click, cmnuTrayToolsCleanFiles.Click
-        fTaskManager.AddTask(New TaskManager.TaskItem With {.ContentType = Enums.ContentType.Movie, .TaskType = Enums.TaskManagerType.CleanFiles})
+        fTaskManager.AddTask(New TaskManager.TaskItem With {.ContentType = Enums.ContentType.Movie, .TaskType = Enums.TaskType.CleanFiles})
     End Sub
 
     Private Sub mnuMainToolsClearCache_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles mnuMainToolsClearCache.Click, cmnuTrayToolsClearCache.Click
@@ -5591,7 +5591,8 @@ Public Class frmMain
     End Sub
 
     Private Sub mnuMainToolsBackdrops_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles mnuMainToolsBackdrops.Click, cmnuTrayToolsBackdrops.Click
-        fTaskManager.AddTask(New TaskManager.TaskItem With {.ContentType = Enums.ContentType.Movie, .TaskType = Enums.TaskManagerType.CopyBackdrops})
+        fTaskManager.AddTask(New TaskManager.TaskItem With {.ContentType = Enums.ContentType.Movie, .TaskType = Enums.TaskType.CopyBackdrops})
+        fTaskManager.AddTask(New TaskManager.TaskItem With {.ContentType = Enums.ContentType.TVShow, .TaskType = Enums.TaskType.CopyBackdrops})
     End Sub
     ''' <summary>
     ''' Populate the form's Genre panel and picture box arrays with the 
@@ -10564,7 +10565,7 @@ Public Class frmMain
         tspbSubTask.Value = 0
     End Sub
 
-    Private Sub TaskManagerProgressUpdate(ByVal eProgressValue As TaskManager.ProgressValue)
+    Private Sub TaskManagerProgressUpdate(ByVal eProgressValue As TaskManager.ProgressStatus)
         Select Case eProgressValue.EventType
 
             Case Enums.TaskManagerEventType.MainTaskUpdate
@@ -10597,6 +10598,7 @@ Public Class frmMain
             Case Else
                 logger.Warn("Callback for <{0}> with no handler.", eProgressValue.EventType)
         End Select
+        Application.DoEvents()
     End Sub
 
     Private Sub mnuGenresAdd_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles mnuGenresAdd.Click
@@ -15689,10 +15691,11 @@ Public Class frmMain
             Next
 
             fTaskManager.AddTask(New TaskManager.TaskItem With {
-                                 .CommonBoolean = bSetToWatched,
-                                 .ListOfID = lItemsToChange,
                                  .ContentType = Enums.ContentType.Movie,
-                                 .TaskType = Enums.TaskManagerType.SetWatchedState})
+                                 .TaskType = Enums.TaskType.SetWatchedState,
+                                 .Container_WatchedState = New TaskManager.TaskItem.WatchedStateContainer With {
+                                 .IDs = lItemsToChange,
+                                 .SetWached = bSetToWatched}})
         End If
     End Sub
 
@@ -15705,10 +15708,11 @@ Public Class frmMain
             Next
 
             fTaskManager.AddTask(New TaskManager.TaskItem With {
-                                 .CommonBoolean = bSetToWatched,
-                                 .ListOfID = lItemsToChange,
                                  .ContentType = Enums.ContentType.TVEpisode,
-                                 .TaskType = Enums.TaskManagerType.SetWatchedState})
+                                 .TaskType = Enums.TaskType.SetWatchedState,
+                                 .Container_WatchedState = New TaskManager.TaskItem.WatchedStateContainer With {
+                                 .IDs = lItemsToChange,
+                                 .SetWached = bSetToWatched}})
         End If
     End Sub
 
@@ -15723,10 +15727,11 @@ Public Class frmMain
             Next
 
             fTaskManager.AddTask(New TaskManager.TaskItem With {
-                                 .CommonBoolean = bSetToWatched,
-                                 .ListOfID = lItemsToChange,
                                  .ContentType = Enums.ContentType.TVSeason,
-                                 .TaskType = Enums.TaskManagerType.SetWatchedState})
+                                 .TaskType = Enums.TaskType.SetWatchedState,
+                                 .Container_WatchedState = New TaskManager.TaskItem.WatchedStateContainer With {
+                                 .IDs = lItemsToChange,
+                                 .SetWached = bSetToWatched}})
         End If
     End Sub
 
@@ -15739,10 +15744,11 @@ Public Class frmMain
             Next
 
             fTaskManager.AddTask(New TaskManager.TaskItem With {
-                                 .CommonBoolean = bSetToWatched,
-                                 .ListOfID = lItemsToChange,
                                  .ContentType = Enums.ContentType.TVShow,
-                                 .TaskType = Enums.TaskManagerType.SetWatchedState})
+                                 .TaskType = Enums.TaskType.SetWatchedState,
+                                 .Container_WatchedState = New TaskManager.TaskItem.WatchedStateContainer With {
+                                 .IDs = lItemsToChange,
+                                 .SetWached = bSetToWatched}})
         End If
     End Sub
 
@@ -17815,7 +17821,7 @@ Public Class frmMain
         Dim Season As Integer
         Dim setEnabled As Boolean
         Dim SetName As String
-        Dim TaskType As Enums.TaskManagerType
+        Dim TaskType As Enums.TaskType
         Dim withEpisodes As Boolean
         Dim withSeasons As Boolean
 
