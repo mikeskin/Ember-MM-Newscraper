@@ -29,7 +29,7 @@ Public Class clsAPITrakt
 
     Shared logger As Logger = LogManager.GetCurrentClassLogger()
 
-    Private _SpecialSettings As New Trakt_Generic.MySettings
+    Private _SpecialSettings As New TraktInterface.SpecialSettings
 
 #End Region 'Fields
 
@@ -39,9 +39,19 @@ Public Class clsAPITrakt
 
 #End Region 'Delegates
 
+#Region "Properties"
+
+    ReadOnly Property Token() As String
+        Get
+            Return _SpecialSettings.Token
+        End Get
+    End Property
+
+#End Region 'Properties
+
 #Region "Methods"
 
-    Public Sub New(ByRef SpecialSettings As Trakt_Generic.MySettings)
+    Public Sub New(ByRef SpecialSettings As TraktInterface.SpecialSettings)
         _SpecialSettings = SpecialSettings
         Try
             CreateToken(_SpecialSettings.Username, _SpecialSettings.Password, _SpecialSettings.Token)
@@ -51,7 +61,7 @@ Public Class clsAPITrakt
         End Try
     End Sub
 
-    Private Function CheckConnection() As Boolean
+    Public Function CheckConnection() As Boolean
         If String.IsNullOrEmpty(TraktSettings.Token) Then
             CreateToken(_SpecialSettings.Username, _SpecialSettings.Password, String.Empty)
         End If
@@ -252,7 +262,7 @@ Public Class clsAPITrakt
                             Dim tmpMovie As Database.DBElement = Master.DB.Load_Movie(Convert.ToInt64(SQLreader("idMovie")))
                             tmpMovie.Movie.PlayCount = watchedMovie.Plays
                             tmpMovie.Movie.LastPlayed = Functions.ConvertToProperDateTime(watchedMovie.LastWatchedAt)
-                            Master.DB.Save_Movie(tmpMovie, True, True, False)
+                            Master.DB.Save_Movie(tmpMovie, True, True, False, False)
                         End While
                     End Using
                 End Using

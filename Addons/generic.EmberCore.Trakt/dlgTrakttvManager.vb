@@ -24,7 +24,6 @@ Imports Trakttv
 Imports System.IO
 Imports System.Text.RegularExpressions
 Imports System.Windows.Forms
-Imports System.Text
 
 Public Class dlgTrakttvManager
 
@@ -36,7 +35,7 @@ Public Class dlgTrakttvManager
     Friend WithEvents bwSaveWatchedStateToEmber_TVEpisodes As New System.ComponentModel.BackgroundWorker
 
     'trakt.tv authentification data and user settings
-    Private _MySettings As New Trakt_Generic.MySettings
+    Private _MySettings As New TraktInterface.SpecialSettings
 
     Private _TraktAPI As clsAPITrakt
 
@@ -47,7 +46,6 @@ Public Class dlgTrakttvManager
     Private _myWatchedTVEpisodes As IEnumerable(Of TraktAPI.Model.Histories.WatchedTVShowsResponse)
 
     Private _myWatchedProgressTVShows As New List(Of TraktAPI.Model.TVShows.WatchedTVShowProgress)
-
 
     Private _traktToken As String
 
@@ -86,7 +84,7 @@ Public Class dlgTrakttvManager
     'binding for movie datagridview
     Private bsMovies As New BindingSource
 
-    Private _SpecialSettings As New Trakt_Generic.SpecialSettings
+    Private _SpecialSettings As New TraktInterface.KodiSettings
     'Not used at moment
     'Friend WithEvents bwLoadMovies As New System.ComponentModel.BackgroundWorker
 
@@ -94,12 +92,13 @@ Public Class dlgTrakttvManager
 
 #Region "Constructors"
 
-    Sub New()
+    Sub New(ByRef TraktAPI As clsAPITrakt)
         ' This call is required by the Windows Form Designer.
         InitializeComponent()
         Left = Master.AppPos.Left + (Master.AppPos.Width - Width) \ 2
         Top = Master.AppPos.Top + (Master.AppPos.Height - Height) \ 2
         StartPosition = FormStartPosition.Manual
+        _TraktAPI = TraktAPI
         SetUp()
     End Sub
 
@@ -119,18 +118,8 @@ Public Class dlgTrakttvManager
     ''' </remarks>
     Sub SetUp()
         Try
-            'set trakt.tv authentification data on start
-            _MySettings.GetShowProgress = CBool(clsAdvancedSettings.GetSetting("GetShowProgress", "False"))
-            _MySettings.Password = clsAdvancedSettings.GetSetting("Password", String.Empty)
-            _MySettings.Token = clsAdvancedSettings.GetSetting("Token", String.Empty)
-            _MySettings.Username = clsAdvancedSettings.GetSetting("Username", String.Empty)
-
             'if there's missing data we can't use any trakt.tv API calls -> block GUI
-            If String.IsNullOrEmpty(_MySettings.Username) OrElse String.IsNullOrEmpty(_MySettings.Password) Then
-                tbTrakt.Enabled = False
-            Else
-                _TraktAPI = New clsAPITrakt(_MySettings)
-            End If
+            If _TraktAPI Is Nothing OrElse _TraktAPI.Token Is Nothing Then tbTrakt.Enabled = False
 
             lblTopTitle.Text = Text
             Text = Master.eLang.GetString(871, "Trakt.tv Manager")
@@ -305,8 +294,8 @@ Public Class dlgTrakttvManager
             If File.Exists(Path.Combine(Master.SettingsPath, "Interface.Kodi.xml")) Then
                 Dim xmlSer As Xml.Serialization.XmlSerializer = Nothing
                 Using xmlSR As StreamReader = New StreamReader(Path.Combine(Master.SettingsPath, "Interface.Kodi.xml"))
-                    xmlSer = New Xml.Serialization.XmlSerializer(GetType(Trakt_Generic.SpecialSettings))
-                    _SpecialSettings = DirectCast(xmlSer.Deserialize(xmlSR), Trakt_Generic.SpecialSettings)
+                    xmlSer = New Xml.Serialization.XmlSerializer(GetType(TraktInterface.KodiSettings))
+                    _SpecialSettings = DirectCast(xmlSer.Deserialize(xmlSR), TraktInterface.KodiSettings)
                 End Using
             End If
 

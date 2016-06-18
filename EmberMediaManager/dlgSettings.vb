@@ -783,7 +783,7 @@ Public Class dlgSettings
 
     Private Sub btnTVSourceAdd_Click(ByVal sender As Object, ByVal e As EventArgs) Handles btnTVSourceAdd.Click
         Using dSource As New dlgSourceTVShow
-            If dSource.ShowDialog = Windows.Forms.DialogResult.OK Then
+            If dSource.ShowDialog = DialogResult.OK Then
                 RefreshTVSources()
                 SetApplyButton(True)
                 sResult.NeedsDBUpdate_TV = True
@@ -819,7 +819,7 @@ Public Class dlgSettings
     Private Sub btnMovieBackdropsPathBrowse_Click(ByVal sender As Object, ByVal e As EventArgs) Handles btnMovieSourcesBackdropsFolderPathBrowse.Click
         With fbdBrowse
             fbdBrowse.Description = Master.eLang.GetString(552, "Select the folder where you wish to store your backdrops...")
-            If .ShowDialog = Windows.Forms.DialogResult.OK Then
+            If .ShowDialog = DialogResult.OK Then
                 If Not String.IsNullOrEmpty(.SelectedPath.ToString) AndAlso Directory.Exists(.SelectedPath) Then
                     txtMovieSourcesBackdropsFolderPath.Text = .SelectedPath.ToString
                 End If
@@ -855,7 +855,7 @@ Public Class dlgSettings
 
     Private Sub btnMovieGeneralCustomMarker1_Click(sender As Object, e As EventArgs) Handles btnMovieGeneralCustomMarker1.Click
         With cdColor
-            If .ShowDialog = Windows.Forms.DialogResult.OK Then
+            If .ShowDialog = DialogResult.OK Then
                 If Not .Color = Nothing Then
                     btnMovieGeneralCustomMarker1.BackColor = .Color
                     SetApplyButton(True)
@@ -866,7 +866,7 @@ Public Class dlgSettings
 
     Private Sub btnMovieGeneralCustomMarker2_Click(sender As Object, e As EventArgs) Handles btnMovieGeneralCustomMarker2.Click
         With cdColor
-            If .ShowDialog = Windows.Forms.DialogResult.OK Then
+            If .ShowDialog = DialogResult.OK Then
                 If Not .Color = Nothing Then
                     btnMovieGeneralCustomMarker2.BackColor = .Color
                     SetApplyButton(True)
@@ -877,7 +877,7 @@ Public Class dlgSettings
 
     Private Sub btnMovieGeneralCustomMarker3_Click(sender As Object, e As EventArgs) Handles btnMovieGeneralCustomMarker3.Click
         With cdColor
-            If .ShowDialog = Windows.Forms.DialogResult.OK Then
+            If .ShowDialog = DialogResult.OK Then
                 If Not .Color = Nothing Then
                     btnMovieGeneralCustomMarker3.BackColor = .Color
                     SetApplyButton(True)
@@ -888,7 +888,7 @@ Public Class dlgSettings
 
     Private Sub btnMovieGeneralCustomMarker4_Click(sender As Object, e As EventArgs) Handles btnMovieGeneralCustomMarker4.Click
         With cdColor
-            If .ShowDialog = Windows.Forms.DialogResult.OK Then
+            If .ShowDialog = DialogResult.OK Then
                 If Not .Color = Nothing Then
                     btnMovieGeneralCustomMarker4.BackColor = .Color
                     SetApplyButton(True)
@@ -899,7 +899,7 @@ Public Class dlgSettings
 
     Private Sub btnMovieScraperDefFIExtEdit_Click(ByVal sender As Object, ByVal e As EventArgs) Handles btnMovieScraperDefFIExtEdit.Click
         Using dEditMeta As New dlgFileInfo(New Database.DBElement(Enums.ContentType.Movie), False)
-            Dim fi As New MediaInfo.Fileinfo
+            Dim fi As New MediaContainers.Fileinfo
             For Each x As Settings.MetadataPerType In MovieMeta
                 If x.FileType = lstMovieScraperDefFIExt.SelectedItems(0).ToString Then
                     fi = dEditMeta.ShowDialog(x.MetaData, False)
@@ -907,7 +907,7 @@ Public Class dlgSettings
                         MovieMeta.Remove(x)
                         Dim m As New Settings.MetadataPerType
                         m.FileType = x.FileType
-                        m.MetaData = New MediaInfo.Fileinfo
+                        m.MetaData = New MediaContainers.Fileinfo
                         m.MetaData = fi
                         MovieMeta.Add(m)
                         LoadMovieMetadata()
@@ -926,7 +926,7 @@ Public Class dlgSettings
     Private Sub btnMovieSourceEdit_Click(ByVal sender As Object, ByVal e As EventArgs) Handles btnMovieSourceEdit.Click
         If lvMovieSources.SelectedItems.Count > 0 Then
             Using dMovieSource As New dlgSourceMovie
-                If dMovieSource.ShowDialog(Convert.ToInt32(lvMovieSources.SelectedItems(0).Text)) = Windows.Forms.DialogResult.OK Then
+                If dMovieSource.ShowDialog(Convert.ToInt32(lvMovieSources.SelectedItems(0).Text)) = DialogResult.OK Then
                     RefreshMovieSources()
                     sResult.NeedsReload_Movie = True 'TODO: Check if we have to use Reload or DBUpdate
                     SetApplyButton(True)
@@ -937,7 +937,7 @@ Public Class dlgSettings
 
     Private Sub btnTVScraperDefFIExtEdit_Click(ByVal sender As Object, ByVal e As EventArgs) Handles btnTVScraperDefFIExtEdit.Click
         Using dEditMeta As New dlgFileInfo(New Database.DBElement(Enums.ContentType.TVEpisode), True)
-            Dim fi As New MediaInfo.Fileinfo
+            Dim fi As New MediaContainers.Fileinfo
             For Each x As Settings.MetadataPerType In TVMeta
                 If x.FileType = lstTVScraperDefFIExt.SelectedItems(0).ToString Then
                     fi = dEditMeta.ShowDialog(x.MetaData, True)
@@ -945,7 +945,7 @@ Public Class dlgSettings
                         TVMeta.Remove(x)
                         Dim m As New Settings.MetadataPerType
                         m.FileType = x.FileType
-                        m.MetaData = New MediaInfo.Fileinfo
+                        m.MetaData = New MediaContainers.Fileinfo
                         m.MetaData = fi
                         TVMeta.Add(m)
                         LoadTVMetadata()
@@ -960,7 +960,7 @@ Public Class dlgSettings
     Private Sub btnTVSourceEdit_Click(ByVal sender As Object, ByVal e As EventArgs) Handles btnTVSourceEdit.Click
         If lvTVSources.SelectedItems.Count > 0 Then
             Using dTVSource As New dlgSourceTVShow
-                If dTVSource.ShowDialog(Convert.ToInt32(lvTVSources.SelectedItems(0).Text)) = Windows.Forms.DialogResult.OK Then
+                If dTVSource.ShowDialog(Convert.ToInt32(lvTVSources.SelectedItems(0).Text)) = DialogResult.OK Then
                     RefreshTVSources()
                     sResult.NeedsReload_TVShow = True
                     SetApplyButton(True)
@@ -1003,7 +1003,7 @@ Public Class dlgSettings
 
     Private Sub btnMovieSourceAdd_Click(ByVal sender As Object, ByVal e As EventArgs) Handles btnMovieSourceAdd.Click
         Using dSource As New dlgSourceMovie
-            If dSource.ShowDialog = Windows.Forms.DialogResult.OK Then
+            If dSource.ShowDialog = DialogResult.OK Then
                 RefreshMovieSources()
                 SetApplyButton(True)
                 sResult.NeedsDBUpdate_Movie = True
@@ -1019,12 +1019,12 @@ Public Class dlgSettings
     Private Sub btnMovieScraperDefFIExtAdd_Click(ByVal sender As Object, ByVal e As EventArgs) Handles btnMovieScraperDefFIExtAdd.Click
         If Not txtMovieScraperDefFIExt.Text.StartsWith(".") Then txtMovieScraperDefFIExt.Text = String.Concat(".", txtMovieScraperDefFIExt.Text)
         Using dEditMeta As New dlgFileInfo(New Database.DBElement(Enums.ContentType.Movie), False)
-            Dim fi As New MediaInfo.Fileinfo
+            Dim fi As New MediaContainers.Fileinfo
             fi = dEditMeta.ShowDialog(fi, False)
             If Not fi Is Nothing Then
                 Dim m As New Settings.MetadataPerType
                 m.FileType = txtMovieScraperDefFIExt.Text
-                m.MetaData = New MediaInfo.Fileinfo
+                m.MetaData = New MediaContainers.Fileinfo
                 m.MetaData = fi
                 MovieMeta.Add(m)
                 LoadMovieMetadata()
@@ -1038,12 +1038,12 @@ Public Class dlgSettings
     Private Sub btnTVScraperDefFIExtAdd_Click(ByVal sender As Object, ByVal e As EventArgs) Handles btnTVScraperDefFIExtAdd.Click
         If Not txtTVScraperDefFIExt.Text.StartsWith(".") Then txtTVScraperDefFIExt.Text = String.Concat(".", txtTVScraperDefFIExt.Text)
         Using dEditMeta As New dlgFileInfo(New Database.DBElement(Enums.ContentType.TVEpisode), True)
-            Dim fi As New MediaInfo.Fileinfo
+            Dim fi As New MediaContainers.Fileinfo
             fi = dEditMeta.ShowDialog(fi, True)
             If Not fi Is Nothing Then
                 Dim m As New Settings.MetadataPerType
                 m.FileType = txtTVScraperDefFIExt.Text
-                m.MetaData = New MediaInfo.Fileinfo
+                m.MetaData = New MediaContainers.Fileinfo
                 m.MetaData = fi
                 TVMeta.Add(m)
                 LoadTVMetadata()
@@ -1526,7 +1526,7 @@ Public Class dlgSettings
     End Sub
 
     Private Sub btnTVShowFilterReset_Click(ByVal sender As Object, ByVal e As EventArgs) Handles btnTVShowFilterReset.Click
-        If MessageBox.Show(Master.eLang.GetString(840, "Are you sure you want to reset to the default list of show filters?"), Master.eLang.GetString(104, "Are You Sure?"), MessageBoxButtons.YesNo, MessageBoxIcon.Question) = Windows.Forms.DialogResult.Yes Then
+        If MessageBox.Show(Master.eLang.GetString(840, "Are you sure you want to reset to the default list of show filters?"), Master.eLang.GetString(104, "Are You Sure?"), MessageBoxButtons.YesNo, MessageBoxIcon.Question) = DialogResult.Yes Then
             Master.eSettings.SetDefaultsForLists(Enums.DefaultType.ShowFilters, True)
             RefreshTVShowFilters()
             SetApplyButton(True)
@@ -1534,7 +1534,7 @@ Public Class dlgSettings
     End Sub
 
     Private Sub btnTVEpisodeFilterReset_Click(ByVal sender As Object, ByVal e As EventArgs) Handles btnTVEpisodeFilterReset.Click
-        If MessageBox.Show(Master.eLang.GetString(841, "Are you sure you want to reset to the default list of episode filters?"), Master.eLang.GetString(104, "Are You Sure?"), MessageBoxButtons.YesNo, MessageBoxIcon.Question) = Windows.Forms.DialogResult.Yes Then
+        If MessageBox.Show(Master.eLang.GetString(841, "Are you sure you want to reset to the default list of episode filters?"), Master.eLang.GetString(104, "Are You Sure?"), MessageBoxButtons.YesNo, MessageBoxIcon.Question) = DialogResult.Yes Then
             Master.eSettings.SetDefaultsForLists(Enums.DefaultType.EpFilters, True)
             RefreshTVEpisodeFilters()
             SetApplyButton(True)
@@ -1542,7 +1542,7 @@ Public Class dlgSettings
     End Sub
 
     Private Sub btnMovieFilterReset_Click(ByVal sender As Object, ByVal e As EventArgs) Handles btnMovieFilterReset.Click
-        If MessageBox.Show(Master.eLang.GetString(842, "Are you sure you want to reset to the default list of movie filters?"), Master.eLang.GetString(104, "Are You Sure?"), MessageBoxButtons.YesNo, MessageBoxIcon.Question) = Windows.Forms.DialogResult.Yes Then
+        If MessageBox.Show(Master.eLang.GetString(842, "Are you sure you want to reset to the default list of movie filters?"), Master.eLang.GetString(104, "Are You Sure?"), MessageBoxButtons.YesNo, MessageBoxIcon.Question) = DialogResult.Yes Then
             Master.eSettings.SetDefaultsForLists(Enums.DefaultType.MovieFilters, True)
             RefreshMovieFilters()
             SetApplyButton(True)
@@ -1550,7 +1550,7 @@ Public Class dlgSettings
     End Sub
 
     Private Sub btnFileSystemValidVideoExtsReset_Click(ByVal sender As Object, ByVal e As EventArgs) Handles btnFileSystemValidVideoExtsReset.Click
-        If MessageBox.Show(Master.eLang.GetString(843, "Are you sure you want to reset to the default list of valid video extensions?"), Master.eLang.GetString(104, "Are You Sure?"), MessageBoxButtons.YesNo, MessageBoxIcon.Question) = Windows.Forms.DialogResult.Yes Then
+        If MessageBox.Show(Master.eLang.GetString(843, "Are you sure you want to reset to the default list of valid video extensions?"), Master.eLang.GetString(104, "Are You Sure?"), MessageBoxButtons.YesNo, MessageBoxIcon.Question) = DialogResult.Yes Then
             Master.eSettings.SetDefaultsForLists(Enums.DefaultType.ValidExts, True)
             RefreshFileSystemValidExts()
             SetApplyButton(True)
@@ -1558,7 +1558,7 @@ Public Class dlgSettings
     End Sub
 
     Private Sub btnFileSystemValidSubtitlesExtsReset_Click(ByVal sender As Object, ByVal e As EventArgs) Handles btnFileSystemValidSubtitlesExtsReset.Click
-        If MessageBox.Show(Master.eLang.GetString(1283, "Are you sure you want to reset to the default list of valid subtitle extensions?"), Master.eLang.GetString(104, "Are You Sure?"), MessageBoxButtons.YesNo, MessageBoxIcon.Question) = Windows.Forms.DialogResult.Yes Then
+        If MessageBox.Show(Master.eLang.GetString(1283, "Are you sure you want to reset to the default list of valid subtitle extensions?"), Master.eLang.GetString(104, "Are You Sure?"), MessageBoxButtons.YesNo, MessageBoxIcon.Question) = DialogResult.Yes Then
             Master.eSettings.SetDefaultsForLists(Enums.DefaultType.ValidSubtitleExts, True)
             RefreshFileSystemValidSubtitlesExts()
             SetApplyButton(True)
@@ -1566,7 +1566,7 @@ Public Class dlgSettings
     End Sub
 
     Private Sub btnFileSystemValidThemeExtsReset_Click(ByVal sender As Object, ByVal e As EventArgs) Handles btnFileSystemValidThemeExtsReset.Click
-        If MessageBox.Show(Master.eLang.GetString(1080, "Are you sure you want to reset to the default list of valid theme extensions?"), Master.eLang.GetString(104, "Are You Sure?"), MessageBoxButtons.YesNo, MessageBoxIcon.Question) = Windows.Forms.DialogResult.Yes Then
+        If MessageBox.Show(Master.eLang.GetString(1080, "Are you sure you want to reset to the default list of valid theme extensions?"), Master.eLang.GetString(104, "Are You Sure?"), MessageBoxButtons.YesNo, MessageBoxIcon.Question) = DialogResult.Yes Then
             Master.eSettings.SetDefaultsForLists(Enums.DefaultType.ValidThemeExts, True)
             RefreshFileSystemValidThemeExts()
             SetApplyButton(True)
@@ -1575,7 +1575,7 @@ Public Class dlgSettings
 
     Private Sub btnTVSourcesRegexTVShowMatchingGet_Click(ByVal sender As Object, ByVal e As EventArgs) Handles btnTVSourcesRegexTVShowMatchingGet.Click
         Using dd As New dlgTVRegExProfiles
-            If dd.ShowDialog() = Windows.Forms.DialogResult.OK Then
+            If dd.ShowDialog() = DialogResult.OK Then
                 TVShowMatching.Clear()
                 TVShowMatching.AddRange(dd.ShowRegex)
                 LoadTVShowMatching()
@@ -1585,7 +1585,7 @@ Public Class dlgSettings
     End Sub
 
     Private Sub btnTVSourcesRegexTVShowMatchingReset_Click(ByVal sender As Object, ByVal e As EventArgs) Handles btnTVSourcesRegexTVShowMatchingReset.Click
-        If MessageBox.Show(Master.eLang.GetString(844, "Are you sure you want to reset to the default list of show regex?"), Master.eLang.GetString(104, "Are You Sure?"), MessageBoxButtons.YesNo, MessageBoxIcon.Question) = Windows.Forms.DialogResult.Yes Then
+        If MessageBox.Show(Master.eLang.GetString(844, "Are you sure you want to reset to the default list of show regex?"), Master.eLang.GetString(104, "Are You Sure?"), MessageBoxButtons.YesNo, MessageBoxIcon.Question) = DialogResult.Yes Then
             Master.eSettings.SetDefaultsForLists(Enums.DefaultType.TVShowMatching, True)
             TVShowMatching.Clear()
             TVShowMatching.AddRange(Master.eSettings.TVShowMatching)
@@ -3025,6 +3025,8 @@ Public Class dlgSettings
             chkMovieScraperCleanPlotOutline.Checked = .MovieScraperCleanPlotOutline
             chkMovieScraperCollectionID.Checked = .MovieScraperCollectionID
             chkMovieScraperCollectionsAuto.Checked = .MovieScraperCollectionsAuto
+            chkMovieScraperCollectionsExtendedInfo.Checked = .MovieScraperCollectionsExtendedInfo
+            chkMovieScraperCollectionsYAMJCompatibleSets.Checked = .MovieScraperCollectionsYAMJCompatibleSets
             chkMovieScraperCountry.Checked = .MovieScraperCountry
             chkMovieScraperDirector.Checked = .MovieScraperDirector
             chkMovieScraperGenre.Checked = .MovieScraperGenre
@@ -3560,7 +3562,6 @@ Public Class dlgSettings
             chkMovieTrailerNMJ.Checked = .MovieTrailerNMJ
 
             '************** NMT optional settings **************
-            chkMovieYAMJCompatibleSets.Checked = .MovieYAMJCompatibleSets
             chkMovieYAMJWatchedFile.Checked = .MovieYAMJWatchedFile
             txtMovieYAMJWatchedFolder.Text = .MovieYAMJWatchedFolder
 
@@ -4308,11 +4309,11 @@ Public Class dlgSettings
     End Sub
 
     Private Sub LoadTVScraperOptionsOrdering()
-        Dim items As New Dictionary(Of String, Enums.Ordering)
-        items.Add(Master.eLang.GetString(438, "Standard"), Enums.Ordering.Standard)
-        items.Add(Master.eLang.GetString(1067, "DVD"), Enums.Ordering.DVD)
-        items.Add(Master.eLang.GetString(839, "Absolute"), Enums.Ordering.Absolute)
-        items.Add(Master.eLang.GetString(1332, "Day Of Year"), Enums.Ordering.DayOfYear)
+        Dim items As New Dictionary(Of String, Enums.EpisodeOrdering)
+        items.Add(Master.eLang.GetString(438, "Standard"), Enums.EpisodeOrdering.Standard)
+        items.Add(Master.eLang.GetString(1067, "DVD"), Enums.EpisodeOrdering.DVD)
+        items.Add(Master.eLang.GetString(839, "Absolute"), Enums.EpisodeOrdering.Absolute)
+        items.Add(Master.eLang.GetString(1332, "Day Of Year"), Enums.EpisodeOrdering.DayOfYear)
         cbTVScraperOptionsOrdering.DataSource = items.ToList
         cbTVScraperOptionsOrdering.DisplayMember = "Key"
         cbTVScraperOptionsOrdering.ValueMember = "Value"
@@ -4369,7 +4370,7 @@ Public Class dlgSettings
     Private Sub lstMovieScraperDefFIExt_DoubleClick(ByVal sender As Object, ByVal e As EventArgs) Handles lstMovieScraperDefFIExt.DoubleClick
         If lstMovieScraperDefFIExt.SelectedItems.Count > 0 Then
             Using dEditMeta As New dlgFileInfo(New Database.DBElement(Enums.ContentType.Movie), False)
-                Dim fi As New MediaInfo.Fileinfo
+                Dim fi As New MediaContainers.Fileinfo
                 For Each x As Settings.MetadataPerType In MovieMeta
                     If x.FileType = lstMovieScraperDefFIExt.SelectedItems(0).ToString Then
                         fi = dEditMeta.ShowDialog(x.MetaData, False)
@@ -4377,7 +4378,7 @@ Public Class dlgSettings
                             MovieMeta.Remove(x)
                             Dim m As New Settings.MetadataPerType
                             m.FileType = x.FileType
-                            m.MetaData = New MediaInfo.Fileinfo
+                            m.MetaData = New MediaContainers.Fileinfo
                             m.MetaData = fi
                             MovieMeta.Add(m)
                             LoadMovieMetadata()
@@ -4440,7 +4441,7 @@ Public Class dlgSettings
     Private Sub lstTVScraperDefFIExt_DoubleClick(ByVal sender As Object, ByVal e As EventArgs) Handles lstTVScraperDefFIExt.DoubleClick
         If lstTVScraperDefFIExt.SelectedItems.Count > 0 Then
             Using dEditMeta As New dlgFileInfo(New Database.DBElement(Enums.ContentType.TVEpisode), True)
-                Dim fi As New MediaInfo.Fileinfo
+                Dim fi As New MediaContainers.Fileinfo
                 For Each x As Settings.MetadataPerType In TVMeta
                     If x.FileType = lstTVScraperDefFIExt.SelectedItems(0).ToString Then
                         fi = dEditMeta.ShowDialog(x.MetaData, True)
@@ -4448,7 +4449,7 @@ Public Class dlgSettings
                             TVMeta.Remove(x)
                             Dim m As New Settings.MetadataPerType
                             m.FileType = x.FileType
-                            m.MetaData = New MediaInfo.Fileinfo
+                            m.MetaData = New MediaContainers.Fileinfo
                             m.MetaData = fi
                             TVMeta.Add(m)
                             LoadTVMetadata()
@@ -4483,7 +4484,7 @@ Public Class dlgSettings
     Private Sub lvMovieSources_DoubleClick(ByVal sender As Object, ByVal e As EventArgs) Handles lvMovieSources.DoubleClick
         If lvMovieSources.SelectedItems.Count > 0 Then
             Using dMovieSource As New dlgSourceMovie
-                If dMovieSource.ShowDialog(Convert.ToInt32(lvMovieSources.SelectedItems(0).Text)) = Windows.Forms.DialogResult.OK Then
+                If dMovieSource.ShowDialog(Convert.ToInt32(lvMovieSources.SelectedItems(0).Text)) = DialogResult.OK Then
                     RefreshMovieSources()
                     sResult.NeedsReload_Movie = True 'TODO: Check if we have to use Reload or DBUpdate
                     SetApplyButton(True)
@@ -4515,7 +4516,7 @@ Public Class dlgSettings
     Private Sub lvTVSources_DoubleClick(ByVal sender As Object, ByVal e As EventArgs) Handles lvTVSources.DoubleClick
         If lvTVSources.SelectedItems.Count > 0 Then
             Using dTVSource As New dlgSourceTVShow
-                If dTVSource.ShowDialog(Convert.ToInt32(lvTVSources.SelectedItems(0).Text)) = Windows.Forms.DialogResult.OK Then
+                If dTVSource.ShowDialog(Convert.ToInt32(lvTVSources.SelectedItems(0).Text)) = DialogResult.OK Then
                     RefreshTVSources()
                     sResult.NeedsReload_TVShow = True
                     SetApplyButton(True)
@@ -4594,6 +4595,7 @@ Public Class dlgSettings
             lvItem.SubItems.Add(s.Ordering.ToString)
             lvItem.SubItems.Add(If(s.Exclude, Master.eLang.GetString(300, "Yes"), Master.eLang.GetString(720, "No")))
             lvItem.SubItems.Add(s.EpisodeSorting.ToString)
+            lvItem.SubItems.Add(If(s.IsSingle, Master.eLang.GetString(300, "Yes"), Master.eLang.GetString(720, "No")))
             lvTVSources.Items.Add(lvItem)
         Next
     End Sub
@@ -4692,7 +4694,7 @@ Public Class dlgSettings
 
     Private Sub RemoveMovieSource()
         If lvMovieSources.SelectedItems.Count > 0 Then
-            If MessageBox.Show(Master.eLang.GetString(418, "Are you sure you want to remove the selected sources? This will remove the movies from these sources from the Ember database."), Master.eLang.GetString(104, "Are You Sure?"), MessageBoxButtons.YesNo, MessageBoxIcon.Question) = Windows.Forms.DialogResult.Yes Then
+            If MessageBox.Show(Master.eLang.GetString(418, "Are you sure you want to remove the selected sources? This will remove the movies from these sources from the Ember database."), Master.eLang.GetString(104, "Are You Sure?"), MessageBoxButtons.YesNo, MessageBoxIcon.Question) = DialogResult.Yes Then
                 lvMovieSources.BeginUpdate()
 
                 Using SQLtransaction As SQLite.SQLiteTransaction = Master.DB.MyVideosDBConn.BeginTransaction()
@@ -4798,12 +4800,12 @@ Public Class dlgSettings
 
     Private Sub RemoveTVSource()
         If lvTVSources.SelectedItems.Count > 0 Then
-            If MessageBox.Show(Master.eLang.GetString(1033, "Are you sure you want to remove the selected sources? This will remove the tv shows from these sources from the Ember database."), Master.eLang.GetString(104, "Are You Sure?"), MessageBoxButtons.YesNo, MessageBoxIcon.Question) = Windows.Forms.DialogResult.Yes Then
+            If MessageBox.Show(Master.eLang.GetString(1033, "Are you sure you want to remove the selected sources? This will remove the tv shows from these sources from the Ember database."), Master.eLang.GetString(104, "Are You Sure?"), MessageBoxButtons.YesNo, MessageBoxIcon.Question) = DialogResult.Yes Then
                 lvTVSources.BeginUpdate()
 
                 Using SQLtransaction As SQLite.SQLiteTransaction = Master.DB.MyVideosDBConn.BeginTransaction()
                     Using SQLcommand As SQLite.SQLiteCommand = Master.DB.MyVideosDBConn.CreateCommand()
-                        Dim parSource As SQLite.SQLiteParameter = SQLcommand.Parameters.Add("parSource", DbType.UInt64, 0, "idSource")
+                        Dim parSource As SQLite.SQLiteParameter = SQLcommand.Parameters.Add("parSource", DbType.Int64, 0, "idSource")
                         While lvTVSources.SelectedItems.Count > 0
                             parSource.Value = lvTVSources.SelectedItems(0).SubItems(0).Text
                             SQLcommand.CommandText = String.Concat("DELETE FROM tvshowsource WHERE idSource = (?);")
@@ -5100,6 +5102,8 @@ Public Class dlgSettings
             .MovieScraperCleanPlotOutline = chkMovieScraperCleanPlotOutline.Checked
             .MovieScraperCollectionID = chkMovieScraperCollectionID.Checked
             .MovieScraperCollectionsAuto = chkMovieScraperCollectionsAuto.Checked
+            .MovieScraperCollectionsExtendedInfo = chkMovieScraperCollectionsExtendedInfo.Checked
+            .MovieScraperCollectionsYAMJCompatibleSets = chkMovieScraperCollectionsYAMJCompatibleSets.Checked
             .MovieScraperCountry = chkMovieScraperCountry.Checked
             .MovieScraperDirector = chkMovieScraperDirector.Checked
             .MovieScraperDurationRuntimeFormat = txtMovieScraperDurationRuntimeFormat.Text
@@ -5265,7 +5269,7 @@ Public Class dlgSettings
             .TVScraperEpisodeRuntime = chkTVScraperEpisodeRuntime.Checked
             .TVScraperEpisodeTitle = chkTVScraperEpisodeTitle.Checked
             .TVScraperMetaDataScan = chkTVScraperMetaDataScan.Checked
-            .TVScraperOptionsOrdering = CType(cbTVScraperOptionsOrdering.SelectedItem, KeyValuePair(Of String, Enums.Ordering)).Value
+            .TVScraperOptionsOrdering = CType(cbTVScraperOptionsOrdering.SelectedItem, KeyValuePair(Of String, Enums.EpisodeOrdering)).Value
             .TVScraperSeasonAired = chkTVScraperSeasonAired.Checked
             .TVScraperSeasonPlot = chkTVScraperSeasonPlot.Checked
             .TVScraperSeasonTitle = chkTVScraperSeasonTitle.Checked
@@ -5490,7 +5494,6 @@ Public Class dlgSettings
             .MovieTrailerNMJ = chkMovieTrailerNMJ.Checked
 
             '************** NMJ optional settings *************
-            .MovieYAMJCompatibleSets = chkMovieYAMJCompatibleSets.Checked
             .MovieYAMJWatchedFile = chkMovieYAMJWatchedFile.Checked
             .MovieYAMJWatchedFolder = txtMovieYAMJWatchedFolder.Text
 
@@ -6856,7 +6859,7 @@ Public Class dlgSettings
         chkMovieScraperStudioWithImg.Text = Master.eLang.GetString(1280, "Scrape Only Studios With Images")
         chkMovieScraperUseMDDuration.Text = Master.eLang.GetString(516, "Use Duration for Runtime")
         chkMovieScraperXBMCTrailerFormat.Text = Master.eLang.GetString(1187, "Save YouTube-Trailer-Links in XBMC compatible format")
-        chkMovieYAMJCompatibleSets.Text = Master.eLang.GetString(561, "YAMJ Compatible Sets")
+        chkMovieScraperCollectionsYAMJCompatibleSets.Text = Master.eLang.GetString(561, "Save YAMJ Compatible Sets to NFO")
         chkMovieSkipStackedSizeCheck.Text = Master.eLang.GetString(538, "Skip Size Check of Stacked Files")
         chkMovieSortBeforeScan.Text = Master.eLang.GetString(712, "Sort files into folder before each library update")
         chkMovieStackExpertMulti.Text = String.Format(Master.eLang.GetString(1178, "Stack {0}filename{1}"), "<", ">")
@@ -7250,7 +7253,7 @@ Public Class dlgSettings
         Try
             With fbdBrowse
                 fbdBrowse.Description = Master.eLang.GetString(1030, "Select the folder where you wish to store your movie sets images...")
-                If .ShowDialog = Windows.Forms.DialogResult.OK Then
+                If .ShowDialog = DialogResult.OK Then
                     If Not String.IsNullOrEmpty(.SelectedPath.ToString) AndAlso Directory.Exists(.SelectedPath) Then
                         txtMovieSetPathExtended.Text = .SelectedPath.ToString
                     End If
@@ -7265,7 +7268,7 @@ Public Class dlgSettings
         Try
             With fbdBrowse
                 fbdBrowse.Description = Master.eLang.GetString(1030, "Select the folder where you wish to store your movie sets images...")
-                If .ShowDialog = Windows.Forms.DialogResult.OK Then
+                If .ShowDialog = DialogResult.OK Then
                     If Not String.IsNullOrEmpty(.SelectedPath.ToString) AndAlso Directory.Exists(.SelectedPath) Then
                         txtMovieSetPathMSAA.Text = .SelectedPath.ToString
                     End If
@@ -7280,7 +7283,7 @@ Public Class dlgSettings
         Try
             With fbdBrowse
                 fbdBrowse.Description = Master.eLang.GetString(1030, "Select the folder where you wish to store your movie sets images...")
-                If .ShowDialog = Windows.Forms.DialogResult.OK Then
+                If .ShowDialog = DialogResult.OK Then
                     If Not String.IsNullOrEmpty(.SelectedPath.ToString) AndAlso Directory.Exists(.SelectedPath) Then
                         txtMovieSetPathExpertSingle.Text = .SelectedPath.ToString
                     End If
@@ -7295,7 +7298,7 @@ Public Class dlgSettings
         Try
             With fbdBrowse
                 fbdBrowse.Description = Master.eLang.GetString(1077, "Select the folder where you wish to store your themes...")
-                If .ShowDialog = Windows.Forms.DialogResult.OK Then
+                If .ShowDialog = DialogResult.OK Then
                     If Not String.IsNullOrEmpty(.SelectedPath.ToString) AndAlso Directory.Exists(.SelectedPath) Then
                         txtMovieThemeTvTunesCustomPath.Text = .SelectedPath.ToString
                     End If
@@ -7310,7 +7313,7 @@ Public Class dlgSettings
         Try
             With fbdBrowse
                 fbdBrowse.Description = Master.eLang.GetString(1077, "Select the folder where you wish to store your themes...")
-                If .ShowDialog = Windows.Forms.DialogResult.OK Then
+                If .ShowDialog = DialogResult.OK Then
                     If Not String.IsNullOrEmpty(.SelectedPath.ToString) AndAlso Directory.Exists(.SelectedPath) Then
                         txtTVShowThemeTvTunesCustomPath.Text = .SelectedPath.ToString
                     End If
@@ -7325,7 +7328,7 @@ Public Class dlgSettings
         Try
             With fbdBrowse
                 fbdBrowse.Description = Master.eLang.GetString(1029, "Select the folder where you wish to store your watched files...")
-                If .ShowDialog = Windows.Forms.DialogResult.OK Then
+                If .ShowDialog = DialogResult.OK Then
                     If Not String.IsNullOrEmpty(.SelectedPath.ToString) AndAlso Directory.Exists(.SelectedPath) Then
                         txtMovieYAMJWatchedFolder.Text = .SelectedPath.ToString
                     End If
@@ -8198,7 +8201,6 @@ Public Class dlgSettings
         chkMovieUseBaseDirectoryExpertBDMV.CheckedChanged,
         chkMovieUseBaseDirectoryExpertVTS.CheckedChanged,
         chkMovieXBMCProtectVTSBDMV.CheckedChanged,
-        chkMovieYAMJCompatibleSets.CheckedChanged,
         chkTVAllSeasonsBannerKeepExisting.CheckedChanged,
         chkTVAllSeasonsBannerPrefSizeOnly.CheckedChanged,
         chkTVAllSeasonsFanartKeepExisting.CheckedChanged,
@@ -8389,6 +8391,8 @@ Public Class dlgSettings
         txtMoviePosterHeight.TextChanged,
         txtMoviePosterWidth.TextChanged,
         txtMovieScraperCastLimit.TextChanged,
+        chkMovieScraperCollectionsExtendedInfo.CheckedChanged,
+        chkMovieScraperCollectionsYAMJCompatibleSets.CheckedChanged,
         txtMovieScraperDurationRuntimeFormat.TextChanged,
         txtMovieScraperGenreLimit.TextChanged,
         txtMovieScraperMPAANotRated.TextChanged,

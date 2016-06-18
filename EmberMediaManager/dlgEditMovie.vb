@@ -537,7 +537,7 @@ Public Class dlgEditMovie
                 Dim dlgImgS = New dlgImgSelect()
                 If dlgImgS.ShowDialog(tmpDBElement, aContainer, ScrapeModifiers) = DialogResult.OK Then
                     tmpDBElement.ImagesContainer.Banner = dlgImgS.Result.ImagesContainer.Banner
-                    If tmpDBElement.ImagesContainer.Banner.ImageOriginal.Image IsNot Nothing OrElse tmpDBElement.ImagesContainer.Banner.ImageOriginal.FromMemoryStream Then
+                    If tmpDBElement.ImagesContainer.Banner.ImageOriginal.Image IsNot Nothing OrElse tmpDBElement.ImagesContainer.Banner.ImageOriginal.LoadFromMemoryStream Then
                         pbBanner.Image = tmpDBElement.ImagesContainer.Banner.ImageOriginal.Image
                         lblBannerSize.Text = String.Format(Master.eLang.GetString(269, "Size: {0}x{1}"), pbBanner.Image.Width, pbBanner.Image.Height)
                         lblBannerSize.Visible = True
@@ -563,7 +563,7 @@ Public Class dlgEditMovie
         End With
 
         If ofdLocalFiles.ShowDialog() = DialogResult.OK Then
-            tmpDBElement.ImagesContainer.Banner.ImageOriginal.FromFile(ofdLocalFiles.FileName, True)
+            tmpDBElement.ImagesContainer.Banner.ImageOriginal.LoadFromFile(ofdLocalFiles.FileName, True)
             pbBanner.Image = tmpDBElement.ImagesContainer.Banner.ImageOriginal.Image
             pbBanner.Tag = tmpDBElement.ImagesContainer.Banner
 
@@ -600,7 +600,7 @@ Public Class dlgEditMovie
                 Dim dlgImgS = New dlgImgSelect()
                 If dlgImgS.ShowDialog(tmpDBElement, aContainer, ScrapeModifiers) = DialogResult.OK Then
                     tmpDBElement.ImagesContainer.ClearArt = dlgImgS.Result.ImagesContainer.ClearArt
-                    If tmpDBElement.ImagesContainer.ClearArt.ImageOriginal.Image IsNot Nothing OrElse tmpDBElement.ImagesContainer.ClearArt.ImageOriginal.FromMemoryStream Then
+                    If tmpDBElement.ImagesContainer.ClearArt.ImageOriginal.Image IsNot Nothing OrElse tmpDBElement.ImagesContainer.ClearArt.ImageOriginal.LoadFromMemoryStream Then
                         pbClearArt.Image = tmpDBElement.ImagesContainer.ClearArt.ImageOriginal.Image
                         lblClearArtSize.Text = String.Format(Master.eLang.GetString(269, "Size: {0}x{1}"), pbClearArt.Image.Width, pbClearArt.Image.Height)
                         lblClearArtSize.Visible = True
@@ -626,7 +626,7 @@ Public Class dlgEditMovie
         End With
 
         If ofdLocalFiles.ShowDialog() = DialogResult.OK Then
-            tmpDBElement.ImagesContainer.ClearArt.ImageOriginal.FromFile(ofdLocalFiles.FileName, True)
+            tmpDBElement.ImagesContainer.ClearArt.ImageOriginal.LoadFromFile(ofdLocalFiles.FileName, True)
             pbClearArt.Image = tmpDBElement.ImagesContainer.ClearArt.ImageOriginal.Image
             pbClearArt.Tag = tmpDBElement.ImagesContainer.ClearArt
 
@@ -663,7 +663,7 @@ Public Class dlgEditMovie
                 Dim dlgImgS = New dlgImgSelect()
                 If dlgImgS.ShowDialog(tmpDBElement, aContainer, ScrapeModifiers) = DialogResult.OK Then
                     tmpDBElement.ImagesContainer.ClearLogo = dlgImgS.Result.ImagesContainer.ClearLogo
-                    If dlgImgS.Result.ImagesContainer.ClearLogo.ImageOriginal.Image IsNot Nothing OrElse tmpDBElement.ImagesContainer.ClearLogo.ImageOriginal.FromMemoryStream Then
+                    If dlgImgS.Result.ImagesContainer.ClearLogo.ImageOriginal.Image IsNot Nothing OrElse tmpDBElement.ImagesContainer.ClearLogo.ImageOriginal.LoadFromMemoryStream Then
                         pbClearLogo.Image = tmpDBElement.ImagesContainer.ClearLogo.ImageOriginal.Image
                         lblClearLogoSize.Text = String.Format(Master.eLang.GetString(269, "Size: {0}x{1}"), pbClearLogo.Image.Width, pbClearLogo.Image.Height)
                         lblClearLogoSize.Visible = True
@@ -689,7 +689,7 @@ Public Class dlgEditMovie
         End With
 
         If ofdLocalFiles.ShowDialog() = DialogResult.OK Then
-            tmpDBElement.ImagesContainer.ClearLogo.ImageOriginal.FromFile(ofdLocalFiles.FileName, True)
+            tmpDBElement.ImagesContainer.ClearLogo.ImageOriginal.LoadFromFile(ofdLocalFiles.FileName, True)
             pbClearLogo.Image = tmpDBElement.ImagesContainer.ClearLogo.ImageOriginal.Image
             pbClearLogo.Tag = tmpDBElement.ImagesContainer.ClearLogo
 
@@ -726,7 +726,7 @@ Public Class dlgEditMovie
                 Dim dlgImgS = New dlgImgSelect()
                 If dlgImgS.ShowDialog(tmpDBElement, aContainer, ScrapeModifiers) = DialogResult.OK Then
                     tmpDBElement.ImagesContainer.DiscArt = dlgImgS.Result.ImagesContainer.DiscArt
-                    If tmpDBElement.ImagesContainer.DiscArt.ImageOriginal.Image IsNot Nothing OrElse tmpDBElement.ImagesContainer.DiscArt.ImageOriginal.FromMemoryStream Then
+                    If tmpDBElement.ImagesContainer.DiscArt.ImageOriginal.Image IsNot Nothing OrElse tmpDBElement.ImagesContainer.DiscArt.ImageOriginal.LoadFromMemoryStream Then
                         pbDiscArt.Image = tmpDBElement.ImagesContainer.DiscArt.ImageOriginal.Image
                         lblDiscArtSize.Text = String.Format(Master.eLang.GetString(269, "Size: {0}x{1}"), pbDiscArt.Image.Width, pbDiscArt.Image.Height)
                         lblDiscArtSize.Visible = True
@@ -753,7 +753,7 @@ Public Class dlgEditMovie
             End With
 
         If ofdLocalFiles.ShowDialog() = DialogResult.OK Then
-            tmpDBElement.ImagesContainer.DiscArt.ImageOriginal.FromFile(ofdLocalFiles.FileName, True)
+            tmpDBElement.ImagesContainer.DiscArt.ImageOriginal.LoadFromFile(ofdLocalFiles.FileName, True)
             pbDiscArt.Image = tmpDBElement.ImagesContainer.DiscArt.ImageOriginal.Image
             pbDiscArt.Tag = tmpDBElement.ImagesContainer.DiscArt
 
@@ -852,7 +852,7 @@ Public Class dlgEditMovie
                 Dim dlgImgS = New dlgImgSelect()
                 If dlgImgS.ShowDialog(tmpDBElement, aContainer, ScrapeModifiers) = DialogResult.OK Then
                     tmpDBElement.ImagesContainer.Fanart = dlgImgS.Result.ImagesContainer.Fanart
-                    If tmpDBElement.ImagesContainer.Fanart.ImageOriginal.Image IsNot Nothing OrElse tmpDBElement.ImagesContainer.Fanart.ImageOriginal.FromMemoryStream Then
+                    If tmpDBElement.ImagesContainer.Fanart.ImageOriginal.Image IsNot Nothing OrElse tmpDBElement.ImagesContainer.Fanart.ImageOriginal.LoadFromMemoryStream Then
                         pbFanart.Image = tmpDBElement.ImagesContainer.Fanart.ImageOriginal.Image
                         lblFanartSize.Text = String.Format(Master.eLang.GetString(269, "Size: {0}x{1}"), pbFanart.Image.Width, pbFanart.Image.Height)
                         lblFanartSize.Visible = True
@@ -878,7 +878,7 @@ Public Class dlgEditMovie
         End With
 
         If ofdLocalFiles.ShowDialog() = DialogResult.OK Then
-            tmpDBElement.ImagesContainer.Fanart.ImageOriginal.FromFile(ofdLocalFiles.FileName, True)
+            tmpDBElement.ImagesContainer.Fanart.ImageOriginal.LoadFromFile(ofdLocalFiles.FileName, True)
             pbFanart.Image = tmpDBElement.ImagesContainer.Fanart.ImageOriginal.Image
             pbFanart.Tag = tmpDBElement.ImagesContainer.Fanart
 
@@ -915,7 +915,7 @@ Public Class dlgEditMovie
                 Dim dlgImgS = New dlgImgSelect()
                 If dlgImgS.ShowDialog(tmpDBElement, aContainer, ScrapeModifiers) = DialogResult.OK Then
                     tmpDBElement.ImagesContainer.Landscape = dlgImgS.Result.ImagesContainer.Landscape
-                    If tmpDBElement.ImagesContainer.Landscape.ImageOriginal.Image IsNot Nothing OrElse tmpDBElement.ImagesContainer.Landscape.ImageOriginal.FromMemoryStream Then
+                    If tmpDBElement.ImagesContainer.Landscape.ImageOriginal.Image IsNot Nothing OrElse tmpDBElement.ImagesContainer.Landscape.ImageOriginal.LoadFromMemoryStream Then
                         pbLandscape.Image = tmpDBElement.ImagesContainer.Landscape.ImageOriginal.Image
                         lblLandscapeSize.Text = String.Format(Master.eLang.GetString(269, "Size: {0}x{1}"), pbLandscape.Image.Width, pbLandscape.Image.Height)
                         lblLandscapeSize.Visible = True
@@ -941,7 +941,7 @@ Public Class dlgEditMovie
         End With
 
         If ofdLocalFiles.ShowDialog() = DialogResult.OK Then
-            tmpDBElement.ImagesContainer.Landscape.ImageOriginal.FromFile(ofdLocalFiles.FileName, True)
+            tmpDBElement.ImagesContainer.Landscape.ImageOriginal.LoadFromFile(ofdLocalFiles.FileName, True)
             pbLandscape.Image = tmpDBElement.ImagesContainer.Landscape.ImageOriginal.Image
             pbLandscape.Tag = tmpDBElement.ImagesContainer.Landscape
 
@@ -978,7 +978,7 @@ Public Class dlgEditMovie
                 Dim dlgImgS = New dlgImgSelect()
                 If dlgImgS.ShowDialog(tmpDBElement, aContainer, ScrapeModifiers) = DialogResult.OK Then
                     tmpDBElement.ImagesContainer.Poster = dlgImgS.Result.ImagesContainer.Poster
-                    If tmpDBElement.ImagesContainer.Poster.ImageOriginal.Image IsNot Nothing OrElse tmpDBElement.ImagesContainer.Poster.ImageOriginal.FromMemoryStream Then
+                    If tmpDBElement.ImagesContainer.Poster.ImageOriginal.Image IsNot Nothing OrElse tmpDBElement.ImagesContainer.Poster.ImageOriginal.LoadFromMemoryStream Then
                         pbPoster.Image = tmpDBElement.ImagesContainer.Poster.ImageOriginal.Image
                         lblPosterSize.Text = String.Format(Master.eLang.GetString(269, "Size: {0}x{1}"), pbPoster.Image.Width, pbPoster.Image.Height)
                         lblPosterSize.Visible = True
@@ -1004,7 +1004,7 @@ Public Class dlgEditMovie
         End With
 
         If ofdLocalFiles.ShowDialog() = DialogResult.OK Then
-            tmpDBElement.ImagesContainer.Poster.ImageOriginal.FromFile(ofdLocalFiles.FileName, True)
+            tmpDBElement.ImagesContainer.Poster.ImageOriginal.LoadFromFile(ofdLocalFiles.FileName, True)
             pbPoster.Image = tmpDBElement.ImagesContainer.Poster.ImageOriginal.Image
             pbPoster.Tag = tmpDBElement.ImagesContainer.Poster
 
@@ -2412,7 +2412,7 @@ Public Class dlgEditMovie
         If Not Master.eSettings.MovieImagesNotSaveURLToNfo AndAlso pResults.Posters.Count > 0 Then tmpDBElement.Movie.Thumb = pResults.Posters
         If Not Master.eSettings.MovieImagesNotSaveURLToNfo AndAlso fResults.Fanart.Thumb.Count > 0 Then tmpDBElement.Movie.Fanart = pResults.Fanart
 
-        Dim removeSubtitles As New List(Of MediaInfo.Subtitle)
+        Dim removeSubtitles As New List(Of MediaContainers.Subtitle)
         For Each Subtitle In tmpDBElement.Subtitles
             If Subtitle.toRemove Then
                 removeSubtitles.Add(Subtitle)
@@ -2563,7 +2563,7 @@ Public Class dlgEditMovie
     Sub GenericRunCallBack(ByVal mType As Enums.ModuleEventType, ByRef _params As List(Of Object))
         If mType = Enums.ModuleEventType.FrameExtrator_Movie AndAlso _params IsNot Nothing Then
             If _params(0).ToString = "FanartToSave" Then
-                tmpDBElement.ImagesContainer.Fanart.ImageOriginal.FromFile(Path.Combine(Master.TempPath, "frame.jpg"), True)
+                tmpDBElement.ImagesContainer.Fanart.ImageOriginal.LoadFromFile(Path.Combine(Master.TempPath, "frame.jpg"), True)
                 If tmpDBElement.ImagesContainer.Fanart.ImageOriginal.Image IsNot Nothing Then
                     pbFanart.Image = tmpDBElement.ImagesContainer.Fanart.ImageOriginal.Image
                     pbFanart.Tag = tmpDBElement.ImagesContainer.Fanart
@@ -2575,7 +2575,7 @@ Public Class dlgEditMovie
                 Dim fPath As String = _params(1).ToString
                 If Not String.IsNullOrEmpty(fPath) AndAlso File.Exists(fPath) Then
                     Dim eImg As New MediaContainers.Image
-                    eImg.ImageOriginal.FromFile(fPath, True)
+                    eImg.ImageOriginal.LoadFromFile(fPath, True)
                     tmpDBElement.ImagesContainer.Extrafanarts.Add(eImg)
                     RefreshExtrafanarts()
                 End If
@@ -2583,7 +2583,7 @@ Public Class dlgEditMovie
                 Dim fPath As String = _params(1).ToString
                 If Not String.IsNullOrEmpty(fPath) AndAlso File.Exists(fPath) Then
                     Dim eImg As New MediaContainers.Image
-                    eImg.ImageOriginal.FromFile(fPath, True)
+                    eImg.ImageOriginal.LoadFromFile(fPath, True)
                     tmpDBElement.ImagesContainer.Extrathumbs.Add(eImg)
                     RefreshExtrathumbs()
                 End If
@@ -2650,13 +2650,13 @@ Public Class dlgEditMovie
     Private Sub EditSubtitle()
         If lvSubtitles.SelectedItems.Count > 0 Then
             Dim i As ListViewItem = lvSubtitles.SelectedItems(0)
-            Dim tmpFileInfo As New MediaInfo.Fileinfo
+            Dim tmpFileInfo As New MediaContainers.Fileinfo
             tmpFileInfo.StreamDetails.Subtitle.AddRange(tmpDBElement.Subtitles)
             Using dEditStream As New dlgFIStreamEditor
                 Dim stream As Object = dEditStream.ShowDialog(i.Tag.ToString, tmpFileInfo, Convert.ToInt16(i.Text))
                 If Not stream Is Nothing Then
                     If i.Tag.ToString = Master.eLang.GetString(597, "Subtitle Stream") Then
-                        tmpDBElement.Subtitles(Convert.ToInt16(i.Text)) = DirectCast(stream, MediaInfo.Subtitle)
+                        tmpDBElement.Subtitles(Convert.ToInt16(i.Text)) = DirectCast(stream, MediaContainers.Subtitle)
                     End If
                     'NeedToRefresh = True
                     LoadSubtitles()
@@ -2701,7 +2701,7 @@ Public Class dlgEditMovie
 
             g.Items.Add(i)
             lvSubtitles.Items.Add(i)
-            Dim s As MediaInfo.Subtitle
+            Dim s As MediaContainers.Subtitle
             For c = 0 To tmpDBElement.Subtitles.Count - 1
                 s = tmpDBElement.Subtitles(c)
                 If Not s Is Nothing Then

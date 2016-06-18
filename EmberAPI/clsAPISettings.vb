@@ -398,11 +398,11 @@ Public Class Settings
         End Set
     End Property
 
-    Public Property TVScraperOptionsOrdering() As Enums.Ordering
+    Public Property TVScraperOptionsOrdering() As Enums.EpisodeOrdering
         Get
             Return Settings._XMLSettings.TVScraperOptionsOrdering
         End Get
-        Set(ByVal value As Enums.Ordering)
+        Set(ByVal value As Enums.EpisodeOrdering)
             Settings._XMLSettings.TVScraperOptionsOrdering = value
         End Set
     End Property
@@ -801,6 +801,15 @@ Public Class Settings
         End Get
         Set(ByVal value As Boolean)
             Settings._XMLSettings.MovieScraperCollectionsAuto = value
+        End Set
+    End Property
+
+    Public Property MovieScraperCollectionsExtendedInfo() As Boolean
+        Get
+            Return Settings._XMLSettings.MovieScraperCollectionsExtendedInfo
+        End Get
+        Set(ByVal value As Boolean)
+            Settings._XMLSettings.MovieScraperCollectionsExtendedInfo = value
         End Set
     End Property
 
@@ -4967,12 +4976,12 @@ Public Class Settings
         End Set
     End Property
 
-    Public Property MovieYAMJCompatibleSets() As Boolean
+    Public Property MovieScraperCollectionsYAMJCompatibleSets() As Boolean
         Get
-            Return Settings._XMLSettings.MovieYAMJCompatibleSets
+            Return Settings._XMLSettings.MovieScraperCollectionsYAMJCompatibleSets
         End Get
         Set(ByVal value As Boolean)
-            Settings._XMLSettings.MovieYAMJCompatibleSets = value
+            Settings._XMLSettings.MovieScraperCollectionsYAMJCompatibleSets = value
         End Set
     End Property
 
@@ -6886,6 +6895,8 @@ Public Class Settings
         GeneralSplitterDistanceTVShow = 200
         GeneralTVEpisodeTheme = "Default"
         GeneralTVShowTheme = "Default"
+        GeneralWindowLoc = New Point(10, 10)
+        GeneralWindowSize = New Size(1024, 768)
         GeneralWindowState = FormWindowState.Maximized
         MovieActorThumbsExtExpertBDMV = ".jpg"
         MovieActorThumbsExtExpertMulti = ".jpg"
@@ -7019,6 +7030,8 @@ Public Class Settings
         MovieScraperCleanPlotOutline = False
         MovieScraperCollectionID = True
         MovieScraperCollectionsAuto = True
+        MovieScraperCollectionsExtendedInfo = False
+        MovieScraperCollectionsYAMJCompatibleSets = False
         MovieScraperCountry = True
         MovieScraperDirector = True
         MovieScraperDurationRuntimeFormat = "<m>"
@@ -7233,7 +7246,7 @@ Public Class Settings
         TVScraperEpisodeRuntime = True
         TVScraperEpisodeTitle = True
         TVScraperMetaDataScan = True
-        TVScraperOptionsOrdering = Enums.Ordering.Standard
+        TVScraperOptionsOrdering = Enums.EpisodeOrdering.Standard
         TVScraperSeasonAired = True
         TVScraperSeasonPlot = True
         TVScraperSeasonTitle = False
@@ -7841,7 +7854,7 @@ Public Class Settings
 #Region "Fields"
 
         Private _filetype As String
-        Private _metadata As MediaInfo.Fileinfo
+        Private _metadata As MediaContainers.Fileinfo
 
 #End Region 'Fields
 
@@ -7864,11 +7877,11 @@ Public Class Settings
             End Set
         End Property
 
-        Public Property MetaData() As MediaInfo.Fileinfo
+        Public Property MetaData() As MediaContainers.Fileinfo
             Get
                 Return _metadata
             End Get
-            Set(ByVal value As MediaInfo.Fileinfo)
+            Set(ByVal value As MediaContainers.Fileinfo)
                 _metadata = value
             End Set
         End Property
@@ -7879,7 +7892,7 @@ Public Class Settings
 
         Public Sub Clear()
             _filetype = String.Empty
-            _metadata = New MediaInfo.Fileinfo
+            _metadata = New MediaContainers.Fileinfo
         End Sub
 
 #End Region 'Methods

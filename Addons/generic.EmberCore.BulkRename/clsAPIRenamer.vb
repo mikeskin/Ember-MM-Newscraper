@@ -261,7 +261,7 @@ Public Class FileFolderRenamer
                     UpdatePaths_Movie(_movie, srcDir, destDir, _frename.FileName, _frename.NewFileName)
 
                     If toDB Then
-                        Master.DB.Save_Movie(_movie, BatchMode, False, False)
+                        Master.DB.Save_Movie(_movie, BatchMode, False, False, False)
                     End If
 
                     If Not _frename.IsSingle Then
@@ -556,7 +556,7 @@ Public Class FileFolderRenamer
         End If
 
         'MovieSets
-        If _tmpMovie.Movie.Sets IsNot Nothing AndAlso _tmpMovie.Movie.Sets.Count > 0 Then
+        If _tmpMovie.Movie.SetsSpecified Then
             MovieFile.Collection = _tmpMovie.Movie.Sets.Item(0).Title
         End If
 
@@ -587,13 +587,13 @@ Public Class FileFolderRenamer
         MovieFile.IsSingle = _tmpMovie.IsSingle
 
         'ListTitle
-        If _tmpMovie.ListTitle IsNot Nothing Then
+        If _tmpMovie.ListTitleSpecified Then
             MovieFile.ListTitle = _tmpMovie.ListTitle
         End If
 
         'MPAA
         If _tmpMovie.Movie.MPAASpecified Then
-            MovieFile.MPAA = FileFolderRenamer.SelectMPAA(_tmpMovie.Movie.MPAA)
+            MovieFile.MPAA = SelectMPAA(_tmpMovie.Movie.MPAA)
         End If
 
         'OriginalTitle
@@ -615,13 +615,13 @@ Public Class FileFolderRenamer
             Try
                 'Resolution
                 If _tmpMovie.Movie.FileInfo.StreamDetails.VideoSpecified Then
-                    Dim tVid As MediaInfo.Video = NFO.GetBestVideo(_tmpMovie.Movie.FileInfo)
+                    Dim tVid As MediaContainers.Video = NFO.GetBestVideo(_tmpMovie.Movie.FileInfo)
                     Dim tRes As String = NFO.GetResFromDimensions(tVid)
                     MovieFile.Resolution = String.Format("{0}", If(String.IsNullOrEmpty(tRes), Master.eLang.GetString(138, "Unknown"), tRes))
                 End If
 
                 If _tmpMovie.Movie.FileInfo.StreamDetails.AudioSpecified Then
-                    Dim tAud As MediaInfo.Audio = NFO.GetBestAudio(_tmpMovie.Movie.FileInfo, False)
+                    Dim tAud As MediaContainers.Audio = NFO.GetBestAudio(_tmpMovie.Movie.FileInfo, False)
 
                     'Audio Channels
                     If tAud.ChannelsSpecified Then
@@ -720,7 +720,7 @@ Public Class FileFolderRenamer
             If Path.GetFileName(_tmpMovie.Filename.ToLower) = "video_ts.ifo" Then
                 MovieFile.FileName = "VIDEO_TS"
             Else
-                MovieFile.FileName = StringUtils.CleanStackingMarkers(Path.GetFileNameWithoutExtension(_tmpMovie.Filename))
+                MovieFile.FileName = Path.GetFileNameWithoutExtension(FileUtils.Common.RemoveStackingMarkers(_tmpMovie.Filename))
                 Dim stackMark As String = Path.GetFileNameWithoutExtension(_tmpMovie.Filename).Replace(MovieFile.FileName, String.Empty).ToLower
                 If Not stackMark = String.Empty AndAlso _tmpMovie.Movie.Title.ToLower.EndsWith(stackMark) Then
                     MovieFile.FileName = Path.GetFileNameWithoutExtension(_tmpMovie.Filename)
@@ -845,13 +845,13 @@ Public Class FileFolderRenamer
             Try
                 'Resolution
                 If _tmpTVEpisode.TVEpisode.FileInfo.StreamDetails.VideoSpecified Then
-                    Dim tVid As MediaInfo.Video = NFO.GetBestVideo(_tmpTVEpisode.TVEpisode.FileInfo)
+                    Dim tVid As MediaContainers.Video = NFO.GetBestVideo(_tmpTVEpisode.TVEpisode.FileInfo)
                     Dim tRes As String = NFO.GetResFromDimensions(tVid)
                     EpisodeFile.Resolution = String.Format("{0}", If(String.IsNullOrEmpty(tRes), Master.eLang.GetString(138, "Unknown"), tRes))
                 End If
 
                 If _tmpTVEpisode.TVEpisode.FileInfo.StreamDetails.AudioSpecified Then
-                    Dim tAud As MediaInfo.Audio = NFO.GetBestAudio(_tmpTVEpisode.TVEpisode.FileInfo, False)
+                    Dim tAud As MediaContainers.Audio = NFO.GetBestAudio(_tmpTVEpisode.TVEpisode.FileInfo, False)
 
                     'Audio Channels
                     If tAud.ChannelsSpecified Then
@@ -945,7 +945,7 @@ Public Class FileFolderRenamer
             If Path.GetFileName(_tmpTVEpisode.Filename.ToLower) = "video_ts.ifo" Then
                 EpisodeFile.FileName = "VIDEO_TS"
             Else
-                EpisodeFile.FileName = StringUtils.CleanStackingMarkers(Path.GetFileNameWithoutExtension(_tmpTVEpisode.Filename))
+                EpisodeFile.FileName = Path.GetFileNameWithoutExtension(FileUtils.Common.RemoveStackingMarkers(_tmpTVEpisode.Filename))
                 Dim stackMark As String = Path.GetFileNameWithoutExtension(_tmpTVEpisode.Filename).Replace(EpisodeFile.FileName, String.Empty).ToLower
                 If Not stackMark = String.Empty AndAlso _tmpTVEpisode.TVEpisode.Title.ToLower.EndsWith(stackMark) Then
                     EpisodeFile.FileName = Path.GetFileNameWithoutExtension(_tmpTVEpisode.Filename)
@@ -999,7 +999,7 @@ Public Class FileFolderRenamer
 
         'MPAA
         If _tmpTVShow.TVShow.MPAASpecified Then
-            ShowFile.MPAA = FileFolderRenamer.SelectMPAA(_tmpTVShow.TVShow.MPAA)
+            ShowFile.MPAA = SelectMPAA(_tmpTVShow.TVShow.MPAA)
         End If
 
         'Rating
@@ -1670,7 +1670,7 @@ Public Class FileFolderRenamer
             DoRenameSingle_Movie(MovieFile, _tmpMovie, BatchMode, ShowError, toDB)
         Else
             If toDB Then
-                Master.DB.Save_Movie(_tmpMovie, BatchMode, False, False)
+                Master.DB.Save_Movie(_tmpMovie, BatchMode, False, False, False)
             End If
         End If
     End Sub

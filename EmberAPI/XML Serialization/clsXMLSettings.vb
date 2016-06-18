@@ -212,6 +212,8 @@ Partial Public Class clsXMLSettings
     Private _moviescrapercleanplotoutline As Boolean
     Private _moviescrapercollectionid As Boolean
     Private _moviescrapercollectionsauto As Boolean
+    Private _moviescrapercollectionsextendedinfo As Boolean
+    Private _moviescrapercollectionsyamjcompatiblesets As Boolean
     Private _moviescrapercountry As Boolean
     Private _moviescraperdirector As Boolean
     Private _moviescraperdurationruntimeformat As String
@@ -424,7 +426,7 @@ Partial Public Class clsXMLSettings
     Private _tvscraperepisoderuntime As Boolean
     Private _tvscraperepisodetitle As Boolean
     Private _tvscrapermetadatascan As Boolean
-    Private _tvscraperoptionsordering As Enums.Ordering
+    Private _tvscraperoptionsordering As Enums.EpisodeOrdering
     Private _tvscraperseasonaired As Boolean
     Private _tvscraperseasonplot As Boolean
     Private _tvscraperseasontitle As Boolean
@@ -596,7 +598,6 @@ Partial Public Class clsXMLSettings
     Private _movienfoyamj As Boolean
     Private _movieposteryamj As Boolean
     Private _movietraileryamj As Boolean
-    Private _movieyamjcompatiblesets As Boolean
     Private _movieyamjwatchedfile As Boolean
     Private _movieyamjwatchedfolder As String
 
@@ -1369,11 +1370,11 @@ Partial Public Class clsXMLSettings
         End Set
     End Property
 
-    Public Property TVScraperOptionsOrdering() As Enums.Ordering
+    Public Property TVScraperOptionsOrdering() As Enums.EpisodeOrdering
         Get
             Return Me._tvscraperoptionsordering
         End Get
-        Set(ByVal value As Enums.Ordering)
+        Set(ByVal value As Enums.EpisodeOrdering)
             Me._tvscraperoptionsordering = value
         End Set
     End Property
@@ -1773,6 +1774,15 @@ Partial Public Class clsXMLSettings
         End Get
         Set(ByVal value As Boolean)
             Me._moviescrapercollectionsauto = value
+        End Set
+    End Property
+
+    Public Property MovieScraperCollectionsExtendedInfo() As Boolean
+        Get
+            Return Me._moviescrapercollectionsextendedinfo
+        End Get
+        Set(ByVal value As Boolean)
+            Me._moviescrapercollectionsextendedinfo = value
         End Set
     End Property
 
@@ -6064,12 +6074,12 @@ Partial Public Class clsXMLSettings
         End Set
     End Property
 
-    Public Property MovieYAMJCompatibleSets() As Boolean
+    Public Property MovieScraperCollectionsYAMJCompatibleSets() As Boolean
         Get
-            Return Me._movieyamjcompatiblesets
+            Return Me._moviescrapercollectionsyamjcompatiblesets
         End Get
         Set(ByVal value As Boolean)
-            Me._movieyamjcompatiblesets = value
+            Me._moviescrapercollectionsyamjcompatiblesets = value
         End Set
     End Property
 
