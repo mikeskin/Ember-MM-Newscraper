@@ -790,7 +790,7 @@ Public Class Scanner
 
             'Scrape episode images
             If isNew AndAlso cEpisode.TVShow.AnyUniqueIDSpecified AndAlso cEpisode.ShowIDSpecified Then
-                Dim SearchResultsContainer As New MediaContainers.SearchResultsContainer
+                Dim SearchResultsContainer As New MediaContainers.ImageResultsContainer
                 Dim ScrapeModifiers As New Structures.ScrapeModifiers
                 If Not cEpisode.ImagesContainer.Fanart.LocalFilePathSpecified AndAlso Master.eSettings.TVEpisodeFanartAnyEnabled Then ScrapeModifiers.EpisodeFanart = True
                 If Not cEpisode.ImagesContainer.Poster.LocalFilePathSpecified AndAlso Master.eSettings.TVEpisodePosterAnyEnabled Then ScrapeModifiers.EpisodePoster = True
@@ -996,7 +996,7 @@ Public Class Scanner
 
                                 'Scrape season images
                                 If isNew AndAlso tmpSeason.TVShow.AnyUniqueIDSpecified AndAlso tmpSeason.ShowIDSpecified Then
-                                    Dim SearchResultsContainer As New MediaContainers.SearchResultsContainer
+                                    Dim SearchResultsContainer As New MediaContainers.ImageResultsContainer
                                     Dim ScrapeModifiers As New Structures.ScrapeModifiers
                                     If Not tmpSeason.ImagesContainer.Banner.LocalFilePathSpecified AndAlso Master.eSettings.TVSeasonBannerAnyEnabled Then ScrapeModifiers.SeasonBanner = True
                                     If Not tmpSeason.ImagesContainer.Fanart.LocalFilePathSpecified AndAlso Master.eSettings.TVSeasonFanartAnyEnabled Then ScrapeModifiers.SeasonFanart = True

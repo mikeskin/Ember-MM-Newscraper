@@ -527,12 +527,12 @@ Public Class dlgEditMovie
     End Sub
 
     Private Sub btnSetBannerScrape_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnSetBannerScrape.Click
-        Dim aContainer As New MediaContainers.SearchResultsContainer
+        Dim aContainer As New MediaContainers.ImageResultsContainer
         Dim ScrapeModifiers As New Structures.ScrapeModifiers
 
         Cursor = Cursors.WaitCursor
         Functions.SetScrapeModifiers(ScrapeModifiers, Enums.ModifierType.MainBanner, True)
-        If Not ModulesManager.Instance.ScrapeImage_Movie(tmpDBElement, aContainer, ScrapeModifiers, True) Then
+        If Not ModulesManager.Instance.RunScraper(tmpDBElement, aContainer, ScrapeModifiers, True) Then
             If aContainer.MainBanners.Count > 0 Then
                 Dim dlgImgS = New dlgImgSelect()
                 If dlgImgS.ShowDialog(tmpDBElement, aContainer, ScrapeModifiers) = DialogResult.OK Then
@@ -590,7 +590,7 @@ Public Class dlgEditMovie
     End Sub
 
     Private Sub btnSetClearArtScrape_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnSetClearArtScrape.Click
-        Dim aContainer As New MediaContainers.SearchResultsContainer
+        Dim aContainer As New MediaContainers.ImageResultsContainer
         Dim ScrapeModifiers As New Structures.ScrapeModifiers
 
         Cursor = Cursors.WaitCursor
@@ -653,7 +653,7 @@ Public Class dlgEditMovie
     End Sub
 
     Private Sub btnSetClearLogoScrape_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnSetClearLogoScrape.Click
-        Dim aContainer As New MediaContainers.SearchResultsContainer
+        Dim aContainer As New MediaContainers.ImageResultsContainer
         Dim ScrapeModifiers As New Structures.ScrapeModifiers
 
         Cursor = Cursors.WaitCursor
@@ -716,7 +716,7 @@ Public Class dlgEditMovie
     End Sub
 
     Private Sub btnSetDiscArtScrape_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnSetDiscArtScrape.Click
-        Dim aContainer As New MediaContainers.SearchResultsContainer
+        Dim aContainer As New MediaContainers.ImageResultsContainer
         Dim ScrapeModifiers As New Structures.ScrapeModifiers
 
         Cursor = Cursors.WaitCursor
@@ -785,7 +785,7 @@ Public Class dlgEditMovie
     End Sub
 
     Private Sub btnSetExtrafanartsScrape_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnSetExtrafanartsScrape.Click
-        Dim aContainer As New MediaContainers.SearchResultsContainer
+        Dim aContainer As New MediaContainers.ImageResultsContainer
         Dim ScrapeModifiers As New Structures.ScrapeModifiers
 
         Cursor = Cursors.WaitCursor
@@ -805,7 +805,7 @@ Public Class dlgEditMovie
     End Sub
 
     Private Sub btnSetExtrathumbsScrape_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnSetExtrathumbsScrape.Click
-        Dim aContainer As New MediaContainers.SearchResultsContainer
+        Dim aContainer As New MediaContainers.ImageResultsContainer
         Dim ScrapeModifiers As New Structures.ScrapeModifiers
 
         Cursor = Cursors.WaitCursor
@@ -842,7 +842,7 @@ Public Class dlgEditMovie
     End Sub
 
     Private Sub btnSetFanartScrape_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnSetFanartScrape.Click
-        Dim aContainer As New MediaContainers.SearchResultsContainer
+        Dim aContainer As New MediaContainers.ImageResultsContainer
         Dim ScrapeModifiers As New Structures.ScrapeModifiers
 
         Cursor = Cursors.WaitCursor
@@ -905,7 +905,7 @@ Public Class dlgEditMovie
     End Sub
 
     Private Sub btnSetLandscapeScrape_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnSetLandscapeScrape.Click
-        Dim aContainer As New MediaContainers.SearchResultsContainer
+        Dim aContainer As New MediaContainers.ImageResultsContainer
         Dim ScrapeModifiers As New Structures.ScrapeModifiers
 
         Cursor = Cursors.WaitCursor
@@ -968,7 +968,7 @@ Public Class dlgEditMovie
     End Sub
 
     Private Sub btnSetPosterScrape_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnSetPosterScrape.Click
-        Dim aContainer As New MediaContainers.SearchResultsContainer
+        Dim aContainer As New MediaContainers.ImageResultsContainer
         Dim ScrapeModifiers As New Structures.ScrapeModifiers
 
         Cursor = Cursors.WaitCursor
@@ -1655,7 +1655,7 @@ Public Class dlgEditMovie
 
                 'Banner
                 If Master.eSettings.MovieBannerAnyEnabled Then
-                    If Not ModulesManager.Instance.ScraperWithCapabilityAnyEnabled_Image_Movie(Enums.ModifierType.MainBanner) Then
+                    If Not ModulesManager.Instance.QueryScraperCapabilities_AnyEnabled(Enums.ModifierType.MainBanner, tmpDBElement.ContentType) Then
                         btnSetBannerScrape.Enabled = False
                     End If
                     If .Banner.ImageOriginal.Image IsNot Nothing Then
@@ -1671,7 +1671,7 @@ Public Class dlgEditMovie
 
                 'ClearArt
                 If Master.eSettings.MovieClearArtAnyEnabled Then
-                    If Not ModulesManager.Instance.ScraperWithCapabilityAnyEnabled_Image_Movie(Enums.ModifierType.MainClearArt) Then
+                    If Not ModulesManager.Instance.QueryScraperCapabilities_AnyEnabled(Enums.ModifierType.MainClearArt, tmpDBElement.ContentType) Then
                         btnSetClearArtScrape.Enabled = False
                     End If
                     If .ClearArt.ImageOriginal.Image IsNot Nothing Then
@@ -1687,7 +1687,7 @@ Public Class dlgEditMovie
 
                 'ClearLogo
                 If Master.eSettings.MovieClearLogoAnyEnabled Then
-                    If Not ModulesManager.Instance.ScraperWithCapabilityAnyEnabled_Image_Movie(Enums.ModifierType.MainClearLogo) Then
+                    If Not ModulesManager.Instance.QueryScraperCapabilities_AnyEnabled(Enums.ModifierType.MainClearLogo, tmpDBElement.ContentType) Then
                         btnSetClearLogoScrape.Enabled = False
                     End If
                     If .ClearLogo.ImageOriginal.Image IsNot Nothing Then
@@ -1703,7 +1703,7 @@ Public Class dlgEditMovie
 
                 'DiscArt
                 If Master.eSettings.MovieDiscArtAnyEnabled Then
-                    If Not ModulesManager.Instance.ScraperWithCapabilityAnyEnabled_Image_Movie(Enums.ModifierType.MainDiscArt) Then
+                    If Not ModulesManager.Instance.QueryScraperCapabilities_AnyEnabled(Enums.ModifierType.MainDiscArt, tmpDBElement.ContentType) Then
                         btnSetDiscArtScrape.Enabled = False
                     End If
                     If .DiscArt.ImageOriginal.Image IsNot Nothing Then
@@ -1751,7 +1751,7 @@ Public Class dlgEditMovie
 
                 'Fanart
                 If Master.eSettings.MovieFanartAnyEnabled Then
-                    If Not ModulesManager.Instance.ScraperWithCapabilityAnyEnabled_Image_Movie(Enums.ModifierType.MainFanart) Then
+                    If Not ModulesManager.Instance.QueryScraperCapabilities_AnyEnabled(Enums.ModifierType.MainFanart, tmpDBElement.ContentType) Then
                         btnSetFanartScrape.Enabled = False
                     End If
                     If .Fanart.ImageOriginal.Image IsNot Nothing Then
@@ -1767,7 +1767,7 @@ Public Class dlgEditMovie
 
                 'Landscape
                 If Master.eSettings.MovieLandscapeAnyEnabled Then
-                    If Not ModulesManager.Instance.ScraperWithCapabilityAnyEnabled_Image_Movie(Enums.ModifierType.MainLandscape) Then
+                    If Not ModulesManager.Instance.QueryScraperCapabilities_AnyEnabled(Enums.ModifierType.MainLandscape, tmpDBElement.ContentType) Then
                         btnSetLandscapeScrape.Enabled = False
                     End If
                     If .Landscape.ImageOriginal.Image IsNot Nothing Then
@@ -1783,7 +1783,7 @@ Public Class dlgEditMovie
 
                 'Poster
                 If Master.eSettings.MoviePosterAnyEnabled Then
-                    If Not ModulesManager.Instance.ScraperWithCapabilityAnyEnabled_Image_Movie(Enums.ModifierType.MainPoster) Then
+                    If Not ModulesManager.Instance.QueryScraperCapabilities_AnyEnabled(Enums.ModifierType.MainPoster, tmpDBElement.ContentType) Then
                         btnSetPosterScrape.Enabled = False
                     End If
                     If .Poster.ImageOriginal.Image IsNot Nothing Then

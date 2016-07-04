@@ -158,7 +158,7 @@ Public Class dlgImgSelect
     Private tDBElement As Database.DBElement
     Private tPreferredImagesContainer As New MediaContainers.PreferredImagesContainer
     Private tResultImagesContainer As New MediaContainers.PreferredImagesContainer
-    Private tSearchResultsContainer As New MediaContainers.SearchResultsContainer
+    Private tSearchResultsContainer As New MediaContainers.ImageResultsContainer
 
     Private tScrapeModifiers As New Structures.ScrapeModifiers
     Private tContentType As Enums.ContentType
@@ -189,7 +189,7 @@ Public Class dlgImgSelect
         pnlTopImages.Height = iTopImage_DistanceTop + iTopImage_Size_Panel.Height + 20
     End Sub
 
-    Public Overloads Function ShowDialog(ByVal DBElement As Database.DBElement, ByVal SearchResultsContainer As MediaContainers.SearchResultsContainer, ByVal ScrapeModifiers As Structures.ScrapeModifiers) As DialogResult
+    Public Overloads Function ShowDialog(ByVal DBElement As Database.DBElement, ByVal SearchResultsContainer As MediaContainers.ImageResultsContainer, ByVal ScrapeModifiers As Structures.ScrapeModifiers) As DialogResult
         tSearchResultsContainer = SearchResultsContainer
         tDBElement = DBElement
         tScrapeModifiers = ScrapeModifiers

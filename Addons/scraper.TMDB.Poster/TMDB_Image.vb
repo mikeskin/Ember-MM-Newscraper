@@ -57,44 +57,17 @@ Public Class TMDB_Image
 #Region "Events"
 
     'Movie part
-    Public Event ModuleSettingsChanged_Movie() Implements Interfaces.ScraperModule_Image_Movie.ModuleSettingsChanged
-    Public Event MovieScraperEvent_Movie(ByVal eType As Enums.ScraperEventType, ByVal Parameter As Object) Implements Interfaces.ScraperModule_Image_Movie.ScraperEvent
     Public Event SetupScraperChanged_Movie(ByVal name As String, ByVal State As Boolean, ByVal difforder As Integer) Implements Interfaces.ScraperModule_Image_Movie.ScraperSetupChanged
-    Public Event SetupNeedsRestart_Movie() Implements Interfaces.ScraperModule_Image_Movie.SetupNeedsRestart
-    Public Event ImagesDownloaded_Movie(ByVal Posters As List(Of MediaContainers.Image)) Implements Interfaces.ScraperModule_Image_Movie.ImagesDownloaded
-    Public Event ProgressUpdated_Movie(ByVal iPercent As Integer) Implements Interfaces.ScraperModule_Image_Movie.ProgressUpdated
 
     'MovieSet part
-    Public Event ModuleSettingsChanged_MovieSet() Implements Interfaces.ScraperModule_Image_MovieSet.ModuleSettingsChanged
-    Public Event MovieScraperEvent_MovieSet(ByVal eType As Enums.ScraperEventType, ByVal Parameter As Object) Implements Interfaces.ScraperModule_Image_MovieSet.ScraperEvent
     Public Event SetupScraperChanged_MovieSet(ByVal name As String, ByVal State As Boolean, ByVal difforder As Integer) Implements Interfaces.ScraperModule_Image_MovieSet.ScraperSetupChanged
-    Public Event SetupNeedsRestart_MovieSet() Implements Interfaces.ScraperModule_Image_MovieSet.SetupNeedsRestart
-    Public Event ImagesDownloaded_MovieSet(ByVal Posters As List(Of MediaContainers.Image)) Implements Interfaces.ScraperModule_Image_MovieSet.ImagesDownloaded
-    Public Event ProgressUpdated_MovieSet(ByVal iPercent As Integer) Implements Interfaces.ScraperModule_Image_MovieSet.ProgressUpdated
 
     'TV part
-    Public Event ModuleSettingsChanged_TV() Implements Interfaces.ScraperModule_Image_TV.ModuleSettingsChanged
-    Public Event MovieScraperEvent_TV(ByVal eType As Enums.ScraperEventType, ByVal Parameter As Object) Implements Interfaces.ScraperModule_Image_TV.ScraperEvent
     Public Event SetupScraperChanged_TV(ByVal name As String, ByVal State As Boolean, ByVal difforder As Integer) Implements Interfaces.ScraperModule_Image_TV.ScraperSetupChanged
-    Public Event SetupNeedsRestart_TV() Implements Interfaces.ScraperModule_Image_TV.SetupNeedsRestart
-    Public Event ImagesDownloaded_TV(ByVal Posters As List(Of MediaContainers.Image)) Implements Interfaces.ScraperModule_Image_TV.ImagesDownloaded
-    Public Event ProgressUpdated_TV(ByVal iPercent As Integer) Implements Interfaces.ScraperModule_Image_TV.ProgressUpdated
 
 #End Region 'Events
 
 #Region "Properties"
-
-    ReadOnly Property ModuleName() As String Implements Interfaces.ScraperModule_Image_Movie.ModuleName, Interfaces.ScraperModule_Image_MovieSet.ModuleName, Interfaces.ScraperModule_Image_TV.ModuleName
-        Get
-            Return _Name
-        End Get
-    End Property
-
-    ReadOnly Property ModuleVersion() As String Implements Interfaces.ScraperModule_Image_Movie.ModuleVersion, Interfaces.ScraperModule_Image_MovieSet.ModuleVersion, Interfaces.ScraperModule_Image_TV.ModuleVersion
-        Get
-            Return System.Diagnostics.FileVersionInfo.GetVersionInfo(System.Reflection.Assembly.GetExecutingAssembly.Location).FileVersion.ToString
-        End Get
-    End Property
 
     Property ScraperEnabled_Movie() As Boolean Implements Interfaces.ScraperModule_Image_Movie.ScraperEnabled
         Get
@@ -127,7 +100,7 @@ Public Class TMDB_Image
 
 #Region "Methods"
 
-    Function QueryScraperCapabilities_Movie(ByVal cap As Enums.ModifierType) As Boolean Implements Interfaces.ScraperModule_Image_Movie.QueryScraperCapabilities
+    Function QueryScraperCapabilities_Movie(ByVal cap As Enums.ModifierType) As Boolean
         Select Case cap
             Case Enums.ModifierType.MainFanart
                 Return ConfigModifier_Movie.MainFanart
@@ -137,7 +110,7 @@ Public Class TMDB_Image
         Return False
     End Function
 
-    Function QueryScraperCapabilities_MovieSet(ByVal cap As Enums.ModifierType) As Boolean Implements Interfaces.ScraperModule_Image_MovieSet.QueryScraperCapabilities
+    Function QueryScraperCapabilities_MovieSet(ByVal cap As Enums.ModifierType) As Boolean
         Select Case cap
             Case Enums.ModifierType.MainFanart
                 Return ConfigModifier_MovieSet.MainFanart
@@ -147,7 +120,7 @@ Public Class TMDB_Image
         Return False
     End Function
 
-    Function QueryScraperCapabilities_TV(ByVal cap As Enums.ModifierType) As Boolean Implements Interfaces.ScraperModule_Image_TV.QueryScraperCapabilities
+    Function QueryScraperCapabilities_TV(ByVal cap As Enums.ModifierType) As Boolean
         Select Case cap
             Case Enums.ModifierType.EpisodePoster
                 Return ConfigModifier_TV.EpisodePoster
@@ -160,30 +133,6 @@ Public Class TMDB_Image
         End Select
         Return False
     End Function
-
-    Private Sub Handle_ModuleSettingsChanged_Movie()
-        RaiseEvent ModuleSettingsChanged_Movie()
-    End Sub
-
-    Private Sub Handle_ModuleSettingsChanged_MovieSet()
-        RaiseEvent ModuleSettingsChanged_MovieSet()
-    End Sub
-
-    Private Sub Handle_ModuleSettingsChanged_TV()
-        RaiseEvent ModuleSettingsChanged_TV()
-    End Sub
-
-    Private Sub Handle_SetupNeedsRestart_Movie()
-        RaiseEvent SetupNeedsRestart_Movie()
-    End Sub
-
-    Private Sub Handle_SetupNeedsRestart_MovieSet()
-        RaiseEvent SetupNeedsRestart_MovieSet()
-    End Sub
-
-    Private Sub Handle_SetupNeedsRestart_TV()
-        RaiseEvent SetupNeedsRestart_TV()
-    End Sub
 
     Private Sub Handle_SetupScraperChanged_Movie(ByVal state As Boolean, ByVal difforder As Integer)
         ScraperEnabled_Movie = state
@@ -200,22 +149,7 @@ Public Class TMDB_Image
         RaiseEvent SetupScraperChanged_TV(String.Concat(Me._Name, "_TV"), state, difforder)
     End Sub
 
-    Sub Init_Movie(ByVal sAssemblyName As String) Implements Interfaces.ScraperModule_Image_Movie.Init
-        _AssemblyName = sAssemblyName
-        LoadSettings_Movie()
-    End Sub
-
-    Sub Init_MovieSet(ByVal sAssemblyName As String) Implements Interfaces.ScraperModule_Image_MovieSet.Init
-        _AssemblyName = sAssemblyName
-        LoadSettings_MovieSet()
-    End Sub
-
-    Sub Init_TV(ByVal sAssemblyName As String) Implements Interfaces.ScraperModule_Image_TV.Init
-        _AssemblyName = sAssemblyName
-        LoadSettings_TV()
-    End Sub
-
-    Function InjectSetupScraper_Movie() As Containers.SettingsPanel Implements Interfaces.ScraperModule_Image_Movie.InjectSetupScraper
+    Function InjectSetupScraper_Movie() As Containers.SettingsPanel Implements Interfaces.ScraperModule_Image_Movie.InjectSettingsPanel
         Dim Spanel As New Containers.SettingsPanel
         _setup_Movie = New frmSettingsHolder_Movie
         LoadSettings_Movie()
@@ -242,12 +176,12 @@ Public Class TMDB_Image
         Spanel.Panel = Me._setup_Movie.pnlSettings
 
         AddHandler _setup_Movie.SetupScraperChanged, AddressOf Handle_SetupScraperChanged_Movie
-        AddHandler _setup_Movie.ModuleSettingsChanged, AddressOf Handle_ModuleSettingsChanged_Movie
-        AddHandler _setup_Movie.SetupNeedsRestart, AddressOf Handle_SetupNeedsRestart_Movie
+        'AddHandler _setup_Movie.ModuleSettingsChanged, AddressOf Handle_ModuleSettingsChanged_Movie
+        'AddHandler _setup_Movie.SetupNeedsRestart, AddressOf Handle_SetupNeedsRestart_Movie
         Return Spanel
     End Function
 
-    Function InjectSetupScraper_MovieSet() As Containers.SettingsPanel Implements Interfaces.ScraperModule_Image_MovieSet.InjectSetupScraper
+    Function InjectSetupScraper_MovieSet() As Containers.SettingsPanel Implements Interfaces.ScraperModule_Image_MovieSet.InjectSettingsPanel
         Dim Spanel As New Containers.SettingsPanel
         _setup_MovieSet = New frmSettingsHolder_MovieSet
         LoadSettings_MovieSet()
@@ -274,12 +208,12 @@ Public Class TMDB_Image
         Spanel.Panel = Me._setup_MovieSet.pnlSettings
 
         AddHandler _setup_MovieSet.SetupScraperChanged, AddressOf Handle_SetupScraperChanged_MovieSet
-        AddHandler _setup_MovieSet.ModuleSettingsChanged, AddressOf Handle_ModuleSettingsChanged_MovieSet
-        AddHandler _setup_MovieSet.SetupNeedsRestart, AddressOf Handle_SetupNeedsRestart_MovieSet
+        'AddHandler _setup_MovieSet.ModuleSettingsChanged, AddressOf Handle_ModuleSettingsChanged_MovieSet
+        'AddHandler _setup_MovieSet.SetupNeedsRestart, AddressOf Handle_SetupNeedsRestart_MovieSet
         Return Spanel
     End Function
 
-    Function InjectSetupScraper_TV() As Containers.SettingsPanel Implements Interfaces.ScraperModule_Image_TV.InjectSetupScraper
+    Function InjectSetupScraper_TV() As Containers.SettingsPanel Implements Interfaces.ScraperModule_Image_TV.InjectSettingsPanel
         Dim Spanel As New Containers.SettingsPanel
         _setup_TV = New frmSettingsHolder_TV
         LoadSettings_TV()
@@ -308,8 +242,8 @@ Public Class TMDB_Image
         Spanel.Panel = Me._setup_TV.pnlSettings
 
         AddHandler _setup_TV.SetupScraperChanged, AddressOf Handle_SetupScraperChanged_TV
-        AddHandler _setup_TV.ModuleSettingsChanged, AddressOf Handle_ModuleSettingsChanged_TV
-        AddHandler _setup_TV.SetupNeedsRestart, AddressOf Handle_SetupNeedsRestart_TV
+        'AddHandler _setup_TV.ModuleSettingsChanged, AddressOf Handle_ModuleSettingsChanged_TV
+        'AddHandler _setup_TV.SetupNeedsRestart, AddressOf Handle_SetupNeedsRestart_TV
         Return Spanel
     End Function
 
@@ -344,14 +278,14 @@ Public Class TMDB_Image
         ConfigModifier_TV.MainExtrafanarts = ConfigModifier_TV.MainFanart
     End Sub
 
-    Function Scraper_Movie(ByRef DBMovie As Database.DBElement, ByRef ImagesContainer As MediaContainers.SearchResultsContainer, ByVal ScrapeModifiers As Structures.ScrapeModifiers) As Interfaces.ModuleResult Implements Interfaces.ScraperModule_Image_Movie.Scraper
+    Function Scraper_Movie(ByRef DBMovie As Database.DBElement, ByRef ImagesContainer As MediaContainers.ImageResultsContainer, ByVal ScrapeModifiers As Structures.ScrapeModifiers) As Interfaces.ModuleResult
         logger.Trace("[TMDB_Image] [Scraper_Movie] [Start]")
 
         LoadSettings_Movie()
 
-        If String.IsNullOrEmpty(DBMovie.Movie.TMDBID) Then
-            DBMovie.Movie.TMDBID = ModulesManager.Instance.GetMovieTMDBID(DBMovie.Movie.ID)
-        End If
+        'If String.IsNullOrEmpty(DBMovie.Movie.TMDBID) Then
+        '    DBMovie.Movie.TMDBID = ModulesManager.Instance.GetMovieTMDBID(DBMovie.Movie.ID)
+        'End If
 
         If Not String.IsNullOrEmpty(DBMovie.Movie.TMDBID) Then
             Dim Settings As New SpecialSettings
@@ -367,14 +301,14 @@ Public Class TMDB_Image
         Return New Interfaces.ModuleResult With {.breakChain = False}
     End Function
 
-    Function Scraper_MovieSet(ByRef DBMovieSet As Database.DBElement, ByRef ImagesContainer As MediaContainers.SearchResultsContainer, ByVal ScrapeModifiers As Structures.ScrapeModifiers) As Interfaces.ModuleResult Implements Interfaces.ScraperModule_Image_MovieSet.Scraper
+    Function Scraper_MovieSet(ByRef DBMovieSet As Database.DBElement, ByRef ImagesContainer As MediaContainers.ImageResultsContainer, ByVal ScrapeModifiers As Structures.ScrapeModifiers) As Interfaces.ModuleResult
         logger.Trace("[TMDB_Image] [Scraper_MovieSet] [Start]")
 
         LoadSettings_MovieSet()
 
-        If String.IsNullOrEmpty(DBMovieSet.MovieSet.TMDB) AndAlso DBMovieSet.MoviesInSetSpecified Then
-            DBMovieSet.MovieSet.TMDB = ModulesManager.Instance.GetMovieCollectionID(DBMovieSet.MoviesInSet.Item(0).DBMovie.Movie.ID)
-        End If
+        'If String.IsNullOrEmpty(DBMovieSet.MovieSet.TMDB) AndAlso DBMovieSet.MoviesInSetSpecified Then
+        '    DBMovieSet.MovieSet.TMDB = ModulesManager.Instance.GetMovieCollectionID(DBMovieSet.MoviesInSet.Item(0).DBMovie.Movie.ID)
+        'End If
 
         If Not String.IsNullOrEmpty(DBMovieSet.MovieSet.TMDB) Then
             Dim Settings As New SpecialSettings
@@ -390,7 +324,7 @@ Public Class TMDB_Image
         Return New Interfaces.ModuleResult With {.breakChain = False}
     End Function
 
-    Function Scraper_TV(ByRef DBTV As Database.DBElement, ByRef ImagesContainer As MediaContainers.SearchResultsContainer, ByVal ScrapeModifiers As Structures.ScrapeModifiers) As Interfaces.ModuleResult Implements Interfaces.ScraperModule_Image_TV.Scraper
+    Function Scraper_TV(ByRef DBTV As Database.DBElement, ByRef ImagesContainer As MediaContainers.ImageResultsContainer, ByVal ScrapeModifiers As Structures.ScrapeModifiers) As Interfaces.ModuleResult
         logger.Trace("[TMDB_Image] [Scraper_TV] [Start]")
 
         LoadSettings_TV()
@@ -439,7 +373,7 @@ Public Class TMDB_Image
         Return New Interfaces.ModuleResult With {.breakChain = False}
     End Function
 
-    Sub SaveSettings_Movie()
+    Sub SaveSettings_Image_Movie()
         Using settings = New AdvancedSettings()
             settings.SetBooleanSetting("DoPoster", ConfigModifier_Movie.MainPoster, , , Enums.ContentType.Movie)
             settings.SetBooleanSetting("DoFanart", ConfigModifier_Movie.MainFanart, , , Enums.ContentType.Movie)
@@ -448,7 +382,7 @@ Public Class TMDB_Image
         End Using
     End Sub
 
-    Sub SaveSettings_MovieSet()
+    Sub SaveSettings_Image_MovieSet()
         Using settings = New AdvancedSettings()
             settings.SetBooleanSetting("DoPoster", ConfigModifier_MovieSet.MainPoster, , , Enums.ContentType.MovieSet)
             settings.SetBooleanSetting("DoFanart", ConfigModifier_MovieSet.MainFanart, , , Enums.ContentType.MovieSet)
@@ -457,7 +391,7 @@ Public Class TMDB_Image
         End Using
     End Sub
 
-    Sub SaveSettings_TV()
+    Sub SaveSettings_Image_TV()
         Using settings = New AdvancedSettings()
             settings.SetBooleanSetting("DoEpisodePoster", ConfigModifier_TV.EpisodePoster, , , Enums.ContentType.TV)
             settings.SetBooleanSetting("DoSeasonPoster", ConfigModifier_TV.SeasonPoster, , , Enums.ContentType.TV)
@@ -468,53 +402,53 @@ Public Class TMDB_Image
         End Using
     End Sub
 
-    Sub SaveSetupScraper_Movie(ByVal DoDispose As Boolean) Implements Interfaces.ScraperModule_Image_Movie.SaveSetupScraper
+    Sub SaveSetupScraper_Movie(ByVal DoDispose As Boolean) 'Implements Interfaces.ScraperModule_Image_Movie.SaveSetupScraper
         ConfigModifier_Movie.MainPoster = _setup_Movie.chkScrapePoster.Checked
         ConfigModifier_Movie.MainFanart = _setup_Movie.chkScrapeFanart.Checked
-        SaveSettings_Movie()
+        SaveSettings_Image_Movie()
         If DoDispose Then
             RemoveHandler _setup_Movie.SetupScraperChanged, AddressOf Handle_SetupScraperChanged_Movie
-            RemoveHandler _setup_Movie.ModuleSettingsChanged, AddressOf Handle_ModuleSettingsChanged_Movie
-            RemoveHandler _setup_Movie.SetupNeedsRestart, AddressOf Handle_SetupNeedsRestart_Movie
+            'RemoveHandler _setup_Movie.ModuleSettingsChanged, AddressOf Handle_ModuleSettingsChanged_Movie
+            'RemoveHandler _setup_Movie.SetupNeedsRestart, AddressOf Handle_SetupNeedsRestart_Movie
             _setup_Movie.Dispose()
         End If
     End Sub
 
-    Sub SaveSetupScraper_MovieSet(ByVal DoDispose As Boolean) Implements Interfaces.ScraperModule_Image_MovieSet.SaveSetupScraper
+    Sub SaveSetupScraper_MovieSet(ByVal DoDispose As Boolean) 'Implements Interfaces.ScraperModule_Image_MovieSet.SaveSetupScraper
         ConfigModifier_MovieSet.MainPoster = _setup_MovieSet.chkScrapePoster.Checked
         ConfigModifier_MovieSet.MainFanart = _setup_MovieSet.chkScrapeFanart.Checked
-        SaveSettings_MovieSet()
+        SaveSettings_Image_MovieSet()
         If DoDispose Then
             RemoveHandler _setup_MovieSet.SetupScraperChanged, AddressOf Handle_SetupScraperChanged_MovieSet
-            RemoveHandler _setup_MovieSet.ModuleSettingsChanged, AddressOf Handle_ModuleSettingsChanged_MovieSet
-            RemoveHandler _setup_MovieSet.SetupNeedsRestart, AddressOf Handle_SetupNeedsRestart_MovieSet
+            'RemoveHandler _setup_MovieSet.ModuleSettingsChanged, AddressOf Handle_ModuleSettingsChanged_MovieSet
+            'RemoveHandler _setup_MovieSet.SetupNeedsRestart, AddressOf Handle_SetupNeedsRestart_MovieSet
             _setup_MovieSet.Dispose()
         End If
     End Sub
 
-    Sub SaveSetupScraper_TV(ByVal DoDispose As Boolean) Implements Interfaces.ScraperModule_Image_TV.SaveSetupScraper
+    Sub SaveSetupScraper_TV(ByVal DoDispose As Boolean) 'Implements Interfaces.ScraperModule_Image_TV.SaveSetupScraper
         ConfigModifier_TV.EpisodePoster = _setup_TV.chkScrapeEpisodePoster.Checked
         ConfigModifier_TV.SeasonPoster = _setup_TV.chkScrapeSeasonPoster.Checked
         ConfigModifier_TV.MainFanart = _setup_TV.chkScrapeShowFanart.Checked
         ConfigModifier_TV.MainPoster = _setup_TV.chkScrapeShowPoster.Checked
-        SaveSettings_TV()
+        SaveSettings_Image_TV()
         If DoDispose Then
             RemoveHandler _setup_TV.SetupScraperChanged, AddressOf Handle_SetupScraperChanged_TV
-            RemoveHandler _setup_TV.ModuleSettingsChanged, AddressOf Handle_ModuleSettingsChanged_TV
-            RemoveHandler _setup_TV.SetupNeedsRestart, AddressOf Handle_SetupNeedsRestart_TV
+            'RemoveHandler _setup_TV.ModuleSettingsChanged, AddressOf Handle_ModuleSettingsChanged_TV
+            'RemoveHandler _setup_TV.SetupNeedsRestart, AddressOf Handle_SetupNeedsRestart_TV
             _setup_TV.Dispose()
         End If
     End Sub
 
-    Public Sub ScraperOrderChanged_Movie() Implements EmberAPI.Interfaces.ScraperModule_Image_Movie.ScraperOrderChanged
+    Public Sub ScraperOrderChanged_Movie() Implements Interfaces.ScraperModule_Image_Movie.ScraperOrderChanged
         _setup_Movie.orderChanged()
     End Sub
 
-    Public Sub ScraperOrderChanged_MovieSet() Implements EmberAPI.Interfaces.ScraperModule_Image_MovieSet.ScraperOrderChanged
+    Public Sub ScraperOrderChanged_MovieSet() Implements Interfaces.ScraperModule_Image_MovieSet.ScraperOrderChanged
         _setup_MovieSet.orderChanged()
     End Sub
 
-    Public Sub ScraperOrderChanged_TV() Implements EmberAPI.Interfaces.ScraperModule_Image_TV.ScraperOrderChanged
+    Public Sub ScraperOrderChanged_TV() Implements Interfaces.ScraperModule_Image_TV.ScraperOrderChanged
         _setup_TV.orderChanged()
     End Sub
 

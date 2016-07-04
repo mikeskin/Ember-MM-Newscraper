@@ -41,29 +41,11 @@ Public Class OFDB_Data
 
 #Region "Events"
 
-    Public Event ModuleSettingsChanged() Implements Interfaces.ScraperModule_Data_Movie.ModuleSettingsChanged
-
-    Public Event MovieScraperEvent(ByVal eType As Enums.ScraperEventType, ByVal Parameter As Object) Implements Interfaces.ScraperModule_Data_Movie.ScraperEvent
-
     Public Event SetupScraperChanged(ByVal name As String, ByVal State As Boolean, ByVal difforder As Integer) Implements Interfaces.ScraperModule_Data_Movie.ScraperSetupChanged
-
-    Public Event SetupNeedsRestart() Implements Interfaces.ScraperModule_Data_Movie.SetupNeedsRestart
 
 #End Region 'Events
 
 #Region "Properties"
-
-    ReadOnly Property ModuleName() As String Implements Interfaces.ScraperModule_Data_Movie.ModuleName
-        Get
-            Return _Name
-        End Get
-    End Property
-
-    ReadOnly Property ModuleVersion() As String Implements Interfaces.ScraperModule_Data_Movie.ModuleVersion
-        Get
-            Return FileVersionInfo.GetVersionInfo(System.Reflection.Assembly.GetExecutingAssembly.Location).FileVersion.ToString
-        End Get
-    End Property
 
     Property ScraperEnabled() As Boolean Implements Interfaces.ScraperModule_Data_Movie.ScraperEnabled
         Get
@@ -77,26 +59,10 @@ Public Class OFDB_Data
 #End Region 'Properties
 
 #Region "Methods"
-    Function GetMovieStudio(ByRef DBMovie As Database.DBElement, ByRef studio As List(Of String)) As Interfaces.ModuleResult Implements Interfaces.ScraperModule_Data_Movie.GetMovieStudio
-        Return New Interfaces.ModuleResult With {.breakChain = False}
-    End Function
-
-    Function GetTMDBID(ByVal sIMDBID As String, ByRef sTMDBID As String) As Interfaces.ModuleResult Implements Interfaces.ScraperModule_Data_Movie.GetTMDBID
-        Return New Interfaces.ModuleResult With {.breakChain = False}
-    End Function
-
-    Private Sub Handle_ModuleSettingsChanged()
-        RaiseEvent ModuleSettingsChanged()
-    End Sub
 
     Private Sub Handle_SetupScraperChanged(ByVal state As Boolean, ByVal difforder As Integer)
         ScraperEnabled = state
         RaiseEvent SetupScraperChanged(String.Concat(Me._Name, "Scraper"), state, difforder)
-    End Sub
-
-    Sub Init(ByVal sAssemblyName As String) Implements Interfaces.ScraperModule_Data_Movie.Init
-        _AssemblyName = sAssemblyName
-        LoadSettings()
     End Sub
 
     Function InjectSetupScraper() As Containers.SettingsPanel Implements Interfaces.ScraperModule_Data_Movie.InjectSetupScraper
@@ -122,7 +88,7 @@ Public Class OFDB_Data
         SPanel.Panel = _setup.pnlSettings
 
         AddHandler _setup.SetupScraperChanged, AddressOf Handle_SetupScraperChanged
-        AddHandler _setup.ModuleSettingsChanged, AddressOf Handle_ModuleSettingsChanged
+        'AddHandler _setup.ModuleSettingsChanged, AddressOf Handle_ModuleSettingsChanged
         Return SPanel
     End Function
 
@@ -144,11 +110,7 @@ Public Class OFDB_Data
         End Using
     End Sub
 
-    Private Sub Handle_PostModuleSettingsChanged()
-        RaiseEvent ModuleSettingsChanged()
-    End Sub
-
-    Sub SaveSetupScraper(ByVal DoDispose As Boolean) Implements Interfaces.ScraperModule_Data_Movie.SaveSetupScraper
+    Sub SaveSetupScraper(ByVal DoDispose As Boolean)
         ConfigScrapeOptions.bMainCertifications = _setup.chkCertifications.Checked
         ConfigScrapeOptions.bMainTitle = _setup.chkTitle.Checked
         ConfigScrapeOptions.bMainOutline = _setup.chkOutline.Checked
@@ -157,7 +119,7 @@ Public Class OFDB_Data
         SaveSettings()
         If DoDispose Then
             RemoveHandler _setup.SetupScraperChanged, AddressOf Handle_SetupScraperChanged
-            RemoveHandler _setup.ModuleSettingsChanged, AddressOf Handle_ModuleSettingsChanged
+            'RemoveHandler _setup.ModuleSettingsChanged, AddressOf Handle_ModuleSettingsChanged
             _setup.Dispose()
         End If
     End Sub
@@ -169,7 +131,7 @@ Public Class OFDB_Data
     ''' <param name="Options">What kind of data is being requested from the scrape(global scraper settings)</param>
     ''' <returns>Database.DBElement Object (nMovie) which contains the scraped data</returns>
     ''' <remarks></remarks>
-    Function Scraper_Movie(ByRef oDBMovie As Database.DBElement, ByRef Modifier As Structures.ScrapeModifiers, ByRef Type As Enums.ScrapeType, ByRef ScrapeOptions As Structures.ScrapeOptions) As Interfaces.ModuleResult_Data_Movie Implements Interfaces.ScraperModule_Data_Movie.Scraper_Movie
+    Function Scraper_Movie(ByRef oDBMovie As Database.DBElement, ByRef Modifier As Structures.ScrapeModifiers, ByRef Type As Enums.ScrapeType, ByRef ScrapeOptions As Structures.ScrapeOptions) As Interfaces.ModuleResult_Data_Movie
         logger.Trace("[OFDB_Data] [Scraper_Movie] [Start]")
 
         LoadSettings()

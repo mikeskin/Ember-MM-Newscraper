@@ -1862,7 +1862,7 @@ Public Class frmMain
             DBScrapeMovie = Master.DB.Load_Movie(Convert.ToInt64(tScrapeItem.DataRow.Item("idMovie")))
 
             If tScrapeItem.ScrapeModifiers.MainNFO Then
-                If ModulesManager.Instance.ScrapeData_Movie(DBScrapeMovie, tScrapeItem.ScrapeModifiers, Args.ScrapeType, Args.ScrapeOptions, Args.ScrapeList.Count = 1) Then
+                If ModulesManager.Instance.RunScraper(DBScrapeMovie, tScrapeItem.ScrapeModifiers, Args.ScrapeType, Args.ScrapeOptions, Args.ScrapeList.Count = 1) Then
                     logger.Trace(String.Format("[Movie Scraper] [Cancelled] Scraping {0}", OldListTitle))
                     Cancelled = True
                     If Args.ScrapeType = Enums.ScrapeType.SingleAuto OrElse Args.ScrapeType = Enums.ScrapeType.SingleField OrElse Args.ScrapeType = Enums.ScrapeType.SingleScrape Then
@@ -1877,7 +1877,7 @@ Public Class frmMain
                                                                          tScrapeItem.ScrapeModifiers.MainPoster Or tScrapeItem.ScrapeModifiers.MainTheme Or tScrapeItem.ScrapeModifiers.MainTrailer) Then
                     Dim tModifiers As New Structures.ScrapeModifiers With {.MainNFO = True}
                     Dim tOptions As New Structures.ScrapeOptions 'set all values to false to not override any field. ID's are always determined.
-                    If ModulesManager.Instance.ScrapeData_Movie(DBScrapeMovie, tModifiers, Args.ScrapeType, tOptions, Args.ScrapeList.Count = 1) Then
+                    If ModulesManager.Instance.RunScraper(DBScrapeMovie, tModifiers, Args.ScrapeType, tOptions, Args.ScrapeList.Count = 1) Then
                         logger.Trace(String.Format("[Movie Scraper] [Cancelled] Scraping {0}", OldListTitle))
                         Cancelled = True
                         If Args.ScrapeType = Enums.ScrapeType.SingleAuto OrElse Args.ScrapeType = Enums.ScrapeType.SingleField OrElse Args.ScrapeType = Enums.ScrapeType.SingleScrape Then
@@ -1913,7 +1913,7 @@ Public Class frmMain
                     tScrapeItem.ScrapeModifiers.MainLandscape OrElse
                     tScrapeItem.ScrapeModifiers.MainPoster Then
 
-                    Dim SearchResultsContainer As New MediaContainers.SearchResultsContainer
+                    Dim SearchResultsContainer As New MediaContainers.ImageResultsContainer
                     bwMovieScraper.ReportProgress(-3, String.Concat(Master.eLang.GetString(254, "Scraping Images"), ":"))
                     If Not ModulesManager.Instance.ScrapeImage_Movie(DBScrapeMovie, SearchResultsContainer, tScrapeItem.ScrapeModifiers, Args.ScrapeList.Count = 1) Then
                         If Args.ScrapeType = Enums.ScrapeType.SingleScrape AndAlso Master.eSettings.MovieImagesDisplayImageSelect Then
@@ -2062,7 +2062,7 @@ Public Class frmMain
         logger.Trace(String.Format("[MovieSet Scraper] [Start] MovieSets Count [{0}]", Args.ScrapeList.Count.ToString))
 
         For Each tScrapeItem As ScrapeItem In Args.ScrapeList
-            Dim aContainer As New MediaContainers.SearchResultsContainer
+            Dim aContainer As New MediaContainers.ImageResultsContainer
             Dim NewListTitle As String = String.Empty
             Dim NewTMDBColID As String = String.Empty
             Dim NewTitle As String = String.Empty
@@ -2134,7 +2134,7 @@ Public Class frmMain
                     tScrapeItem.ScrapeModifiers.MainLandscape OrElse
                     tScrapeItem.ScrapeModifiers.MainPoster Then
 
-                    Dim SearchResultsContainer As New MediaContainers.SearchResultsContainer
+                    Dim SearchResultsContainer As New MediaContainers.ImageResultsContainer
                     bwMovieSetScraper.ReportProgress(-3, String.Concat(Master.eLang.GetString(254, "Scraping Images"), ":"))
                     If Not ModulesManager.Instance.ScrapeImage_MovieSet(DBScrapeMovieSet, SearchResultsContainer, tScrapeItem.ScrapeModifiers) Then
                         If Args.ScrapeType = Enums.ScrapeType.SingleScrape AndAlso Master.eSettings.MovieImagesDisplayImageSelect Then
@@ -2271,7 +2271,7 @@ Public Class frmMain
                 End If
 
                 'get all images
-                Dim SearchResultsContainer As New MediaContainers.SearchResultsContainer
+                Dim SearchResultsContainer As New MediaContainers.ImageResultsContainer
                 bwTVScraper.ReportProgress(-3, String.Concat(Master.eLang.GetString(254, "Scraping Images"), ":"))
                 If Not ModulesManager.Instance.ScrapeImage_TV(DBScrapeShow, SearchResultsContainer, tScrapeItem.ScrapeModifiers, Args.ScrapeList.Count = 1) Then
                     If Args.ScrapeType = Enums.ScrapeType.SingleScrape AndAlso Master.eSettings.TVImagesDisplayImageSelect Then
@@ -2426,7 +2426,7 @@ Public Class frmMain
                 'get all images
                 If tScrapeItem.ScrapeModifiers.EpisodeFanart OrElse
                     tScrapeItem.ScrapeModifiers.EpisodePoster Then
-                    Dim SearchResultsContainer As New MediaContainers.SearchResultsContainer
+                    Dim SearchResultsContainer As New MediaContainers.ImageResultsContainer
                     bwTVEpisodeScraper.ReportProgress(-3, String.Concat(Master.eLang.GetString(265, "Scraping Episode Images"), ":"))
                     If Not ModulesManager.Instance.ScrapeImage_TV(DBScrapeEpisode, SearchResultsContainer, tScrapeItem.ScrapeModifiers, Args.ScrapeList.Count = 1) Then
                         If Args.ScrapeType = Enums.ScrapeType.SingleScrape AndAlso Master.eSettings.TVImagesDisplayImageSelect Then
@@ -2559,7 +2559,7 @@ Public Class frmMain
                     tScrapeItem.ScrapeModifiers.SeasonLandscape OrElse
                     tScrapeItem.ScrapeModifiers.SeasonPoster Then
 
-                    Dim SearchResultsContainer As New MediaContainers.SearchResultsContainer
+                    Dim SearchResultsContainer As New MediaContainers.ImageResultsContainer
                     bwTVSeasonScraper.ReportProgress(-3, "Scraping Season Images:")
                     If Not ModulesManager.Instance.ScrapeImage_TV(DBScrapeSeason, SearchResultsContainer, tScrapeItem.ScrapeModifiers, Args.ScrapeList.Count = 1) Then
                         If Args.ScrapeType = Enums.ScrapeType.SingleScrape AndAlso Master.eSettings.TVImagesDisplayImageSelect Then
@@ -11224,60 +11224,60 @@ Public Class frmMain
                 Case "movie"
                     mnuScrapeModifierActorthumbs.Enabled = .MovieActorThumbsAnyEnabled
                     mnuScrapeModifierActorthumbs.Visible = True
-                    mnuScrapeModifierBanner.Enabled = .MovieBannerAnyEnabled AndAlso ModulesManager.Instance.ScraperWithCapabilityAnyEnabled_Image_Movie(Enums.ModifierType.MainBanner)
+                    mnuScrapeModifierBanner.Enabled = .MovieBannerAnyEnabled AndAlso ModulesManager.Instance.QueryScraperCapabilities_AnyEnabled(Enums.ModifierType.MainBanner, Enums.ContentType.Movie)
                     mnuScrapeModifierBanner.Visible = True
                     mnuScrapeModifierCharacterArt.Enabled = False
                     mnuScrapeModifierCharacterArt.Visible = False
-                    mnuScrapeModifierClearArt.Enabled = .MovieClearArtAnyEnabled AndAlso ModulesManager.Instance.ScraperWithCapabilityAnyEnabled_Image_Movie(Enums.ModifierType.MainClearArt)
+                    mnuScrapeModifierClearArt.Enabled = .MovieClearArtAnyEnabled AndAlso ModulesManager.Instance.QueryScraperCapabilities_AnyEnabled(Enums.ModifierType.MainClearArt, Enums.ContentType.Movie)
                     mnuScrapeModifierClearArt.Visible = True
-                    mnuScrapeModifierClearLogo.Enabled = .MovieClearLogoAnyEnabled AndAlso ModulesManager.Instance.ScraperWithCapabilityAnyEnabled_Image_Movie(Enums.ModifierType.MainClearLogo)
+                    mnuScrapeModifierClearLogo.Enabled = .MovieClearLogoAnyEnabled AndAlso ModulesManager.Instance.QueryScraperCapabilities_AnyEnabled(Enums.ModifierType.MainClearLogo, Enums.ContentType.Movie)
                     mnuScrapeModifierClearLogo.Visible = True
-                    mnuScrapeModifierDiscArt.Enabled = .MovieDiscArtAnyEnabled AndAlso ModulesManager.Instance.ScraperWithCapabilityAnyEnabled_Image_Movie(Enums.ModifierType.MainDiscArt)
+                    mnuScrapeModifierDiscArt.Enabled = .MovieDiscArtAnyEnabled AndAlso ModulesManager.Instance.QueryScraperCapabilities_AnyEnabled(Enums.ModifierType.MainDiscArt, Enums.ContentType.Movie)
                     mnuScrapeModifierDiscArt.Visible = True
-                    mnuScrapeModifierExtrafanarts.Enabled = .MovieExtrafanartsAnyEnabled AndAlso ModulesManager.Instance.ScraperWithCapabilityAnyEnabled_Image_Movie(Enums.ModifierType.MainExtrafanarts)
+                    mnuScrapeModifierExtrafanarts.Enabled = .MovieExtrafanartsAnyEnabled AndAlso ModulesManager.Instance.QueryScraperCapabilities_AnyEnabled(Enums.ModifierType.MainExtrafanarts, Enums.ContentType.Movie)
                     mnuScrapeModifierExtrafanarts.Visible = True
-                    mnuScrapeModifierExtrathumbs.Enabled = .MovieExtrathumbsAnyEnabled AndAlso ModulesManager.Instance.ScraperWithCapabilityAnyEnabled_Image_Movie(Enums.ModifierType.MainExtrathumbs)
+                    mnuScrapeModifierExtrathumbs.Enabled = .MovieExtrathumbsAnyEnabled AndAlso ModulesManager.Instance.QueryScraperCapabilities_AnyEnabled(Enums.ModifierType.MainExtrathumbs, Enums.ContentType.Movie)
                     mnuScrapeModifierExtrathumbs.Visible = True
-                    mnuScrapeModifierFanart.Enabled = .MovieFanartAnyEnabled AndAlso ModulesManager.Instance.ScraperWithCapabilityAnyEnabled_Image_Movie(Enums.ModifierType.MainFanart)
+                    mnuScrapeModifierFanart.Enabled = .MovieFanartAnyEnabled AndAlso ModulesManager.Instance.QueryScraperCapabilities_AnyEnabled(Enums.ModifierType.MainFanart, Enums.ContentType.Movie)
                     mnuScrapeModifierFanart.Visible = True
-                    mnuScrapeModifierLandscape.Enabled = .MovieLandscapeAnyEnabled AndAlso ModulesManager.Instance.ScraperWithCapabilityAnyEnabled_Image_Movie(Enums.ModifierType.MainLandscape)
+                    mnuScrapeModifierLandscape.Enabled = .MovieLandscapeAnyEnabled AndAlso ModulesManager.Instance.QueryScraperCapabilities_AnyEnabled(Enums.ModifierType.MainLandscape, Enums.ContentType.Movie)
                     mnuScrapeModifierLandscape.Visible = True
                     mnuScrapeModifierMetaData.Enabled = .MovieScraperMetaDataScan
                     mnuScrapeModifierMetaData.Visible = True
                     mnuScrapeModifierNFO.Enabled = True
                     mnuScrapeModifierNFO.Visible = True
-                    mnuScrapeModifierPoster.Enabled = .MoviePosterAnyEnabled AndAlso ModulesManager.Instance.ScraperWithCapabilityAnyEnabled_Image_Movie(Enums.ModifierType.MainPoster)
+                    mnuScrapeModifierPoster.Enabled = .MoviePosterAnyEnabled AndAlso ModulesManager.Instance.QueryScraperCapabilities_AnyEnabled(Enums.ModifierType.MainPoster, Enums.ContentType.Movie)
                     mnuScrapeModifierPoster.Visible = True
-                    mnuScrapeModifierTheme.Enabled = .MovieThemeAnyEnabled AndAlso ModulesManager.Instance.ScraperWithCapabilityAnyEnabled_Theme_Movie(Enums.ModifierType.MainTheme)
+                    mnuScrapeModifierTheme.Enabled = .MovieThemeAnyEnabled AndAlso ModulesManager.Instance.QueryScraperCapabilities_AnyEnabled(Enums.ModifierType.MainTheme, Enums.ContentType.Movie)
                     mnuScrapeModifierTheme.Visible = True
-                    mnuScrapeModifierTrailer.Enabled = .MovieTrailerAnyEnabled AndAlso ModulesManager.Instance.ScraperWithCapabilityAnyEnabled_Trailer_Movie(Enums.ModifierType.MainTrailer)
+                    mnuScrapeModifierTrailer.Enabled = .MovieTrailerAnyEnabled AndAlso ModulesManager.Instance.QueryScraperCapabilities_AnyEnabled(Enums.ModifierType.MainTrailer, Enums.ContentType.Movie)
                     mnuScrapeModifierTrailer.Visible = True
                 Case "movieset"
                     mnuScrapeModifierActorthumbs.Enabled = False
                     mnuScrapeModifierActorthumbs.Visible = False
-                    mnuScrapeModifierBanner.Enabled = .MovieSetBannerAnyEnabled AndAlso ModulesManager.Instance.ScraperWithCapabilityAnyEnabled_Image_MovieSet(Enums.ModifierType.MainBanner)
+                    mnuScrapeModifierBanner.Enabled = .MovieSetBannerAnyEnabled AndAlso ModulesManager.Instance.QueryScraperCapabilities_AnyEnabled(Enums.ModifierType.MainBanner, Enums.ContentType.MovieSet)
                     mnuScrapeModifierBanner.Visible = True
                     mnuScrapeModifierCharacterArt.Enabled = False
                     mnuScrapeModifierCharacterArt.Visible = False
-                    mnuScrapeModifierClearArt.Enabled = .MovieSetClearArtAnyEnabled AndAlso ModulesManager.Instance.ScraperWithCapabilityAnyEnabled_Image_MovieSet(Enums.ModifierType.MainClearArt)
+                    mnuScrapeModifierClearArt.Enabled = .MovieSetClearArtAnyEnabled AndAlso ModulesManager.Instance.QueryScraperCapabilities_AnyEnabled(Enums.ModifierType.MainClearArt, Enums.ContentType.MovieSet)
                     mnuScrapeModifierClearArt.Visible = True
-                    mnuScrapeModifierClearLogo.Enabled = .MovieSetClearLogoAnyEnabled AndAlso ModulesManager.Instance.ScraperWithCapabilityAnyEnabled_Image_MovieSet(Enums.ModifierType.MainClearLogo)
+                    mnuScrapeModifierClearLogo.Enabled = .MovieSetClearLogoAnyEnabled AndAlso ModulesManager.Instance.QueryScraperCapabilities_AnyEnabled(Enums.ModifierType.MainClearLogo, Enums.ContentType.MovieSet)
                     mnuScrapeModifierClearLogo.Visible = True
-                    mnuScrapeModifierDiscArt.Enabled = .MovieSetDiscArtAnyEnabled AndAlso ModulesManager.Instance.ScraperWithCapabilityAnyEnabled_Image_MovieSet(Enums.ModifierType.MainDiscArt)
+                    mnuScrapeModifierDiscArt.Enabled = .MovieSetDiscArtAnyEnabled AndAlso ModulesManager.Instance.QueryScraperCapabilities_AnyEnabled(Enums.ModifierType.MainDiscArt, Enums.ContentType.MovieSet)
                     mnuScrapeModifierDiscArt.Visible = True
                     mnuScrapeModifierExtrafanarts.Enabled = False
                     mnuScrapeModifierExtrafanarts.Visible = False
                     mnuScrapeModifierExtrathumbs.Enabled = False
                     mnuScrapeModifierExtrathumbs.Visible = False
-                    mnuScrapeModifierFanart.Enabled = .MovieSetFanartAnyEnabled AndAlso ModulesManager.Instance.ScraperWithCapabilityAnyEnabled_Image_MovieSet(Enums.ModifierType.MainFanart)
+                    mnuScrapeModifierFanart.Enabled = .MovieSetFanartAnyEnabled AndAlso ModulesManager.Instance.QueryScraperCapabilities_AnyEnabled(Enums.ModifierType.MainFanart, Enums.ContentType.MovieSet)
                     mnuScrapeModifierFanart.Visible = True
-                    mnuScrapeModifierLandscape.Enabled = .MovieSetLandscapeAnyEnabled AndAlso ModulesManager.Instance.ScraperWithCapabilityAnyEnabled_Image_MovieSet(Enums.ModifierType.MainLandscape)
+                    mnuScrapeModifierLandscape.Enabled = .MovieSetLandscapeAnyEnabled AndAlso ModulesManager.Instance.QueryScraperCapabilities_AnyEnabled(Enums.ModifierType.MainLandscape, Enums.ContentType.MovieSet)
                     mnuScrapeModifierLandscape.Visible = True
                     mnuScrapeModifierMetaData.Enabled = False
                     mnuScrapeModifierMetaData.Visible = False
                     mnuScrapeModifierNFO.Enabled = True
                     mnuScrapeModifierNFO.Visible = True
-                    mnuScrapeModifierPoster.Enabled = .MovieSetPosterAnyEnabled AndAlso ModulesManager.Instance.ScraperWithCapabilityAnyEnabled_Image_MovieSet(Enums.ModifierType.MainPoster)
+                    mnuScrapeModifierPoster.Enabled = .MovieSetPosterAnyEnabled AndAlso ModulesManager.Instance.QueryScraperCapabilities_AnyEnabled(Enums.ModifierType.MainPoster, Enums.ContentType.MovieSet)
                     mnuScrapeModifierPoster.Visible = True
                     mnuScrapeModifierTheme.Enabled = False
                     mnuScrapeModifierTheme.Visible = False
@@ -11300,7 +11300,7 @@ Public Class frmMain
                     mnuScrapeModifierExtrafanarts.Visible = False
                     mnuScrapeModifierExtrathumbs.Enabled = False
                     mnuScrapeModifierExtrathumbs.Visible = False
-                    mnuScrapeModifierFanart.Enabled = .TVEpisodeFanartAnyEnabled AndAlso ModulesManager.Instance.ScraperWithCapabilityAnyEnabled_Image_TV(Enums.ModifierType.EpisodeFanart)
+                    mnuScrapeModifierFanart.Enabled = .TVEpisodeFanartAnyEnabled AndAlso ModulesManager.Instance.QueryScraperCapabilities_AnyEnabled(Enums.ModifierType.EpisodeFanart, Enums.ContentType.TV)
                     mnuScrapeModifierFanart.Visible = True
                     mnuScrapeModifierLandscape.Enabled = False
                     mnuScrapeModifierLandscape.Visible = False
@@ -11308,7 +11308,7 @@ Public Class frmMain
                     mnuScrapeModifierMetaData.Visible = True
                     mnuScrapeModifierNFO.Enabled = True
                     mnuScrapeModifierNFO.Visible = True
-                    mnuScrapeModifierPoster.Enabled = .TVEpisodePosterAnyEnabled AndAlso ModulesManager.Instance.ScraperWithCapabilityAnyEnabled_Image_TV(Enums.ModifierType.EpisodePoster)
+                    mnuScrapeModifierPoster.Enabled = .TVEpisodePosterAnyEnabled AndAlso ModulesManager.Instance.QueryScraperCapabilities_AnyEnabled(Enums.ModifierType.EpisodePoster, Enums.ContentType.TV)
                     mnuScrapeModifierPoster.Visible = True
                     mnuScrapeModifierTheme.Enabled = False
                     mnuScrapeModifierTheme.Visible = False
@@ -11317,7 +11317,7 @@ Public Class frmMain
                 Case "tvseason"
                     mnuScrapeModifierActorthumbs.Enabled = False
                     mnuScrapeModifierActorthumbs.Visible = False
-                    mnuScrapeModifierBanner.Enabled = .TVSeasonBannerAnyEnabled AndAlso ModulesManager.Instance.ScraperWithCapabilityAnyEnabled_Image_TV(Enums.ModifierType.SeasonBanner)
+                    mnuScrapeModifierBanner.Enabled = .TVSeasonBannerAnyEnabled AndAlso ModulesManager.Instance.QueryScraperCapabilities_AnyEnabled(Enums.ModifierType.SeasonBanner, Enums.ContentType.TV)
                     mnuScrapeModifierBanner.Visible = True
                     mnuScrapeModifierCharacterArt.Enabled = False
                     mnuScrapeModifierCharacterArt.Visible = False
@@ -11331,15 +11331,15 @@ Public Class frmMain
                     mnuScrapeModifierExtrafanarts.Visible = False
                     mnuScrapeModifierExtrathumbs.Enabled = False
                     mnuScrapeModifierExtrathumbs.Visible = False
-                    mnuScrapeModifierFanart.Enabled = .TVSeasonFanartAnyEnabled AndAlso ModulesManager.Instance.ScraperWithCapabilityAnyEnabled_Image_TV(Enums.ModifierType.SeasonFanart)
+                    mnuScrapeModifierFanart.Enabled = .TVSeasonFanartAnyEnabled AndAlso ModulesManager.Instance.QueryScraperCapabilities_AnyEnabled(Enums.ModifierType.SeasonFanart, Enums.ContentType.TV)
                     mnuScrapeModifierFanart.Visible = True
-                    mnuScrapeModifierLandscape.Enabled = .TVSeasonLandscapeAnyEnabled AndAlso ModulesManager.Instance.ScraperWithCapabilityAnyEnabled_Image_TV(Enums.ModifierType.SeasonLandscape)
+                    mnuScrapeModifierLandscape.Enabled = .TVSeasonLandscapeAnyEnabled AndAlso ModulesManager.Instance.QueryScraperCapabilities_AnyEnabled(Enums.ModifierType.SeasonLandscape, Enums.ContentType.TV)
                     mnuScrapeModifierLandscape.Visible = True
                     mnuScrapeModifierMetaData.Enabled = False
                     mnuScrapeModifierMetaData.Visible = False
                     mnuScrapeModifierNFO.Enabled = False
                     mnuScrapeModifierNFO.Visible = False
-                    mnuScrapeModifierPoster.Enabled = .TVSeasonPosterAnyEnabled AndAlso ModulesManager.Instance.ScraperWithCapabilityAnyEnabled_Image_TV(Enums.ModifierType.SeasonPoster)
+                    mnuScrapeModifierPoster.Enabled = .TVSeasonPosterAnyEnabled AndAlso ModulesManager.Instance.QueryScraperCapabilities_AnyEnabled(Enums.ModifierType.SeasonPoster, Enums.ContentType.TV)
                     mnuScrapeModifierPoster.Visible = True
                     mnuScrapeModifierTheme.Enabled = False
                     mnuScrapeModifierTheme.Visible = False
@@ -11348,31 +11348,31 @@ Public Class frmMain
                 Case "tvshow"
                     mnuScrapeModifierActorthumbs.Enabled = .TVShowActorThumbsAnyEnabled
                     mnuScrapeModifierActorthumbs.Visible = True
-                    mnuScrapeModifierBanner.Enabled = .TVShowBannerAnyEnabled AndAlso ModulesManager.Instance.ScraperWithCapabilityAnyEnabled_Image_TV(Enums.ModifierType.MainBanner)
+                    mnuScrapeModifierBanner.Enabled = .TVShowBannerAnyEnabled AndAlso ModulesManager.Instance.QueryScraperCapabilities_AnyEnabled(Enums.ModifierType.MainBanner, Enums.ContentType.TV)
                     mnuScrapeModifierBanner.Visible = True
-                    mnuScrapeModifierCharacterArt.Enabled = .TVShowCharacterArtAnyEnabled AndAlso ModulesManager.Instance.ScraperWithCapabilityAnyEnabled_Image_TV(Enums.ModifierType.MainCharacterArt)
+                    mnuScrapeModifierCharacterArt.Enabled = .TVShowCharacterArtAnyEnabled AndAlso ModulesManager.Instance.QueryScraperCapabilities_AnyEnabled(Enums.ModifierType.MainCharacterArt, Enums.ContentType.TV)
                     mnuScrapeModifierCharacterArt.Visible = True
-                    mnuScrapeModifierClearArt.Enabled = .TVShowClearArtAnyEnabled AndAlso ModulesManager.Instance.ScraperWithCapabilityAnyEnabled_Image_TV(Enums.ModifierType.MainClearArt)
+                    mnuScrapeModifierClearArt.Enabled = .TVShowClearArtAnyEnabled AndAlso ModulesManager.Instance.QueryScraperCapabilities_AnyEnabled(Enums.ModifierType.MainClearArt, Enums.ContentType.TV)
                     mnuScrapeModifierClearArt.Visible = True
-                    mnuScrapeModifierClearLogo.Enabled = .TVShowClearLogoAnyEnabled AndAlso ModulesManager.Instance.ScraperWithCapabilityAnyEnabled_Image_TV(Enums.ModifierType.MainClearLogo)
+                    mnuScrapeModifierClearLogo.Enabled = .TVShowClearLogoAnyEnabled AndAlso ModulesManager.Instance.QueryScraperCapabilities_AnyEnabled(Enums.ModifierType.MainClearLogo, Enums.ContentType.TV)
                     mnuScrapeModifierClearLogo.Visible = True
                     mnuScrapeModifierDiscArt.Enabled = False
                     mnuScrapeModifierDiscArt.Visible = False
-                    mnuScrapeModifierExtrafanarts.Enabled = .TVShowExtrafanartsAnyEnabled AndAlso ModulesManager.Instance.ScraperWithCapabilityAnyEnabled_Image_TV(Enums.ModifierType.MainExtrafanarts)
+                    mnuScrapeModifierExtrafanarts.Enabled = .TVShowExtrafanartsAnyEnabled AndAlso ModulesManager.Instance.QueryScraperCapabilities_AnyEnabled(Enums.ModifierType.MainExtrafanarts, Enums.ContentType.TV)
                     mnuScrapeModifierExtrafanarts.Visible = True
                     mnuScrapeModifierExtrathumbs.Enabled = False
                     mnuScrapeModifierExtrathumbs.Visible = False
-                    mnuScrapeModifierFanart.Enabled = .TVShowFanartAnyEnabled AndAlso ModulesManager.Instance.ScraperWithCapabilityAnyEnabled_Image_TV(Enums.ModifierType.MainFanart)
+                    mnuScrapeModifierFanart.Enabled = .TVShowFanartAnyEnabled AndAlso ModulesManager.Instance.QueryScraperCapabilities_AnyEnabled(Enums.ModifierType.MainFanart, Enums.ContentType.TV)
                     mnuScrapeModifierFanart.Visible = True
-                    mnuScrapeModifierLandscape.Enabled = .TVShowLandscapeAnyEnabled AndAlso ModulesManager.Instance.ScraperWithCapabilityAnyEnabled_Image_TV(Enums.ModifierType.MainLandscape)
+                    mnuScrapeModifierLandscape.Enabled = .TVShowLandscapeAnyEnabled AndAlso ModulesManager.Instance.QueryScraperCapabilities_AnyEnabled(Enums.ModifierType.MainLandscape, Enums.ContentType.TV)
                     mnuScrapeModifierLandscape.Visible = True
                     mnuScrapeModifierMetaData.Enabled = False
                     mnuScrapeModifierMetaData.Visible = False
                     mnuScrapeModifierNFO.Enabled = True
                     mnuScrapeModifierNFO.Visible = True
-                    mnuScrapeModifierPoster.Enabled = .TVShowPosterAnyEnabled AndAlso ModulesManager.Instance.ScraperWithCapabilityAnyEnabled_Image_TV(Enums.ModifierType.MainPoster)
+                    mnuScrapeModifierPoster.Enabled = .TVShowPosterAnyEnabled AndAlso ModulesManager.Instance.QueryScraperCapabilities_AnyEnabled(Enums.ModifierType.MainPoster, Enums.ContentType.TV)
                     mnuScrapeModifierPoster.Visible = True
-                    mnuScrapeModifierTheme.Enabled = .TvShowThemeAnyEnabled AndAlso ModulesManager.Instance.ScraperWithCapabilityAnyEnabled_Theme_TV(Enums.ModifierType.MainTheme)
+                    mnuScrapeModifierTheme.Enabled = .TvShowThemeAnyEnabled AndAlso ModulesManager.Instance.QueryScraperCapabilities_AnyEnabled(Enums.ModifierType.MainTheme, Enums.ContentType.TV)
                     mnuScrapeModifierTheme.Visible = True
                     mnuScrapeModifierTrailer.Enabled = False
                     mnuScrapeModifierTrailer.Visible = False
@@ -11758,17 +11758,17 @@ Public Class frmMain
         End Select
 
         Dim ActorThumbsAllowed As Boolean = Master.eSettings.MovieActorThumbsAnyEnabled
-        Dim BannerAllowed As Boolean = Master.eSettings.MovieBannerAnyEnabled AndAlso ModulesManager.Instance.ScraperWithCapabilityAnyEnabled_Image_Movie(Enums.ModifierType.MainBanner)
-        Dim ClearArtAllowed As Boolean = Master.eSettings.MovieClearArtAnyEnabled AndAlso ModulesManager.Instance.ScraperWithCapabilityAnyEnabled_Image_Movie(Enums.ModifierType.MainClearArt)
-        Dim ClearLogoAllowed As Boolean = Master.eSettings.MovieClearLogoAnyEnabled AndAlso ModulesManager.Instance.ScraperWithCapabilityAnyEnabled_Image_Movie(Enums.ModifierType.MainClearLogo)
-        Dim DiscArtAllowed As Boolean = Master.eSettings.MovieDiscArtAnyEnabled AndAlso ModulesManager.Instance.ScraperWithCapabilityAnyEnabled_Image_Movie(Enums.ModifierType.MainDiscArt)
-        Dim ExtrafanartsAllowed As Boolean = Master.eSettings.MovieExtrafanartsAnyEnabled AndAlso ModulesManager.Instance.ScraperWithCapabilityAnyEnabled_Image_Movie(Enums.ModifierType.MainFanart)
-        Dim ExtrathumbsAllowed As Boolean = Master.eSettings.MovieExtrathumbsAnyEnabled AndAlso ModulesManager.Instance.ScraperWithCapabilityAnyEnabled_Image_Movie(Enums.ModifierType.MainFanart)
-        Dim FanartAllowed As Boolean = Master.eSettings.MovieFanartAnyEnabled AndAlso ModulesManager.Instance.ScraperWithCapabilityAnyEnabled_Image_Movie(Enums.ModifierType.MainFanart)
-        Dim LandscapeAllowed As Boolean = Master.eSettings.MovieLandscapeAnyEnabled AndAlso ModulesManager.Instance.ScraperWithCapabilityAnyEnabled_Image_Movie(Enums.ModifierType.MainLandscape)
-        Dim PosterAllowed As Boolean = Master.eSettings.MoviePosterAnyEnabled AndAlso ModulesManager.Instance.ScraperWithCapabilityAnyEnabled_Image_Movie(Enums.ModifierType.MainPoster)
-        Dim ThemeAllowed As Boolean = Master.eSettings.MovieThemeAnyEnabled AndAlso ModulesManager.Instance.ScraperWithCapabilityAnyEnabled_Theme_Movie(Enums.ModifierType.MainTheme)
-        Dim TrailerAllowed As Boolean = Master.eSettings.MovieTrailerAnyEnabled AndAlso ModulesManager.Instance.ScraperWithCapabilityAnyEnabled_Trailer_Movie(Enums.ModifierType.MainTrailer)
+        Dim BannerAllowed As Boolean = Master.eSettings.MovieBannerAnyEnabled AndAlso ModulesManager.Instance.QueryScraperCapabilities_AnyEnabled(Enums.ModifierType.MainBanner, Enums.ContentType.Movie)
+        Dim ClearArtAllowed As Boolean = Master.eSettings.MovieClearArtAnyEnabled AndAlso ModulesManager.Instance.QueryScraperCapabilities_AnyEnabled(Enums.ModifierType.MainClearArt, Enums.ContentType.Movie)
+        Dim ClearLogoAllowed As Boolean = Master.eSettings.MovieClearLogoAnyEnabled AndAlso ModulesManager.Instance.QueryScraperCapabilities_AnyEnabled(Enums.ModifierType.MainClearLogo, Enums.ContentType.Movie)
+        Dim DiscArtAllowed As Boolean = Master.eSettings.MovieDiscArtAnyEnabled AndAlso ModulesManager.Instance.QueryScraperCapabilities_AnyEnabled(Enums.ModifierType.MainDiscArt, Enums.ContentType.Movie)
+        Dim ExtrafanartsAllowed As Boolean = Master.eSettings.MovieExtrafanartsAnyEnabled AndAlso ModulesManager.Instance.QueryScraperCapabilities_AnyEnabled(Enums.ModifierType.MainFanart, Enums.ContentType.Movie)
+        Dim ExtrathumbsAllowed As Boolean = Master.eSettings.MovieExtrathumbsAnyEnabled AndAlso ModulesManager.Instance.QueryScraperCapabilities_AnyEnabled(Enums.ModifierType.MainFanart, Enums.ContentType.Movie)
+        Dim FanartAllowed As Boolean = Master.eSettings.MovieFanartAnyEnabled AndAlso ModulesManager.Instance.QueryScraperCapabilities_AnyEnabled(Enums.ModifierType.MainFanart, Enums.ContentType.Movie)
+        Dim LandscapeAllowed As Boolean = Master.eSettings.MovieLandscapeAnyEnabled AndAlso ModulesManager.Instance.QueryScraperCapabilities_AnyEnabled(Enums.ModifierType.MainLandscape, Enums.ContentType.Movie)
+        Dim PosterAllowed As Boolean = Master.eSettings.MoviePosterAnyEnabled AndAlso ModulesManager.Instance.QueryScraperCapabilities_AnyEnabled(Enums.ModifierType.MainPoster, Enums.ContentType.Movie)
+        Dim ThemeAllowed As Boolean = Master.eSettings.MovieThemeAnyEnabled AndAlso ModulesManager.Instance.QueryScraperCapabilities_AnyEnabled(Enums.ModifierType.MainTheme, Enums.ContentType.Movie)
+        Dim TrailerAllowed As Boolean = Master.eSettings.MovieTrailerAnyEnabled AndAlso ModulesManager.Instance.QueryScraperCapabilities_AnyEnabled(Enums.ModifierType.MainTrailer, Enums.ContentType.Movie)
 
         'create ScrapeList of movies acording to scrapetype
         For Each drvRow As DataRow In DataRowList
@@ -11934,13 +11934,13 @@ Public Class frmMain
                 Next
         End Select
 
-        Dim BannerAllowed As Boolean = Master.eSettings.MovieSetBannerAnyEnabled AndAlso ModulesManager.Instance.ScraperWithCapabilityAnyEnabled_Image_MovieSet(Enums.ModifierType.MainBanner)
-        Dim ClearArtAllowed As Boolean = Master.eSettings.MovieSetClearArtAnyEnabled AndAlso ModulesManager.Instance.ScraperWithCapabilityAnyEnabled_Image_MovieSet(Enums.ModifierType.MainClearArt)
-        Dim ClearLogoAllowed As Boolean = Master.eSettings.MovieSetClearLogoAnyEnabled AndAlso ModulesManager.Instance.ScraperWithCapabilityAnyEnabled_Image_MovieSet(Enums.ModifierType.MainClearLogo)
-        Dim DiscArtAllowed As Boolean = Master.eSettings.MovieSetDiscArtAnyEnabled AndAlso ModulesManager.Instance.ScraperWithCapabilityAnyEnabled_Image_MovieSet(Enums.ModifierType.MainDiscArt)
-        Dim FanartAllowed As Boolean = Master.eSettings.MovieSetFanartAnyEnabled AndAlso ModulesManager.Instance.ScraperWithCapabilityAnyEnabled_Image_MovieSet(Enums.ModifierType.MainFanart)
-        Dim LandscapeAllowed As Boolean = Master.eSettings.MovieSetLandscapeAnyEnabled AndAlso ModulesManager.Instance.ScraperWithCapabilityAnyEnabled_Image_MovieSet(Enums.ModifierType.MainLandscape)
-        Dim PosterAllowed As Boolean = Master.eSettings.MovieSetPosterAnyEnabled AndAlso ModulesManager.Instance.ScraperWithCapabilityAnyEnabled_Image_MovieSet(Enums.ModifierType.MainPoster)
+        Dim BannerAllowed As Boolean = Master.eSettings.MovieSetBannerAnyEnabled AndAlso ModulesManager.Instance.QueryScraperCapabilities_AnyEnabled(Enums.ModifierType.MainBanner, Enums.ContentType.MovieSet)
+        Dim ClearArtAllowed As Boolean = Master.eSettings.MovieSetClearArtAnyEnabled AndAlso ModulesManager.Instance.QueryScraperCapabilities_AnyEnabled(Enums.ModifierType.MainClearArt, Enums.ContentType.MovieSet)
+        Dim ClearLogoAllowed As Boolean = Master.eSettings.MovieSetClearLogoAnyEnabled AndAlso ModulesManager.Instance.QueryScraperCapabilities_AnyEnabled(Enums.ModifierType.MainClearLogo, Enums.ContentType.MovieSet)
+        Dim DiscArtAllowed As Boolean = Master.eSettings.MovieSetDiscArtAnyEnabled AndAlso ModulesManager.Instance.QueryScraperCapabilities_AnyEnabled(Enums.ModifierType.MainDiscArt, Enums.ContentType.MovieSet)
+        Dim FanartAllowed As Boolean = Master.eSettings.MovieSetFanartAnyEnabled AndAlso ModulesManager.Instance.QueryScraperCapabilities_AnyEnabled(Enums.ModifierType.MainFanart, Enums.ContentType.MovieSet)
+        Dim LandscapeAllowed As Boolean = Master.eSettings.MovieSetLandscapeAnyEnabled AndAlso ModulesManager.Instance.QueryScraperCapabilities_AnyEnabled(Enums.ModifierType.MainLandscape, Enums.ContentType.MovieSet)
+        Dim PosterAllowed As Boolean = Master.eSettings.MovieSetPosterAnyEnabled AndAlso ModulesManager.Instance.QueryScraperCapabilities_AnyEnabled(Enums.ModifierType.MainPoster, Enums.ContentType.MovieSet)
 
         'create ScrapeList of moviesets acording to scrapetype
         For Each drvRow As DataRow In DataRowList
@@ -12096,28 +12096,28 @@ Public Class frmMain
                 Next
         End Select
 
-        Dim AllSeasonsBannerAllowed As Boolean = Master.eSettings.TVAllSeasonsBannerAnyEnabled AndAlso ModulesManager.Instance.ScraperWithCapabilityAnyEnabled_Image_TV(Enums.ModifierType.AllSeasonsBanner)
-        Dim AllSeasonsFanartAllowed As Boolean = Master.eSettings.TVAllSeasonsFanartAnyEnabled AndAlso ModulesManager.Instance.ScraperWithCapabilityAnyEnabled_Image_TV(Enums.ModifierType.AllSeasonsFanart)
-        Dim AllSeasonsLandscapeAllowed As Boolean = Master.eSettings.TVAllSeasonsLandscapeAnyEnabled AndAlso ModulesManager.Instance.ScraperWithCapabilityAnyEnabled_Image_TV(Enums.ModifierType.AllSeasonsLandscape)
-        Dim AllSeasonsPosterAllowed As Boolean = Master.eSettings.TVAllSeasonsPosterAnyEnabled AndAlso ModulesManager.Instance.ScraperWithCapabilityAnyEnabled_Image_TV(Enums.ModifierType.AllSeasonsPoster)
+        Dim AllSeasonsBannerAllowed As Boolean = Master.eSettings.TVAllSeasonsBannerAnyEnabled AndAlso ModulesManager.Instance.QueryScraperCapabilities_AnyEnabled(Enums.ModifierType.AllSeasonsBanner, Enums.ContentType.TV)
+        Dim AllSeasonsFanartAllowed As Boolean = Master.eSettings.TVAllSeasonsFanartAnyEnabled AndAlso ModulesManager.Instance.QueryScraperCapabilities_AnyEnabled(Enums.ModifierType.AllSeasonsFanart, Enums.ContentType.TV)
+        Dim AllSeasonsLandscapeAllowed As Boolean = Master.eSettings.TVAllSeasonsLandscapeAnyEnabled AndAlso ModulesManager.Instance.QueryScraperCapabilities_AnyEnabled(Enums.ModifierType.AllSeasonsLandscape, Enums.ContentType.TV)
+        Dim AllSeasonsPosterAllowed As Boolean = Master.eSettings.TVAllSeasonsPosterAnyEnabled AndAlso ModulesManager.Instance.QueryScraperCapabilities_AnyEnabled(Enums.ModifierType.AllSeasonsPoster, Enums.ContentType.TV)
         Dim EpisodeActorThumbsAllowed As Boolean = Master.eSettings.TVEpisodeActorThumbsAnyEnabled
-        Dim EpisodeFanartAllowed As Boolean = Master.eSettings.TVEpisodeFanartAnyEnabled AndAlso ModulesManager.Instance.ScraperWithCapabilityAnyEnabled_Image_TV(Enums.ModifierType.EpisodeFanart)
+        Dim EpisodeFanartAllowed As Boolean = Master.eSettings.TVEpisodeFanartAnyEnabled AndAlso ModulesManager.Instance.QueryScraperCapabilities_AnyEnabled(Enums.ModifierType.EpisodeFanart, Enums.ContentType.TV)
         Dim EpisodeMetaAllowed As Boolean = Master.eSettings.TVScraperMetaDataScan
-        Dim EpisodePosterAllowed As Boolean = Master.eSettings.TVEpisodePosterAnyEnabled AndAlso ModulesManager.Instance.ScraperWithCapabilityAnyEnabled_Image_TV(Enums.ModifierType.EpisodePoster)
+        Dim EpisodePosterAllowed As Boolean = Master.eSettings.TVEpisodePosterAnyEnabled AndAlso ModulesManager.Instance.QueryScraperCapabilities_AnyEnabled(Enums.ModifierType.EpisodePoster, Enums.ContentType.TV)
         Dim MainActorThumbsAllowed As Boolean = Master.eSettings.TVShowActorThumbsAnyEnabled
-        Dim MainBannerAllowed As Boolean = Master.eSettings.TVShowBannerAnyEnabled AndAlso ModulesManager.Instance.ScraperWithCapabilityAnyEnabled_Image_TV(Enums.ModifierType.MainBanner)
-        Dim MainCharacterArtAllowed As Boolean = Master.eSettings.TVShowCharacterArtAnyEnabled AndAlso ModulesManager.Instance.ScraperWithCapabilityAnyEnabled_Image_TV(Enums.ModifierType.MainCharacterArt)
-        Dim MainClearArtAllowed As Boolean = Master.eSettings.TVShowClearArtAnyEnabled AndAlso ModulesManager.Instance.ScraperWithCapabilityAnyEnabled_Image_TV(Enums.ModifierType.MainClearArt)
-        Dim MainClearLogoAllowed As Boolean = Master.eSettings.TVShowClearLogoAnyEnabled AndAlso ModulesManager.Instance.ScraperWithCapabilityAnyEnabled_Image_TV(Enums.ModifierType.MainClearLogo)
-        Dim MainExtrafanartsAllowed As Boolean = Master.eSettings.TVShowExtrafanartsAnyEnabled AndAlso ModulesManager.Instance.ScraperWithCapabilityAnyEnabled_Image_TV(Enums.ModifierType.MainFanart)
-        Dim MainFanartAllowed As Boolean = Master.eSettings.TVShowFanartAnyEnabled AndAlso ModulesManager.Instance.ScraperWithCapabilityAnyEnabled_Image_TV(Enums.ModifierType.MainFanart)
-        Dim MainLandscapeAllowed As Boolean = Master.eSettings.TVShowLandscapeAnyEnabled AndAlso ModulesManager.Instance.ScraperWithCapabilityAnyEnabled_Image_TV(Enums.ModifierType.MainLandscape)
-        Dim MainPosterAllowed As Boolean = Master.eSettings.TVShowPosterAnyEnabled AndAlso ModulesManager.Instance.ScraperWithCapabilityAnyEnabled_Image_TV(Enums.ModifierType.MainPoster)
-        Dim MainThemeAllowed As Boolean = Master.eSettings.TvShowThemeAnyEnabled AndAlso ModulesManager.Instance.ScraperWithCapabilityAnyEnabled_Theme_TV(Enums.ModifierType.MainTheme)
-        Dim SeasonBannerAllowed As Boolean = Master.eSettings.TVSeasonBannerAnyEnabled AndAlso ModulesManager.Instance.ScraperWithCapabilityAnyEnabled_Image_TV(Enums.ModifierType.SeasonBanner)
-        Dim SeasonFanartAllowed As Boolean = Master.eSettings.TVSeasonFanartAnyEnabled AndAlso ModulesManager.Instance.ScraperWithCapabilityAnyEnabled_Image_TV(Enums.ModifierType.SeasonFanart)
-        Dim SeasonLandscapeAllowed As Boolean = Master.eSettings.TVSeasonLandscapeAnyEnabled AndAlso ModulesManager.Instance.ScraperWithCapabilityAnyEnabled_Image_TV(Enums.ModifierType.SeasonLandscape)
-        Dim SeasonPosterAllowed As Boolean = Master.eSettings.TVSeasonPosterAnyEnabled AndAlso ModulesManager.Instance.ScraperWithCapabilityAnyEnabled_Image_TV(Enums.ModifierType.SeasonPoster)
+        Dim MainBannerAllowed As Boolean = Master.eSettings.TVShowBannerAnyEnabled AndAlso ModulesManager.Instance.QueryScraperCapabilities_AnyEnabled(Enums.ModifierType.MainBanner, Enums.ContentType.TV)
+        Dim MainCharacterArtAllowed As Boolean = Master.eSettings.TVShowCharacterArtAnyEnabled AndAlso ModulesManager.Instance.QueryScraperCapabilities_AnyEnabled(Enums.ModifierType.MainCharacterArt, Enums.ContentType.TV)
+        Dim MainClearArtAllowed As Boolean = Master.eSettings.TVShowClearArtAnyEnabled AndAlso ModulesManager.Instance.QueryScraperCapabilities_AnyEnabled(Enums.ModifierType.MainClearArt, Enums.ContentType.TV)
+        Dim MainClearLogoAllowed As Boolean = Master.eSettings.TVShowClearLogoAnyEnabled AndAlso ModulesManager.Instance.QueryScraperCapabilities_AnyEnabled(Enums.ModifierType.MainClearLogo, Enums.ContentType.TV)
+        Dim MainExtrafanartsAllowed As Boolean = Master.eSettings.TVShowExtrafanartsAnyEnabled AndAlso ModulesManager.Instance.QueryScraperCapabilities_AnyEnabled(Enums.ModifierType.MainFanart, Enums.ContentType.TV)
+        Dim MainFanartAllowed As Boolean = Master.eSettings.TVShowFanartAnyEnabled AndAlso ModulesManager.Instance.QueryScraperCapabilities_AnyEnabled(Enums.ModifierType.MainFanart, Enums.ContentType.TV)
+        Dim MainLandscapeAllowed As Boolean = Master.eSettings.TVShowLandscapeAnyEnabled AndAlso ModulesManager.Instance.QueryScraperCapabilities_AnyEnabled(Enums.ModifierType.MainLandscape, Enums.ContentType.TV)
+        Dim MainPosterAllowed As Boolean = Master.eSettings.TVShowPosterAnyEnabled AndAlso ModulesManager.Instance.QueryScraperCapabilities_AnyEnabled(Enums.ModifierType.MainPoster, Enums.ContentType.TV)
+        Dim MainThemeAllowed As Boolean = Master.eSettings.TvShowThemeAnyEnabled AndAlso ModulesManager.Instance.QueryScraperCapabilities_AnyEnabled(Enums.ModifierType.MainTheme, Enums.ContentType.TV)
+        Dim SeasonBannerAllowed As Boolean = Master.eSettings.TVSeasonBannerAnyEnabled AndAlso ModulesManager.Instance.QueryScraperCapabilities_AnyEnabled(Enums.ModifierType.SeasonBanner, Enums.ContentType.TV)
+        Dim SeasonFanartAllowed As Boolean = Master.eSettings.TVSeasonFanartAnyEnabled AndAlso ModulesManager.Instance.QueryScraperCapabilities_AnyEnabled(Enums.ModifierType.SeasonFanart, Enums.ContentType.TV)
+        Dim SeasonLandscapeAllowed As Boolean = Master.eSettings.TVSeasonLandscapeAnyEnabled AndAlso ModulesManager.Instance.QueryScraperCapabilities_AnyEnabled(Enums.ModifierType.SeasonLandscape, Enums.ContentType.TV)
+        Dim SeasonPosterAllowed As Boolean = Master.eSettings.TVSeasonPosterAnyEnabled AndAlso ModulesManager.Instance.QueryScraperCapabilities_AnyEnabled(Enums.ModifierType.SeasonPoster, Enums.ContentType.TV)
 
         'create ScrapeList of tv shows acording to scrapetype
         For Each drvRow As DataRow In DataRowList
@@ -12293,9 +12293,9 @@ Public Class frmMain
         End Select
 
         Dim ActorThumbsAllowed As Boolean = Master.eSettings.TVEpisodeActorThumbsAnyEnabled
-        Dim FanartAllowed As Boolean = Master.eSettings.TVEpisodeFanartAnyEnabled AndAlso (ModulesManager.Instance.ScraperWithCapabilityAnyEnabled_Image_TV(Enums.ModifierType.EpisodeFanart) OrElse
-                                                                                           ModulesManager.Instance.ScraperWithCapabilityAnyEnabled_Image_TV(Enums.ModifierType.MainFanart))
-        Dim PosterAllowed As Boolean = Master.eSettings.TVEpisodePosterAnyEnabled AndAlso ModulesManager.Instance.ScraperWithCapabilityAnyEnabled_Image_TV(Enums.ModifierType.EpisodePoster)
+        Dim FanartAllowed As Boolean = Master.eSettings.TVEpisodeFanartAnyEnabled AndAlso (ModulesManager.Instance.QueryScraperCapabilities_AnyEnabled(Enums.ModifierType.EpisodeFanart, Enums.ContentType.TV) OrElse
+                                                                                           ModulesManager.Instance.QueryScraperCapabilities_AnyEnabled(Enums.ModifierType.MainFanart, Enums.ContentType.TV))
+        Dim PosterAllowed As Boolean = Master.eSettings.TVEpisodePosterAnyEnabled AndAlso ModulesManager.Instance.QueryScraperCapabilities_AnyEnabled(Enums.ModifierType.EpisodePoster, Enums.ContentType.TV)
 
         'create ScrapeList of episodes acording to scrapetype
         For Each drvRow As DataRow In DataRowList
@@ -12442,14 +12442,14 @@ Public Class frmMain
                 Next
         End Select
 
-        Dim AllSeasonsBannerAllowed As Boolean = Master.eSettings.TVAllSeasonsBannerAnyEnabled AndAlso ModulesManager.Instance.ScraperWithCapabilityAnyEnabled_Image_TV(Enums.ModifierType.AllSeasonsBanner)
-        Dim AllSeasonsFanartAllowed As Boolean = Master.eSettings.TVAllSeasonsFanartAnyEnabled AndAlso ModulesManager.Instance.ScraperWithCapabilityAnyEnabled_Image_TV(Enums.ModifierType.AllSeasonsFanart)
-        Dim AllSeasonsLandscapeAllowed As Boolean = Master.eSettings.TVAllSeasonsLandscapeAnyEnabled AndAlso ModulesManager.Instance.ScraperWithCapabilityAnyEnabled_Image_TV(Enums.ModifierType.AllSeasonsLandscape)
-        Dim AllSeasonsPosterAllowed As Boolean = Master.eSettings.TVAllSeasonsPosterAnyEnabled AndAlso ModulesManager.Instance.ScraperWithCapabilityAnyEnabled_Image_TV(Enums.ModifierType.AllSeasonsPoster)
-        Dim SeasonBannerAllowed As Boolean = Master.eSettings.TVSeasonBannerAnyEnabled AndAlso ModulesManager.Instance.ScraperWithCapabilityAnyEnabled_Image_TV(Enums.ModifierType.SeasonBanner)
-        Dim SeasonFanartAllowed As Boolean = Master.eSettings.TVSeasonFanartAnyEnabled AndAlso ModulesManager.Instance.ScraperWithCapabilityAnyEnabled_Image_TV(Enums.ModifierType.SeasonFanart)
-        Dim SeasonLandscapeAllowed As Boolean = Master.eSettings.TVSeasonLandscapeAnyEnabled AndAlso ModulesManager.Instance.ScraperWithCapabilityAnyEnabled_Image_TV(Enums.ModifierType.SeasonLandscape)
-        Dim SeasonPosterAllowed As Boolean = Master.eSettings.TVSeasonPosterAnyEnabled AndAlso ModulesManager.Instance.ScraperWithCapabilityAnyEnabled_Image_TV(Enums.ModifierType.SeasonPoster)
+        Dim AllSeasonsBannerAllowed As Boolean = Master.eSettings.TVAllSeasonsBannerAnyEnabled AndAlso ModulesManager.Instance.QueryScraperCapabilities_AnyEnabled(Enums.ModifierType.AllSeasonsBanner, Enums.ContentType.TV)
+        Dim AllSeasonsFanartAllowed As Boolean = Master.eSettings.TVAllSeasonsFanartAnyEnabled AndAlso ModulesManager.Instance.QueryScraperCapabilities_AnyEnabled(Enums.ModifierType.AllSeasonsFanart, Enums.ContentType.TV)
+        Dim AllSeasonsLandscapeAllowed As Boolean = Master.eSettings.TVAllSeasonsLandscapeAnyEnabled AndAlso ModulesManager.Instance.QueryScraperCapabilities_AnyEnabled(Enums.ModifierType.AllSeasonsLandscape, Enums.ContentType.TV)
+        Dim AllSeasonsPosterAllowed As Boolean = Master.eSettings.TVAllSeasonsPosterAnyEnabled AndAlso ModulesManager.Instance.QueryScraperCapabilities_AnyEnabled(Enums.ModifierType.AllSeasonsPoster, Enums.ContentType.TV)
+        Dim SeasonBannerAllowed As Boolean = Master.eSettings.TVSeasonBannerAnyEnabled AndAlso ModulesManager.Instance.QueryScraperCapabilities_AnyEnabled(Enums.ModifierType.SeasonBanner, Enums.ContentType.TV)
+        Dim SeasonFanartAllowed As Boolean = Master.eSettings.TVSeasonFanartAnyEnabled AndAlso ModulesManager.Instance.QueryScraperCapabilities_AnyEnabled(Enums.ModifierType.SeasonFanart, Enums.ContentType.TV)
+        Dim SeasonLandscapeAllowed As Boolean = Master.eSettings.TVSeasonLandscapeAnyEnabled AndAlso ModulesManager.Instance.QueryScraperCapabilities_AnyEnabled(Enums.ModifierType.SeasonLandscape, Enums.ContentType.TV)
+        Dim SeasonPosterAllowed As Boolean = Master.eSettings.TVSeasonPosterAnyEnabled AndAlso ModulesManager.Instance.QueryScraperCapabilities_AnyEnabled(Enums.ModifierType.SeasonPoster, Enums.ContentType.TV)
 
         'create ScrapeList of tv seasons acording to scrapetype
         For Each drvRow As DataRow In DataRowList
@@ -13100,7 +13100,7 @@ Public Class frmMain
                         Dim ID As Long = Convert.ToInt64(dgvMovies.Item("idMovie", indX).Value)
                         Dim tmpDBElement As Database.DBElement = Master.DB.Load_Movie(ID)
 
-                        Dim aContainer As New MediaContainers.SearchResultsContainer
+                        Dim aContainer As New MediaContainers.ImageResultsContainer
                         Dim ScrapeModifiers As New Structures.ScrapeModifiers
 
                         Functions.SetScrapeModifiers(ScrapeModifiers, Enums.ModifierType.MainBanner, True)
@@ -13125,7 +13125,7 @@ Public Class frmMain
                         Dim ID As Long = Convert.ToInt64(dgvMovieSets.Item("idSet", indX).Value)
                         Dim tmpDBElement As Database.DBElement = Master.DB.Load_MovieSet(ID)
 
-                        Dim aContainer As New MediaContainers.SearchResultsContainer
+                        Dim aContainer As New MediaContainers.ImageResultsContainer
                         Dim ScrapeModifiers As New Structures.ScrapeModifiers
 
                         Functions.SetScrapeModifiers(ScrapeModifiers, Enums.ModifierType.MainBanner, True)
@@ -13152,7 +13152,7 @@ Public Class frmMain
                             Dim ID As Long = Convert.ToInt64(dgvTVShows.Item("idShow", indX).Value)
                             Dim tmpDBElement As Database.DBElement = Master.DB.Load_TVShow(ID, False, False)
 
-                            Dim aContainer As New MediaContainers.SearchResultsContainer
+                            Dim aContainer As New MediaContainers.ImageResultsContainer
                             Dim ScrapeModifiers As New Structures.ScrapeModifiers
 
                             Functions.SetScrapeModifiers(ScrapeModifiers, Enums.ModifierType.MainBanner, True)
@@ -13179,7 +13179,7 @@ Public Class frmMain
                             Dim ID As Long = Convert.ToInt64(dgvTVSeasons.Item("idSeason", indX).Value)
                             Dim tmpDBElement As Database.DBElement = Master.DB.Load_TVSeason(ID, True, False)
 
-                            Dim aContainer As New MediaContainers.SearchResultsContainer
+                            Dim aContainer As New MediaContainers.ImageResultsContainer
                             Dim ScrapeModifiers As New Structures.ScrapeModifiers
 
                             If tmpDBElement.TVSeason.Season = 999 Then
@@ -13238,7 +13238,7 @@ Public Class frmMain
                             Dim ID As Long = Convert.ToInt64(dgvTVShows.Item("idShow", indX).Value)
                             Dim tmpDBElement As Database.DBElement = Master.DB.Load_TVShow(ID, False, False)
 
-                            Dim aContainer As New MediaContainers.SearchResultsContainer
+                            Dim aContainer As New MediaContainers.ImageResultsContainer
                             Dim ScrapeModifiers As New Structures.ScrapeModifiers
 
                             Functions.SetScrapeModifiers(ScrapeModifiers, Enums.ModifierType.MainCharacterArt, True)
@@ -13291,7 +13291,7 @@ Public Class frmMain
                         Dim ID As Long = Convert.ToInt64(dgvMovies.Item("idMovie", indX).Value)
                         Dim tmpDBElement As Database.DBElement = Master.DB.Load_Movie(ID)
 
-                        Dim aContainer As New MediaContainers.SearchResultsContainer
+                        Dim aContainer As New MediaContainers.ImageResultsContainer
                         Dim ScrapeModifiers As New Structures.ScrapeModifiers
 
                         Functions.SetScrapeModifiers(ScrapeModifiers, Enums.ModifierType.MainClearArt, True)
@@ -13316,7 +13316,7 @@ Public Class frmMain
                         Dim ID As Long = Convert.ToInt64(dgvMovieSets.Item("idSet", indX).Value)
                         Dim tmpDBElement As Database.DBElement = Master.DB.Load_MovieSet(ID)
 
-                        Dim aContainer As New MediaContainers.SearchResultsContainer
+                        Dim aContainer As New MediaContainers.ImageResultsContainer
                         Dim ScrapeModifiers As New Structures.ScrapeModifiers
 
                         Functions.SetScrapeModifiers(ScrapeModifiers, Enums.ModifierType.MainClearArt, True)
@@ -13343,7 +13343,7 @@ Public Class frmMain
                             Dim ID As Long = Convert.ToInt64(dgvTVShows.Item("idShow", indX).Value)
                             Dim tmpDBElement As Database.DBElement = Master.DB.Load_TVShow(ID, False, False)
 
-                            Dim aContainer As New MediaContainers.SearchResultsContainer
+                            Dim aContainer As New MediaContainers.ImageResultsContainer
                             Dim ScrapeModifiers As New Structures.ScrapeModifiers
 
                             Functions.SetScrapeModifiers(ScrapeModifiers, Enums.ModifierType.MainClearArt, True)
@@ -13396,7 +13396,7 @@ Public Class frmMain
                         Dim ID As Long = Convert.ToInt64(dgvMovies.Item("idMovie", indX).Value)
                         Dim tmpDBElement As Database.DBElement = Master.DB.Load_Movie(ID)
 
-                        Dim aContainer As New MediaContainers.SearchResultsContainer
+                        Dim aContainer As New MediaContainers.ImageResultsContainer
                         Dim ScrapeModifiers As New Structures.ScrapeModifiers
 
                         Functions.SetScrapeModifiers(ScrapeModifiers, Enums.ModifierType.MainClearLogo, True)
@@ -13421,7 +13421,7 @@ Public Class frmMain
                         Dim ID As Long = Convert.ToInt64(dgvMovieSets.Item("idSet", indX).Value)
                         Dim tmpDBElement As Database.DBElement = Master.DB.Load_MovieSet(ID)
 
-                        Dim aContainer As New MediaContainers.SearchResultsContainer
+                        Dim aContainer As New MediaContainers.ImageResultsContainer
                         Dim ScrapeModifiers As New Structures.ScrapeModifiers
 
                         Functions.SetScrapeModifiers(ScrapeModifiers, Enums.ModifierType.MainClearLogo, True)
@@ -13448,7 +13448,7 @@ Public Class frmMain
                             Dim ID As Long = Convert.ToInt64(dgvTVShows.Item("idShow", indX).Value)
                             Dim tmpDBElement As Database.DBElement = Master.DB.Load_TVShow(ID, False, False)
 
-                            Dim aContainer As New MediaContainers.SearchResultsContainer
+                            Dim aContainer As New MediaContainers.ImageResultsContainer
                             Dim ScrapeModifiers As New Structures.ScrapeModifiers
 
                             Functions.SetScrapeModifiers(ScrapeModifiers, Enums.ModifierType.MainClearLogo, True)
@@ -13501,7 +13501,7 @@ Public Class frmMain
                         Dim ID As Long = Convert.ToInt64(dgvMovies.Item("idMovie", indX).Value)
                         Dim tmpDBElement As Database.DBElement = Master.DB.Load_Movie(ID)
 
-                        Dim aContainer As New MediaContainers.SearchResultsContainer
+                        Dim aContainer As New MediaContainers.ImageResultsContainer
                         Dim ScrapeModifiers As New Structures.ScrapeModifiers
 
                         Functions.SetScrapeModifiers(ScrapeModifiers, Enums.ModifierType.MainDiscArt, True)
@@ -13526,7 +13526,7 @@ Public Class frmMain
                         Dim ID As Long = Convert.ToInt64(dgvMovieSets.Item("idSet", indX).Value)
                         Dim tmpDBElement As Database.DBElement = Master.DB.Load_MovieSet(ID)
 
-                        Dim aContainer As New MediaContainers.SearchResultsContainer
+                        Dim aContainer As New MediaContainers.ImageResultsContainer
                         Dim ScrapeModifiers As New Structures.ScrapeModifiers
 
                         Functions.SetScrapeModifiers(ScrapeModifiers, Enums.ModifierType.MainDiscArt, True)
@@ -13592,7 +13592,7 @@ Public Class frmMain
                         Dim ID As Long = Convert.ToInt64(dgvMovies.Item("idMovie", indX).Value)
                         Dim tmpDBElement As Database.DBElement = Master.DB.Load_Movie(ID)
 
-                        Dim aContainer As New MediaContainers.SearchResultsContainer
+                        Dim aContainer As New MediaContainers.ImageResultsContainer
                         Dim ScrapeModifiers As New Structures.ScrapeModifiers
 
                         Functions.SetScrapeModifiers(ScrapeModifiers, Enums.ModifierType.MainFanart, True)
@@ -13617,7 +13617,7 @@ Public Class frmMain
                         Dim ID As Long = Convert.ToInt64(dgvMovieSets.Item("idSet", indX).Value)
                         Dim tmpDBElement As Database.DBElement = Master.DB.Load_MovieSet(ID)
 
-                        Dim aContainer As New MediaContainers.SearchResultsContainer
+                        Dim aContainer As New MediaContainers.ImageResultsContainer
                         Dim ScrapeModifiers As New Structures.ScrapeModifiers
 
                         Functions.SetScrapeModifiers(ScrapeModifiers, Enums.ModifierType.MainFanart, True)
@@ -13644,7 +13644,7 @@ Public Class frmMain
                             Dim ID As Long = Convert.ToInt64(dgvTVShows.Item("idShow", indX).Value)
                             Dim tmpDBElement As Database.DBElement = Master.DB.Load_TVShow(ID, False, False)
 
-                            Dim aContainer As New MediaContainers.SearchResultsContainer
+                            Dim aContainer As New MediaContainers.ImageResultsContainer
                             Dim ScrapeModifiers As New Structures.ScrapeModifiers
 
                             Functions.SetScrapeModifiers(ScrapeModifiers, Enums.ModifierType.MainFanart, True)
@@ -13671,7 +13671,7 @@ Public Class frmMain
                             Dim ID As Long = Convert.ToInt64(dgvTVSeasons.Item("idSeason", indX).Value)
                             Dim tmpDBElement As Database.DBElement = Master.DB.Load_TVSeason(ID, True, False)
 
-                            Dim aContainer As New MediaContainers.SearchResultsContainer
+                            Dim aContainer As New MediaContainers.ImageResultsContainer
                             Dim ScrapeModifiers As New Structures.ScrapeModifiers
 
                             If tmpDBElement.TVSeason.Season = 999 Then
@@ -13702,7 +13702,7 @@ Public Class frmMain
                             Dim ID As Long = Convert.ToInt64(dgvTVEpisodes.Item("idEpisode", indX).Value)
                             Dim tmpDBElement As Database.DBElement = Master.DB.Load_TVEpisode(ID, True)
 
-                            Dim aContainer As New MediaContainers.SearchResultsContainer
+                            Dim aContainer As New MediaContainers.ImageResultsContainer
                             Dim ScrapeModifiers As New Structures.ScrapeModifiers
 
                             Functions.SetScrapeModifiers(ScrapeModifiers, Enums.ModifierType.EpisodeFanart, True)
@@ -13747,7 +13747,7 @@ Public Class frmMain
                         Dim ID As Long = Convert.ToInt64(dgvMovies.Item("idMovie", indX).Value)
                         Dim tmpDBElement As Database.DBElement = Master.DB.Load_Movie(ID)
 
-                        Dim aContainer As New MediaContainers.SearchResultsContainer
+                        Dim aContainer As New MediaContainers.ImageResultsContainer
                         Dim ScrapeModifiers As New Structures.ScrapeModifiers
 
                         Functions.SetScrapeModifiers(ScrapeModifiers, Enums.ModifierType.MainLandscape, True)
@@ -13772,7 +13772,7 @@ Public Class frmMain
                         Dim ID As Long = Convert.ToInt64(dgvMovieSets.Item("idSet", indX).Value)
                         Dim tmpDBElement As Database.DBElement = Master.DB.Load_MovieSet(ID)
 
-                        Dim aContainer As New MediaContainers.SearchResultsContainer
+                        Dim aContainer As New MediaContainers.ImageResultsContainer
                         Dim ScrapeModifiers As New Structures.ScrapeModifiers
 
                         Functions.SetScrapeModifiers(ScrapeModifiers, Enums.ModifierType.MainLandscape, True)
@@ -13799,7 +13799,7 @@ Public Class frmMain
                             Dim ID As Long = Convert.ToInt64(dgvTVShows.Item("idShow", indX).Value)
                             Dim tmpDBElement As Database.DBElement = Master.DB.Load_TVShow(ID, False, False)
 
-                            Dim aContainer As New MediaContainers.SearchResultsContainer
+                            Dim aContainer As New MediaContainers.ImageResultsContainer
                             Dim ScrapeModifiers As New Structures.ScrapeModifiers
 
                             Functions.SetScrapeModifiers(ScrapeModifiers, Enums.ModifierType.MainLandscape, True)
@@ -13826,7 +13826,7 @@ Public Class frmMain
                             Dim ID As Long = Convert.ToInt64(dgvTVSeasons.Item("idSeason", indX).Value)
                             Dim tmpDBElement As Database.DBElement = Master.DB.Load_TVSeason(ID, True, False)
 
-                            Dim aContainer As New MediaContainers.SearchResultsContainer
+                            Dim aContainer As New MediaContainers.ImageResultsContainer
                             Dim ScrapeModifiers As New Structures.ScrapeModifiers
 
                             If tmpDBElement.TVSeason.Season = 999 Then
@@ -13879,7 +13879,7 @@ Public Class frmMain
                         Dim ID As Long = Convert.ToInt64(dgvMovies.Item("idMovie", indX).Value)
                         Dim tmpDBElement As Database.DBElement = Master.DB.Load_Movie(ID)
 
-                        Dim aContainer As New MediaContainers.SearchResultsContainer
+                        Dim aContainer As New MediaContainers.ImageResultsContainer
                         Dim ScrapeModifiers As New Structures.ScrapeModifiers
 
                         Functions.SetScrapeModifiers(ScrapeModifiers, Enums.ModifierType.MainPoster, True)
@@ -13904,7 +13904,7 @@ Public Class frmMain
                         Dim ID As Long = Convert.ToInt64(dgvMovieSets.Item("idSet", indX).Value)
                         Dim tmpDBElement As Database.DBElement = Master.DB.Load_MovieSet(ID)
 
-                        Dim aContainer As New MediaContainers.SearchResultsContainer
+                        Dim aContainer As New MediaContainers.ImageResultsContainer
                         Dim ScrapeModifiers As New Structures.ScrapeModifiers
 
                         Functions.SetScrapeModifiers(ScrapeModifiers, Enums.ModifierType.MainPoster, True)
@@ -13931,7 +13931,7 @@ Public Class frmMain
                             Dim ID As Long = Convert.ToInt64(dgvTVShows.Item("idShow", indX).Value)
                             Dim tmpDBElement As Database.DBElement = Master.DB.Load_TVShow(ID, False, False)
 
-                            Dim aContainer As New MediaContainers.SearchResultsContainer
+                            Dim aContainer As New MediaContainers.ImageResultsContainer
                             Dim ScrapeModifiers As New Structures.ScrapeModifiers
 
                             Functions.SetScrapeModifiers(ScrapeModifiers, Enums.ModifierType.MainPoster, True)
@@ -13958,7 +13958,7 @@ Public Class frmMain
                             Dim ID As Long = Convert.ToInt64(dgvTVSeasons.Item("idSeason", indX).Value)
                             Dim tmpDBElement As Database.DBElement = Master.DB.Load_TVSeason(ID, True, False)
 
-                            Dim aContainer As New MediaContainers.SearchResultsContainer
+                            Dim aContainer As New MediaContainers.ImageResultsContainer
                             Dim ScrapeModifiers As New Structures.ScrapeModifiers
 
                             If tmpDBElement.TVSeason.Season = 999 Then
@@ -13989,7 +13989,7 @@ Public Class frmMain
                             Dim ID As Long = Convert.ToInt64(dgvTVEpisodes.Item("idEpisode", indX).Value)
                             Dim tmpDBElement As Database.DBElement = Master.DB.Load_TVEpisode(ID, True)
 
-                            Dim aContainer As New MediaContainers.SearchResultsContainer
+                            Dim aContainer As New MediaContainers.ImageResultsContainer
                             Dim ScrapeModifiers As New Structures.ScrapeModifiers
 
                             Functions.SetScrapeModifiers(ScrapeModifiers, Enums.ModifierType.EpisodePoster, True)

@@ -4581,7 +4581,212 @@ Namespace MediaContainers
     End Class
 
     <Serializable()>
+    Public Class ScrapeResultsContainer
+
+#Region "Fields"
+
+        Private _images As New ImageResultsContainer
+        Private _movie As New Movie
+        Private _movieset As New MovieSet
+        Private _themes As New List(Of Theme)
+        Private _trailers As New List(Of Trailer)
+        Private _tvepisode As New EpisodeDetails
+        Private _tvseason As New SeasonDetails
+        Private _tvshow As New TVShow
+
+#End Region 'Fields
+
+#Region "Constructors"
+
+        Public Sub New()
+            Clear()
+        End Sub
+
+#End Region 'Constructors
+
+#Region "Properties"
+
+        Public Property Images() As ImageResultsContainer
+            Get
+                Return _images
+            End Get
+            Set(ByVal value As ImageResultsContainer)
+                _images = value
+            End Set
+        End Property
+
+        Public Property Movie() As Movie
+            Get
+                Return _movie
+            End Get
+            Set(ByVal value As Movie)
+                _movie = value
+            End Set
+        End Property
+
+        Public Property MovieSet() As MovieSet
+            Get
+                Return _movieset
+            End Get
+            Set(ByVal value As MovieSet)
+                _movieset = value
+            End Set
+        End Property
+
+        Public Property Themes() As List(Of Theme)
+            Get
+                Return _themes
+            End Get
+            Set(ByVal value As List(Of Theme))
+                _themes = value
+            End Set
+        End Property
+
+        Public Property Trailers() As List(Of Trailer)
+            Get
+                Return _trailers
+            End Get
+            Set(ByVal value As List(Of Trailer))
+                _trailers = value
+            End Set
+        End Property
+
+        Public Property TVEpisode() As EpisodeDetails
+            Get
+                Return _tvepisode
+            End Get
+            Set(ByVal value As EpisodeDetails)
+                _tvepisode = value
+            End Set
+        End Property
+
+        Public Property TVSeason() As SeasonDetails
+            Get
+                Return _tvseason
+            End Get
+            Set(ByVal value As SeasonDetails)
+                _tvseason = value
+            End Set
+        End Property
+
+        Public Property TVShow() As TVShow
+            Get
+                Return _tvshow
+            End Get
+            Set(ByVal value As TVShow)
+                _tvshow = value
+            End Set
+        End Property
+
+#End Region 'Properties
+
+#Region "Methods"
+
+        Public Sub Clear()
+            _images.Clear()
+            _movie = New Movie
+            _movieset = New MovieSet
+            _themes = New List(Of Theme)
+            _trailers = New List(Of Trailer)
+            _tvepisode = New EpisodeDetails
+            _tvseason = New SeasonDetails
+            _tvshow = New TVShow
+        End Sub
+
+#End Region 'Methods
+
+#Region "Nested Types"
+
+#End Region 'Nested Types
+
+    End Class
+
+    <Serializable()>
     Public Class SearchResultsContainer
+
+#Region "Fields"
+
+        Private _movies As List(Of Movie)
+        Private _moviesets As List(Of MovieSet)
+        Private _tvepisodes As List(Of EpisodeDetails)
+        Private _tvseasons As List(Of SeasonDetails)
+        Private _tvshows As List(Of TVShow)
+
+#End Region 'Fields
+
+#Region "Constructors"
+
+        Public Sub New()
+            Clear()
+        End Sub
+
+#End Region 'Constructors
+
+#Region "Properties"
+
+        Public Property Movies() As List(Of Movie)
+            Get
+                Return _movies
+            End Get
+            Set(ByVal value As List(Of Movie))
+                _movies = value
+            End Set
+        End Property
+
+        Public Property MovieSets() As List(Of MovieSet)
+            Get
+                Return _moviesets
+            End Get
+            Set(ByVal value As List(Of MovieSet))
+                _moviesets = value
+            End Set
+        End Property
+
+        Public Property TVEpisodes() As List(Of EpisodeDetails)
+            Get
+                Return _tvepisodes
+            End Get
+            Set(ByVal value As List(Of EpisodeDetails))
+                _tvepisodes = value
+            End Set
+        End Property
+
+        Public Property TVESeasons() As List(Of SeasonDetails)
+            Get
+                Return _tvseasons
+            End Get
+            Set(ByVal value As List(Of SeasonDetails))
+                _tvseasons = value
+            End Set
+        End Property
+
+        Public Property TVShows() As List(Of TVShow)
+            Get
+                Return _tvshows
+            End Get
+            Set(ByVal value As List(Of TVShow))
+                _tvshows = value
+            End Set
+        End Property
+
+#End Region 'Properties
+
+#Region "Methods"
+
+        Public Sub Clear()
+            _movies.Clear()
+            _moviesets.Clear()
+            _tvepisodes.Clear()
+            _tvseasons.Clear()
+            _tvshows.Clear()
+        End Sub
+
+#End Region 'Methods
+
+    End Class
+
+    <Serializable()>
+    Public Class ImageResultsContainer
 
 #Region "Fields"
 

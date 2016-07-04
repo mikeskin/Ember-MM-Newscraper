@@ -60,16 +60,12 @@ Public Class dlgStudioSelect
 
     Private Sub dlgStudioSelect_Load(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MyBase.Load
         SetUp()
-        'Dim DBMovie As New Database.DBElement
-        'DBMovie.Movie = New MediaContainers.Movie
-        'DBMovie.Movie.IMDBID = Me._MovieId
-        Dim alStudio As List(Of String) = ModulesManager.Instance.GetMovieStudio(_CurrMovie)
-        ' If alStudio.Count = 0 Then alStudio.Add(_CurrMovie.Movie.Studio)
-        If alStudio.Count = 0 Then alStudio.AddRange(_CurrMovie.Movie.Studios)
-        For i As Integer = 0 To alStudio.Count - 1
-            ilStudios.Images.Add(alStudio(i).ToString, APIXML.GetStudioImage(alStudio(i).ToString))
-            lvStudios.Items.Add(alStudio(i).ToString, i)
-        Next
+        'Dim alStudio As List(Of String) = ModulesManager.Instance.GetMovieStudio(_CurrMovie)
+        'If alStudio.Count = 0 Then alStudio.AddRange(_CurrMovie.Movie.Studios)
+        'For i As Integer = 0 To alStudio.Count - 1
+        '    ilStudios.Images.Add(alStudio(i).ToString, APIXML.GetStudioImage(alStudio(i).ToString))
+        '    lvStudios.Items.Add(alStudio(i).ToString, i)
+        'Next
     End Sub
 
     Private Sub dlgStudioSelect_Shown(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.Shown

@@ -41,8 +41,8 @@ Namespace IMDB
 
 #Region "Methods"
 
-        Public Function GetIMDBPosters(ByVal imdbID As String) As MediaContainers.SearchResultsContainer
-            Dim alContainer As New MediaContainers.SearchResultsContainer
+        Public Function GetIMDBPosters(ByVal imdbID As String) As MediaContainers.ImageResultsContainer
+            Dim alContainer As New MediaContainers.ImageResultsContainer
             Dim aParentID As String = String.Empty
 
             Try

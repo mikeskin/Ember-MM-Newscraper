@@ -43,31 +43,11 @@ Public Class IMDB_Trailer
 
 #Region "Events"
 
-    Public Event ModuleSettingsChanged() Implements Interfaces.ScraperModule_Trailer_Movie.ModuleSettingsChanged
-
-    Public Event MovieScraperEvent(ByVal eType As Enums.ScraperEventType, ByVal Parameter As Object) Implements Interfaces.ScraperModule_Trailer_Movie.ScraperEvent
-
     Public Event SetupScraperChanged(ByVal name As String, ByVal State As Boolean, ByVal difforder As Integer) Implements Interfaces.ScraperModule_Trailer_Movie.ScraperSetupChanged
-
-    Public Event SetupNeedsRestart() Implements Interfaces.ScraperModule_Trailer_Movie.SetupNeedsRestart
-
-    'Public Event ProgressUpdated(ByVal iPercent As Integer) Implements Interfaces.EmberMovieScraperModule_Trailer.ProgressUpdated
 
 #End Region 'Events
 
 #Region "Properties"
-
-    ReadOnly Property ModuleName() As String Implements Interfaces.ScraperModule_Trailer_Movie.ModuleName
-        Get
-            Return _Name
-        End Get
-    End Property
-
-    ReadOnly Property ModuleVersion() As String Implements Interfaces.ScraperModule_Trailer_Movie.ModuleVersion
-        Get
-            Return FileVersionInfo.GetVersionInfo(System.Reflection.Assembly.GetExecutingAssembly.Location).FileVersion.ToString
-        End Get
-    End Property
 
     Property ScraperEnabled() As Boolean Implements Interfaces.ScraperModule_Trailer_Movie.ScraperEnabled
         Get
@@ -82,26 +62,9 @@ Public Class IMDB_Trailer
 
 #Region "Methods"
 
-    Private Sub Handle_ModuleSettingsChanged()
-        RaiseEvent ModuleSettingsChanged()
-    End Sub
-
-    Private Sub Handle_PostModuleSettingsChanged()
-        RaiseEvent ModuleSettingsChanged()
-    End Sub
-
     Private Sub Handle_SetupScraperChanged(ByVal state As Boolean, ByVal difforder As Integer)
         ScraperEnabled = state
         RaiseEvent SetupScraperChanged(String.Concat(Me._Name, "Scraper"), state, difforder)
-    End Sub
-
-    Private Sub Handle_SetupNeedsRestart()
-        RaiseEvent SetupNeedsRestart()
-    End Sub
-
-    Sub Init(ByVal sAssemblyName As String) Implements Interfaces.ScraperModule_Trailer_Movie.Init
-        _AssemblyName = sAssemblyName
-        LoadSettings()
     End Sub
 
     Function InjectSetupScraper() As Containers.SettingsPanel Implements Interfaces.ScraperModule_Trailer_Movie.InjectSetupScraper
@@ -119,8 +82,8 @@ Public Class IMDB_Trailer
         SPanel.ImageIndex = If(_ScraperEnabled, 9, 10)
         SPanel.Panel = _setup.pnlSettings
         AddHandler _setup.SetupScraperChanged, AddressOf Handle_SetupScraperChanged
-        AddHandler _setup.ModuleSettingsChanged, AddressOf Handle_ModuleSettingsChanged
-        AddHandler _setup.SetupNeedsRestart, AddressOf Handle_SetupNeedsRestart
+        'AddHandler _setup.ModuleSettingsChanged, AddressOf Handle_ModuleSettingsChanged
+        'AddHandler _setup.SetupNeedsRestart, AddressOf Handle_SetupNeedsRestart
         Return SPanel
     End Function
 
@@ -134,18 +97,18 @@ Public Class IMDB_Trailer
         End Using
     End Sub
 
-    Sub SaveSetupScraper(ByVal DoDispose As Boolean) Implements Interfaces.ScraperModule_Trailer_Movie.SaveSetupScraper
+    Sub SaveSetupScraper(ByVal DoDispose As Boolean)
         SaveSettings()
         'ModulesManager.Instance.SaveSettings()
         If DoDispose Then
             RemoveHandler _setup.SetupScraperChanged, AddressOf Handle_SetupScraperChanged
-            RemoveHandler _setup.ModuleSettingsChanged, AddressOf Handle_ModuleSettingsChanged
-            RemoveHandler _setup.SetupNeedsRestart, AddressOf Handle_SetupNeedsRestart
+            'RemoveHandler _setup.ModuleSettingsChanged, AddressOf Handle_ModuleSettingsChanged
+            'RemoveHandler _setup.SetupNeedsRestart, AddressOf Handle_SetupNeedsRestart
             _setup.Dispose()
         End If
     End Sub
 
-    Function Scraper_Movie(ByRef DBMovie As Database.DBElement, ByVal Type As Enums.ModifierType, ByRef TrailerList As List(Of MediaContainers.Trailer)) As Interfaces.ModuleResult Implements Interfaces.ScraperModule_Trailer_Movie.Scraper
+    Function Scraper_Movie(ByRef DBMovie As Database.DBElement, ByVal Type As Enums.ModifierType, ByRef TrailerList As List(Of MediaContainers.Trailer)) As Interfaces.ModuleResult
         logger.Trace("[IMDB_Trailer] [Scraper_Movie] [Start]")
 
         Dim tIMDBID As String = String.Empty
@@ -159,7 +122,7 @@ Public Class IMDB_Trailer
         Return New Interfaces.ModuleResult With {.breakChain = False}
     End Function
 
-    Public Sub ScraperOrderChanged() Implements EmberAPI.Interfaces.ScraperModule_Trailer_Movie.ScraperOrderChanged
+    Public Sub ScraperOrderChanged() Implements Interfaces.ScraperModule_Trailer_Movie.ScraperOrderChanged
         _setup.orderChanged()
     End Sub
 

@@ -38,28 +38,11 @@ Public Class IMPA_Image
 
 #Region "Events"
 
-    Public Event ModuleSettingsChanged() Implements Interfaces.ScraperModule_Image_Movie.ModuleSettingsChanged
-    Public Event MovieScraperEvent(ByVal eType As Enums.ScraperEventType, ByVal Parameter As Object) Implements Interfaces.ScraperModule_Image_Movie.ScraperEvent
     Public Event SetupScraperChanged(ByVal name As String, ByVal State As Boolean, ByVal difforder As Integer) Implements Interfaces.ScraperModule_Image_Movie.ScraperSetupChanged
-    Public Event SetupNeedsRestart() Implements Interfaces.ScraperModule_Image_Movie.SetupNeedsRestart
-    Public Event PostersDownloaded(ByVal Posters As List(Of MediaContainers.Image)) Implements Interfaces.ScraperModule_Image_Movie.ImagesDownloaded
-    Public Event ProgressUpdated(ByVal iPercent As Integer) Implements Interfaces.ScraperModule_Image_Movie.ProgressUpdated
 
 #End Region 'Events
 
 #Region "Properties"
-
-    ReadOnly Property ModuleName() As String Implements Interfaces.ScraperModule_Image_Movie.ModuleName
-        Get
-            Return _Name
-        End Get
-    End Property
-
-    ReadOnly Property ModuleVersion() As String Implements Interfaces.ScraperModule_Image_Movie.ModuleVersion
-        Get
-            Return System.Diagnostics.FileVersionInfo.GetVersionInfo(System.Reflection.Assembly.GetExecutingAssembly.Location).FileVersion.ToString
-        End Get
-    End Property
 
     Property ScraperEnabled() As Boolean Implements Interfaces.ScraperModule_Image_Movie.ScraperEnabled
         Get
@@ -73,7 +56,7 @@ Public Class IMPA_Image
 #End Region 'Properties
 
 #Region "Methods"
-    Function QueryScraperCapabilities(ByVal cap As Enums.ModifierType) As Boolean Implements Interfaces.ScraperModule_Image_Movie.QueryScraperCapabilities
+    Function QueryScraperCapabilities(ByVal cap As Enums.ModifierType) As Boolean
         Select Case cap
             Case Enums.ModifierType.MainPoster
                 Return ConfigScrapeModifiers.MainPoster
@@ -96,12 +79,6 @@ Public Class IMPA_Image
     Private Sub Handle_SetupScraperChanged(ByVal state As Boolean, ByVal difforder As Integer)
         ScraperEnabled = state
         RaiseEvent SetupScraperChanged(String.Concat(Me._Name, "Scraper"), state, difforder)
-    End Sub
-
-    Sub Init(ByVal sAssemblyName As String) Implements Interfaces.ScraperModule_Image_Movie.Init
-        _AssemblyName = sAssemblyName
-        LoadSettings()
-        'Must be after Load settings to retrieve the correct API key
     End Sub
 
 
@@ -129,7 +106,7 @@ Public Class IMPA_Image
         ConfigScrapeModifiers.MainPoster = AdvancedSettings.GetBooleanSetting("DoPoster", True)
     End Sub
 
-    Function Scraper(ByRef DBMovie As Database.DBElement, ByRef ImagesContainer As MediaContainers.SearchResultsContainer, ByVal ScrapeModifier As Structures.ScrapeModifiers) As Interfaces.ModuleResult Implements Interfaces.ScraperModule_Image_Movie.Scraper
+    Function Scraper(ByRef DBMovie As Database.DBElement, ByRef ImagesContainer As MediaContainers.ImageResultsContainer, ByVal ScrapeModifier As Structures.ScrapeModifiers) As Interfaces.ModuleResult
 
         LoadSettings()
 

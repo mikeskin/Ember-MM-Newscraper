@@ -1078,7 +1078,7 @@ Public Class Images
     End Function
 
     Public Shared Function GetPreferredImagesContainer(ByVal DBElement As Database.DBElement,
-                                            ByVal SearchResultsContainer As MediaContainers.SearchResultsContainer,
+                                            ByVal SearchResultsContainer As MediaContainers.ImageResultsContainer,
                                             ByVal ScrapeModifiers As Structures.ScrapeModifiers,
                                             Optional ByVal IsAutoScraper As Boolean = False) As MediaContainers.PreferredImagesContainer
 
@@ -1649,7 +1649,7 @@ Public Class Images
     End Sub
 
     Public Shared Sub SetPreferredImages(ByRef DBElement As Database.DBElement,
-                                         ByVal SearchResultsContainer As MediaContainers.SearchResultsContainer,
+                                         ByVal SearchResultsContainer As MediaContainers.ImageResultsContainer,
                                          ByVal ScrapeModifiers As Structures.ScrapeModifiers,
                                          Optional ByVal IsAutoScraper As Boolean = False)
 

@@ -73,8 +73,8 @@ Namespace TVDBs
             Return Result
         End Function
 
-        Public Function GetImages_TV(ByVal tvdbID As String, ByVal FilteredModifiers As Structures.ScrapeModifiers) As MediaContainers.SearchResultsContainer
-            Dim alContainer As New MediaContainers.SearchResultsContainer
+        Public Function GetImages_TV(ByVal tvdbID As String, ByVal FilteredModifiers As Structures.ScrapeModifiers) As MediaContainers.ImageResultsContainer
+            Dim alContainer As New MediaContainers.ImageResultsContainer
 
             Try
                 Dim APIResult As Task(Of TVDB.Model.SeriesDetails) = Task.Run(Function() GetFullSeriesById(CInt(tvdbID)))
@@ -198,8 +198,8 @@ Namespace TVDBs
             Return alContainer
         End Function
 
-        Public Function GetImages_TVEpisode(ByVal tvdbID As String, ByVal iSeason As Integer, ByVal iEpisode As Integer, ByVal FilteredModifiers As Structures.ScrapeModifiers) As MediaContainers.SearchResultsContainer
-            Dim alContainer As New MediaContainers.SearchResultsContainer
+        Public Function GetImages_TVEpisode(ByVal tvdbID As String, ByVal iSeason As Integer, ByVal iEpisode As Integer, ByVal FilteredModifiers As Structures.ScrapeModifiers) As MediaContainers.ImageResultsContainer
+            Dim alContainer As New MediaContainers.ImageResultsContainer
 
             Try
                 Dim APIResult As Task(Of TVDB.Model.SeriesDetails) = Task.Run(Function() GetFullSeriesById(CInt(tvdbID)))

@@ -50,8 +50,8 @@ Namespace TMDB
             End Try
         End Sub
 
-        Public Function GetImages_Movie_MovieSet(ByVal TMDBID As String, ByVal FilteredModifiers As Structures.ScrapeModifiers, ByVal ContentType As Enums.ContentType) As MediaContainers.SearchResultsContainer
-            Dim alImagesContainer As New MediaContainers.SearchResultsContainer
+        Public Function GetImages_Movie_MovieSet(ByVal TMDBID As String, ByVal FilteredModifiers As Structures.ScrapeModifiers, ByVal ContentType As Enums.ContentType) As MediaContainers.ImageResultsContainer
+            Dim alImagesContainer As New MediaContainers.ImageResultsContainer
 
             If bwTMDB.CancellationPending Then Return Nothing
 
@@ -116,8 +116,8 @@ Namespace TMDB
             Return alImagesContainer
         End Function
 
-        Public Function GetImages_TVShow(ByVal tmdbID As String, ByVal FilteredModifiers As Structures.ScrapeModifiers) As MediaContainers.SearchResultsContainer
-            Dim alContainer As New MediaContainers.SearchResultsContainer
+        Public Function GetImages_TVShow(ByVal tmdbID As String, ByVal FilteredModifiers As Structures.ScrapeModifiers) As MediaContainers.ImageResultsContainer
+            Dim alContainer As New MediaContainers.ImageResultsContainer
 
             If bwTMDB.CancellationPending Then Return Nothing
 
@@ -245,8 +245,8 @@ Namespace TMDB
             Return alContainer
         End Function
 
-        Public Function GetImages_TVEpisode(ByVal tmdbID As String, ByVal iSeason As Integer, ByVal iEpisode As Integer, ByVal FilteredModifiers As Structures.ScrapeModifiers) As MediaContainers.SearchResultsContainer
-            Dim alContainer As New MediaContainers.SearchResultsContainer
+        Public Function GetImages_TVEpisode(ByVal tmdbID As String, ByVal iSeason As Integer, ByVal iEpisode As Integer, ByVal FilteredModifiers As Structures.ScrapeModifiers) As MediaContainers.ImageResultsContainer
+            Dim alContainer As New MediaContainers.ImageResultsContainer
 
             If bwTMDB.CancellationPending Then Return Nothing
 

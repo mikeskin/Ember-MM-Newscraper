@@ -536,7 +536,7 @@ Public Class dlgEditTVEpisode
 
             'Fanart
             If Master.eSettings.TVEpisodeFanartAnyEnabled Then
-                If Not ModulesManager.Instance.ScraperWithCapabilityAnyEnabled_Image_TV(Enums.ModifierType.EpisodeFanart) AndAlso Not ModulesManager.Instance.ScraperWithCapabilityAnyEnabled_Image_TV(Enums.ModifierType.MainFanart) Then
+                If Not ModulesManager.Instance.QueryScraperCapabilities_AnyEnabled(Enums.ModifierType.EpisodeFanart, tmpDBElement.ContentType) AndAlso Not ModulesManager.Instance.QueryScraperCapabilities_AnyEnabled(Enums.ModifierType.MainFanart, tmpDBElement.ContentType) Then
                     btnSetFanartScrape.Enabled = False
                 End If
                 If .Fanart.ImageOriginal.Image IsNot Nothing Then
@@ -552,7 +552,7 @@ Public Class dlgEditTVEpisode
 
             'Poster
             If Master.eSettings.TVEpisodePosterAnyEnabled Then
-                If Not ModulesManager.Instance.ScraperWithCapabilityAnyEnabled_Image_TV(Enums.ModifierType.EpisodePoster) Then
+                If Not ModulesManager.Instance.QueryScraperCapabilities_AnyEnabled(Enums.ModifierType.EpisodePoster, tmpDBElement.ContentType) Then
                     btnSetPosterScrape.Enabled = False
                 End If
                 If .Poster.ImageOriginal.Image IsNot Nothing Then
@@ -1081,7 +1081,7 @@ Public Class dlgEditTVEpisode
     End Sub
 
     Private Sub btnSetFanartScrape_Click(ByVal sender As Object, ByVal e As EventArgs) Handles btnSetFanartScrape.Click
-        Dim aContainer As New MediaContainers.SearchResultsContainer
+        Dim aContainer As New MediaContainers.ImageResultsContainer
         Dim ScrapeModifiers As New Structures.ScrapeModifiers
 
         Cursor = Cursors.WaitCursor
@@ -1155,7 +1155,7 @@ Public Class dlgEditTVEpisode
     End Sub
 
     Private Sub btnSetPosterScrape_Click(ByVal sender As Object, ByVal e As EventArgs) Handles btnSetPosterScrape.Click
-        Dim aContainer As New MediaContainers.SearchResultsContainer
+        Dim aContainer As New MediaContainers.ImageResultsContainer
         Dim ScrapeModifiers As New Structures.ScrapeModifiers
 
         Cursor = Cursors.WaitCursor

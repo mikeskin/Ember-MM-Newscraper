@@ -72,8 +72,8 @@ Namespace FanartTVs
             End Try
         End Sub
 
-        Public Function GetImages_Movie_MovieSet(ByVal imdbID_tmdbID As String, ByVal FilteredModifiers As Structures.ScrapeModifiers) As MediaContainers.SearchResultsContainer
-            Dim alImagesContainer As New MediaContainers.SearchResultsContainer
+        Public Function GetImages_Movie_MovieSet(ByVal imdbID_tmdbID As String, ByVal FilteredModifiers As Structures.ScrapeModifiers) As MediaContainers.ImageResultsContainer
+            Dim alImagesContainer As New MediaContainers.ImageResultsContainer
 
             Try
                 Dim Results = New FanartTv.Movies.Movie(imdbID_tmdbID)
@@ -238,8 +238,8 @@ Namespace FanartTVs
             Return alImagesContainer
         End Function
 
-        Public Function GetImages_TV(ByVal tvdbID As String, ByVal FilteredModifiers As Structures.ScrapeModifiers) As MediaContainers.SearchResultsContainer
-            Dim alContainer As New MediaContainers.SearchResultsContainer
+        Public Function GetImages_TV(ByVal tvdbID As String, ByVal FilteredModifiers As Structures.ScrapeModifiers) As MediaContainers.ImageResultsContainer
+            Dim alContainer As New MediaContainers.ImageResultsContainer
 
             Try
                 Dim Results = New FanartTv.TV.Show(tvdbID)

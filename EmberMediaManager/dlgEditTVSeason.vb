@@ -105,7 +105,7 @@ Public Class dlgEditTVSeason
     End Sub
 
     Private Sub btnSetBannerScrape_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnSetBannerScrape.Click
-        Dim aContainer As New MediaContainers.SearchResultsContainer
+        Dim aContainer As New MediaContainers.ImageResultsContainer
         Dim ScrapeModifiers As New Structures.ScrapeModifiers
 
         Cursor = Cursors.WaitCursor
@@ -175,7 +175,7 @@ Public Class dlgEditTVSeason
     End Sub
 
     Private Sub btnSetFanartScrape_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnSetFanartScrape.Click
-        Dim aContainer As New MediaContainers.SearchResultsContainer
+        Dim aContainer As New MediaContainers.ImageResultsContainer
         Dim ScrapeModifiers As New Structures.ScrapeModifiers
 
         Cursor = Cursors.WaitCursor
@@ -245,7 +245,7 @@ Public Class dlgEditTVSeason
     End Sub
 
     Private Sub btnSetLandscapeScrape_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnSetLandscapeScrape.Click
-        Dim aContainer As New MediaContainers.SearchResultsContainer
+        Dim aContainer As New MediaContainers.ImageResultsContainer
         Dim ScrapeModifiers As New Structures.ScrapeModifiers
 
         Cursor = Cursors.WaitCursor
@@ -315,7 +315,7 @@ Public Class dlgEditTVSeason
     End Sub
 
     Private Sub btnSetPosterScrape_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnSetPosterScrape.Click
-        Dim aContainer As New MediaContainers.SearchResultsContainer
+        Dim aContainer As New MediaContainers.ImageResultsContainer
         Dim ScrapeModifiers As New Structures.ScrapeModifiers
 
         Cursor = Cursors.WaitCursor
@@ -414,9 +414,9 @@ Public Class dlgEditTVSeason
             'Banner
             If (Not tmpDBElement.TVSeason.Season = 999 AndAlso Master.eSettings.TVSeasonBannerAnyEnabled) OrElse
                 (tmpDBElement.TVSeason.Season = 999 AndAlso Master.eSettings.TVAllSeasonsBannerAnyEnabled) Then
-                If (Not tmpDBElement.TVSeason.Season = 999 AndAlso Not ModulesManager.Instance.ScraperWithCapabilityAnyEnabled_Image_TV(Enums.ModifierType.SeasonBanner)) OrElse
-                    (tmpDBElement.TVSeason.Season = 999 AndAlso Not ModulesManager.Instance.ScraperWithCapabilityAnyEnabled_Image_TV(Enums.ModifierType.SeasonBanner) AndAlso
-                     Not ModulesManager.Instance.ScraperWithCapabilityAnyEnabled_Image_TV(Enums.ModifierType.MainBanner)) Then
+                If (Not tmpDBElement.TVSeason.Season = 999 AndAlso Not ModulesManager.Instance.QueryScraperCapabilities_AnyEnabled(Enums.ModifierType.SeasonBanner, tmpDBElement.ContentType)) OrElse
+                    (tmpDBElement.TVSeason.Season = 999 AndAlso Not ModulesManager.Instance.QueryScraperCapabilities_AnyEnabled(Enums.ModifierType.SeasonBanner, tmpDBElement.ContentType) AndAlso
+                     Not ModulesManager.Instance.QueryScraperCapabilities_AnyEnabled(Enums.ModifierType.MainBanner, tmpDBElement.ContentType)) Then
                     btnSetBannerScrape.Enabled = False
                 End If
                 If .Banner.ImageOriginal.Image IsNot Nothing Then
@@ -433,10 +433,10 @@ Public Class dlgEditTVSeason
             'Fanart
             If (Not tmpDBElement.TVSeason.Season = 999 AndAlso Master.eSettings.TVSeasonFanartAnyEnabled) OrElse
                 (tmpDBElement.TVSeason.Season = 999 AndAlso Master.eSettings.TVAllSeasonsFanartAnyEnabled) Then
-                If (Not tmpDBElement.TVSeason.Season = 999 AndAlso Not ModulesManager.Instance.ScraperWithCapabilityAnyEnabled_Image_TV(Enums.ModifierType.SeasonFanart) AndAlso
-                    Not ModulesManager.Instance.ScraperWithCapabilityAnyEnabled_Image_TV(Enums.ModifierType.MainFanart)) OrElse
-                    (tmpDBElement.TVSeason.Season = 999 AndAlso Not ModulesManager.Instance.ScraperWithCapabilityAnyEnabled_Image_TV(Enums.ModifierType.SeasonFanart) AndAlso
-                     Not ModulesManager.Instance.ScraperWithCapabilityAnyEnabled_Image_TV(Enums.ModifierType.MainFanart)) Then
+                If (Not tmpDBElement.TVSeason.Season = 999 AndAlso Not ModulesManager.Instance.QueryScraperCapabilities_AnyEnabled(Enums.ModifierType.SeasonFanart, tmpDBElement.ContentType) AndAlso
+                    Not ModulesManager.Instance.QueryScraperCapabilities_AnyEnabled(Enums.ModifierType.MainFanart, tmpDBElement.ContentType)) OrElse
+                    (tmpDBElement.TVSeason.Season = 999 AndAlso Not ModulesManager.Instance.QueryScraperCapabilities_AnyEnabled(Enums.ModifierType.SeasonFanart, tmpDBElement.ContentType) AndAlso
+                     Not ModulesManager.Instance.QueryScraperCapabilities_AnyEnabled(Enums.ModifierType.MainFanart, tmpDBElement.ContentType)) Then
                     btnSetFanartScrape.Enabled = False
                 End If
                 If .Fanart.ImageOriginal.Image IsNot Nothing Then
@@ -453,9 +453,9 @@ Public Class dlgEditTVSeason
             'Landscape
             If (Not tmpDBElement.TVSeason.Season = 999 AndAlso Master.eSettings.TVSeasonLandscapeAnyEnabled) OrElse
                 (tmpDBElement.TVSeason.Season = 999 AndAlso Master.eSettings.TVAllSeasonsLandscapeAnyEnabled) Then
-                If (Not tmpDBElement.TVSeason.Season = 999 AndAlso Not ModulesManager.Instance.ScraperWithCapabilityAnyEnabled_Image_TV(Enums.ModifierType.SeasonLandscape)) OrElse
-                    (tmpDBElement.TVSeason.Season = 999 AndAlso Not ModulesManager.Instance.ScraperWithCapabilityAnyEnabled_Image_TV(Enums.ModifierType.SeasonLandscape) AndAlso
-                     Not ModulesManager.Instance.ScraperWithCapabilityAnyEnabled_Image_TV(Enums.ModifierType.MainLandscape)) Then
+                If (Not tmpDBElement.TVSeason.Season = 999 AndAlso Not ModulesManager.Instance.QueryScraperCapabilities_AnyEnabled(Enums.ModifierType.SeasonLandscape, tmpDBElement.ContentType)) OrElse
+                    (tmpDBElement.TVSeason.Season = 999 AndAlso Not ModulesManager.Instance.QueryScraperCapabilities_AnyEnabled(Enums.ModifierType.SeasonLandscape, tmpDBElement.ContentType) AndAlso
+                     Not ModulesManager.Instance.QueryScraperCapabilities_AnyEnabled(Enums.ModifierType.MainLandscape, tmpDBElement.ContentType)) Then
                     btnSetLandscapeScrape.Enabled = False
                 End If
                 If .Landscape.ImageOriginal.Image IsNot Nothing Then
@@ -472,9 +472,9 @@ Public Class dlgEditTVSeason
             'Poster
             If (Not tmpDBElement.TVSeason.Season = 999 AndAlso Master.eSettings.TVSeasonPosterAnyEnabled) OrElse
                 (tmpDBElement.TVSeason.Season = 999 AndAlso Master.eSettings.TVAllSeasonsPosterAnyEnabled) Then
-                If (Not tmpDBElement.TVSeason.Season = 999 AndAlso Not ModulesManager.Instance.ScraperWithCapabilityAnyEnabled_Image_TV(Enums.ModifierType.SeasonPoster)) OrElse
-                    (tmpDBElement.TVSeason.Season = 999 AndAlso Not ModulesManager.Instance.ScraperWithCapabilityAnyEnabled_Image_TV(Enums.ModifierType.SeasonPoster) AndAlso
-                     Not ModulesManager.Instance.ScraperWithCapabilityAnyEnabled_Image_TV(Enums.ModifierType.MainPoster)) Then
+                If (Not tmpDBElement.TVSeason.Season = 999 AndAlso Not ModulesManager.Instance.QueryScraperCapabilities_AnyEnabled(Enums.ModifierType.SeasonPoster, tmpDBElement.ContentType)) OrElse
+                    (tmpDBElement.TVSeason.Season = 999 AndAlso Not ModulesManager.Instance.QueryScraperCapabilities_AnyEnabled(Enums.ModifierType.SeasonPoster, tmpDBElement.ContentType) AndAlso
+                     Not ModulesManager.Instance.QueryScraperCapabilities_AnyEnabled(Enums.ModifierType.MainPoster, tmpDBElement.ContentType)) Then
                     btnSetPosterScrape.Enabled = False
                 End If
                 If .Poster.ImageOriginal.Image IsNot Nothing Then

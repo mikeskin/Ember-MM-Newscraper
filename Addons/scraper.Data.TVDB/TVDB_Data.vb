@@ -43,26 +43,11 @@ Public Class TVDB_Data
 
 #Region "Events"
 
-    Public Event ModuleSettingsChanged() Implements Interfaces.ScraperModule_Data_TV.ModuleSettingsChanged
-    Public Event ScraperEvent(ByVal eType As Enums.ScraperEventType, ByVal Parameter As Object) Implements Interfaces.ScraperModule_Data_TV.ScraperEvent
     Public Event ScraperSetupChanged(ByVal name As String, ByVal State As Boolean, ByVal difforder As Integer) Implements Interfaces.ScraperModule_Data_TV.ScraperSetupChanged
-    Public Event SetupNeedsRestart() Implements Interfaces.ScraperModule_Data_TV.SetupNeedsRestart
 
 #End Region 'Events
 
 #Region "Properties"
-
-    ReadOnly Property ModuleName() As String Implements Interfaces.ScraperModule_Data_TV.ModuleName
-        Get
-            Return _Name
-        End Get
-    End Property
-
-    ReadOnly Property ModuleVersion() As String Implements Interfaces.ScraperModule_Data_TV.ModuleVersion
-        Get
-            Return System.Diagnostics.FileVersionInfo.GetVersionInfo(System.Reflection.Assembly.GetExecutingAssembly.Location).FileVersion.ToString
-        End Get
-    End Property
 
     Property ScraperEnabled() As Boolean Implements Interfaces.ScraperModule_Data_TV.ScraperEnabled
         Get
@@ -77,22 +62,9 @@ Public Class TVDB_Data
 
 #Region "Methods"
 
-    Private Sub Handle_ModuleSettingsChanged()
-        RaiseEvent ModuleSettingsChanged()
-    End Sub
-
-    Private Sub Handle_SetupNeedsRestart()
-        RaiseEvent SetupNeedsRestart()
-    End Sub
-
     Private Sub Handle_SetupScraperChanged(ByVal state As Boolean, ByVal difforder As Integer)
         ScraperEnabled = state
         RaiseEvent ScraperSetupChanged(String.Concat(_Name, "_TV"), state, difforder)
-    End Sub
-
-    Sub Init(ByVal sAssemblyName As String) Implements Interfaces.ScraperModule_Data_TV.Init
-        _AssemblyName = sAssemblyName
-        LoadSettings()
     End Sub
 
     Function InjectSetupScraper() As Containers.SettingsPanel Implements Interfaces.ScraperModule_Data_TV.InjectSetupScraper
@@ -139,8 +111,8 @@ Public Class TVDB_Data
         SPanel.Panel = _setup.pnlSettings
 
         AddHandler _setup.SetupScraperChanged, AddressOf Handle_SetupScraperChanged
-        AddHandler _setup.ModuleSettingsChanged, AddressOf Handle_ModuleSettingsChanged
-        AddHandler _setup.SetupNeedsRestart, AddressOf Handle_SetupNeedsRestart
+        ' AddHandler _setup.ModuleSettingsChanged, AddressOf Handle_ModuleSettingsChanged
+        ' AddHandler _setup.SetupNeedsRestart, AddressOf Handle_SetupNeedsRestart
         Return SPanel
     End Function
 
@@ -196,7 +168,7 @@ Public Class TVDB_Data
         End Using
     End Sub
 
-    Sub SaveSetupScraper(ByVal DoDispose As Boolean) Implements Interfaces.ScraperModule_Data_TV.SaveSetupScraper
+    Sub SaveSetupScraper(ByVal DoDispose As Boolean)
         ConfigScrapeOptions.bEpisodeActors = _setup.chkScraperEpisodeActors.Checked
         ConfigScrapeOptions.bEpisodeAired = _setup.chkScraperEpisodeAired.Checked
         ConfigScrapeOptions.bEpisodeCredits = _setup.chkScraperEpisodeCredits.Checked
@@ -219,7 +191,7 @@ Public Class TVDB_Data
         SaveSettings()
         If DoDispose Then
             RemoveHandler _setup.SetupScraperChanged, AddressOf Handle_SetupScraperChanged
-            RemoveHandler _setup.ModuleSettingsChanged, AddressOf Handle_ModuleSettingsChanged
+            ' RemoveHandler _setup.ModuleSettingsChanged, AddressOf Handle_ModuleSettingsChanged
             _setup.Dispose()
         End If
     End Sub
@@ -230,7 +202,7 @@ Public Class TVDB_Data
     ''' <param name="ScrapeOptions">What kind of data is being requested from the scrape(global scraper settings)</param>
     ''' <returns>Database.DBElement Object (nMovie) which contains the scraped data</returns>
     ''' <remarks></remarks>
-    Function Scraper_TV(ByRef oDBTV As Database.DBElement, ByRef ScrapeModifiers As Structures.ScrapeModifiers, ByRef ScrapeType As Enums.ScrapeType, ByRef ScrapeOptions As Structures.ScrapeOptions) As Interfaces.ModuleResult_Data_TVShow Implements Interfaces.ScraperModule_Data_TV.Scraper_TVShow
+    Function Scraper_TV(ByRef oDBTV As Database.DBElement, ByRef ScrapeModifiers As Structures.ScrapeModifiers, ByRef ScrapeType As Enums.ScrapeType, ByRef ScrapeOptions As Structures.ScrapeOptions) As Interfaces.ModuleResult_Data_TVShow
         logger.Trace("[TVDB_Data] [Scraper_TV] [Start]")
 
         LoadSettings()
@@ -293,7 +265,7 @@ Public Class TVDB_Data
         Return New Interfaces.ModuleResult_Data_TVShow With {.Result = nTVShow}
     End Function
 
-    Public Function Scraper_TVEpisode(ByRef oDBTVEpisode As Database.DBElement, ByVal ScrapeOptions As Structures.ScrapeOptions) As Interfaces.ModuleResult_Data_TVEpisode Implements Interfaces.ScraperModule_Data_TV.Scraper_TVEpisode
+    Public Function Scraper_TVEpisode(ByRef oDBTVEpisode As Database.DBElement, ByVal ScrapeOptions As Structures.ScrapeOptions) As Interfaces.ModuleResult_Data_TVEpisode
         logger.Trace("[TVDB_Data] [Scraper_TVEpisode] [Start]")
 
         LoadSettings()
@@ -319,10 +291,6 @@ Public Class TVDB_Data
 
         logger.Trace("[TVDB_Data] [Scraper_TVEpisode] [Done]")
         Return New Interfaces.ModuleResult_Data_TVEpisode With {.Result = nTVEpisode}
-    End Function
-
-    Public Function Scraper_TVSeason(ByRef oDBTVSeason As Database.DBElement, ByVal ScrapeOptions As Structures.ScrapeOptions) As Interfaces.ModuleResult_Data_TVSeason Implements Interfaces.ScraperModule_Data_TV.Scraper_TVSeason
-        Return New Interfaces.ModuleResult_Data_TVSeason With {.Result = Nothing}
     End Function
 
     Public Sub ScraperOrderChanged() Implements Interfaces.ScraperModule_Data_TV.ScraperOrderChanged
