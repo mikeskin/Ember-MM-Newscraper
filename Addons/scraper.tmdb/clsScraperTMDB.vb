@@ -24,75 +24,6 @@ Imports System.Diagnostics
 
 Namespace TMDB
 
-    Public Class SearchResults_Movie
-
-#Region "Fields"
-
-        Private _Matches As New List(Of MediaContainers.Movie)
-
-#End Region 'Fields
-
-#Region "Properties"
-
-        Public Property Matches() As List(Of MediaContainers.Movie)
-            Get
-                Return _Matches
-            End Get
-            Set(ByVal value As List(Of MediaContainers.Movie))
-                _Matches = value
-            End Set
-        End Property
-
-#End Region 'Properties
-
-    End Class
-
-    Public Class SearchResults_MovieSet
-
-#Region "Fields"
-
-        Private _Matches As New List(Of MediaContainers.MovieSet)
-
-#End Region 'Fields
-
-#Region "Properties"
-
-        Public Property Matches() As List(Of MediaContainers.MovieSet)
-            Get
-                Return _Matches
-            End Get
-            Set(ByVal value As List(Of MediaContainers.MovieSet))
-                _Matches = value
-            End Set
-        End Property
-
-#End Region 'Properties
-
-    End Class
-
-    Public Class SearchResults_TVShow
-
-#Region "Fields"
-
-        Private _Matches As New List(Of MediaContainers.TVShow)
-
-#End Region 'Fields
-
-#Region "Properties"
-
-        Public Property Matches() As List(Of MediaContainers.TVShow)
-            Get
-                Return _Matches
-            End Get
-            Set(ByVal value As List(Of MediaContainers.TVShow))
-                _Matches = value
-            End Set
-        End Property
-
-#End Region 'Properties
-
-    End Class
-
     Public Class Scraper
 
 #Region "Fields"
@@ -132,9 +63,9 @@ Namespace TMDB
         Public Event SearchInfoDownloaded_MovieSet(ByVal strPoster As String, ByVal sInfo As MediaContainers.MovieSet)
         Public Event SearchInfoDownloaded_TVShow(ByVal strPoster As String, ByVal sInfo As MediaContainers.TVShow)
 
-        Public Event SearchResultsDownloaded_Movie(ByVal mResults As SearchResults_Movie)
-        Public Event SearchResultsDownloaded_MovieSet(ByVal mResults As SearchResults_MovieSet)
-        Public Event SearchResultsDownloaded_TVShow(ByVal mResults As SearchResults_TVShow)
+        Public Event SearchResultsDownloaded_Movie(ByVal mResults As List(Of MediaContainers.Movie))
+        Public Event SearchResultsDownloaded_MovieSet(ByVal mResults As List(Of MediaContainers.MovieSet))
+        Public Event SearchResultsDownloaded_TVShow(ByVal mResults As List(Of MediaContainers.TVShow))
 
 #End Region 'Events
 
@@ -1201,12 +1132,12 @@ Namespace TMDB
         End Function
 
         Public Function GetSearchMovieInfo(ByVal strMovieName As String, ByRef oDBMovie As Database.DBElement, ByVal eType As Enums.ScrapeType, ByVal FilteredOptions As Structures.ScrapeOptions) As MediaContainers.Movie
-            Dim r As SearchResults_Movie = SearchMovie(strMovieName, CInt(If(Not String.IsNullOrEmpty(oDBMovie.Movie.Year), oDBMovie.Movie.Year, Nothing)))
+            Dim r As List(Of MediaContainers.Movie) = SearchMovie(strMovieName, CInt(If(Not String.IsNullOrEmpty(oDBMovie.Movie.Year), oDBMovie.Movie.Year, Nothing)))
 
             Select Case eType
                 Case Enums.ScrapeType.AllAsk, Enums.ScrapeType.FilterAsk, Enums.ScrapeType.MarkedAsk, Enums.ScrapeType.MissingAsk, Enums.ScrapeType.NewAsk, Enums.ScrapeType.SelectedAsk, Enums.ScrapeType.SingleField
-                    If r.Matches.Count = 1 Then
-                        Return GetMovieInfo(r.Matches.Item(0).TMDBID, FilteredOptions, False)
+                    If r.Count = 1 Then
+                        Return GetMovieInfo(r.Item(0).TMDBID, FilteredOptions, False)
                     Else
                         'Using dlgSearch As New dlgTMDBSearchResults_Movie(_SpecialSettings, Me)
                         '    If dlgSearch.ShowDialog(r, strMovieName, oDBMovie.Filename) = DialogResult.OK Then
@@ -1218,13 +1149,13 @@ Namespace TMDB
                     End If
 
                 Case Enums.ScrapeType.AllSkip, Enums.ScrapeType.FilterSkip, Enums.ScrapeType.MarkedSkip, Enums.ScrapeType.MissingSkip, Enums.ScrapeType.NewSkip, Enums.ScrapeType.SelectedSkip
-                    If r.Matches.Count = 1 Then
-                        Return GetMovieInfo(r.Matches.Item(0).TMDBID, FilteredOptions, False)
+                    If r.Count = 1 Then
+                        Return GetMovieInfo(r.Item(0).TMDBID, FilteredOptions, False)
                     End If
 
                 Case Enums.ScrapeType.AllAuto, Enums.ScrapeType.FilterAuto, Enums.ScrapeType.MarkedAuto, Enums.ScrapeType.MissingAuto, Enums.ScrapeType.NewAuto, Enums.ScrapeType.SelectedAuto, Enums.ScrapeType.SingleScrape
-                    If r.Matches.Count > 0 Then
-                        Return GetMovieInfo(r.Matches.Item(0).TMDBID, FilteredOptions, False)
+                    If r.Count > 0 Then
+                        Return GetMovieInfo(r.Item(0).TMDBID, FilteredOptions, False)
                     End If
             End Select
 
@@ -1232,12 +1163,12 @@ Namespace TMDB
         End Function
 
         Public Function GetSearchMovieSetInfo(ByVal strMovieSetName As String, ByRef oDBMovieSet As Database.DBElement, ByVal eType As Enums.ScrapeType, ByVal FilteredOptions As Structures.ScrapeOptions) As MediaContainers.MovieSet
-            Dim r As SearchResults_MovieSet = SearchMovieSet(strMovieSetName)
+            Dim r As List(Of MediaContainers.MovieSet) = SearchMovieSet(strMovieSetName)
 
             Select Case eType
                 Case Enums.ScrapeType.AllAsk, Enums.ScrapeType.FilterAsk, Enums.ScrapeType.MarkedAsk, Enums.ScrapeType.MissingAsk, Enums.ScrapeType.NewAsk, Enums.ScrapeType.SelectedAsk, Enums.ScrapeType.SingleField
-                    If r.Matches.Count = 1 Then
-                        Return GetMovieSetInfo(r.Matches.Item(0).TMDB, FilteredOptions, False)
+                    If r.Count = 1 Then
+                        Return GetMovieSetInfo(r.Item(0).TMDB, FilteredOptions, False)
                     Else
                         'Using dlgSearch As New dlgTMDBSearchResults_MovieSet(_SpecialSettings, Me)
                         '    If dlgSearch.ShowDialog(r, strMovieSetName) = DialogResult.OK Then
@@ -1249,13 +1180,13 @@ Namespace TMDB
                     End If
 
                 Case Enums.ScrapeType.AllSkip, Enums.ScrapeType.FilterSkip, Enums.ScrapeType.MarkedSkip, Enums.ScrapeType.MissingSkip, Enums.ScrapeType.NewSkip, Enums.ScrapeType.SelectedSkip
-                    If r.Matches.Count = 1 Then
-                        Return GetMovieSetInfo(r.Matches.Item(0).TMDB, FilteredOptions, False)
+                    If r.Count = 1 Then
+                        Return GetMovieSetInfo(r.Item(0).TMDB, FilteredOptions, False)
                     End If
 
                 Case Enums.ScrapeType.AllAuto, Enums.ScrapeType.FilterAuto, Enums.ScrapeType.MarkedAuto, Enums.ScrapeType.MissingAuto, Enums.ScrapeType.NewAuto, Enums.ScrapeType.SelectedAuto, Enums.ScrapeType.SingleScrape
-                    If r.Matches.Count > 0 Then
-                        Return GetMovieSetInfo(r.Matches.Item(0).TMDB, FilteredOptions, False)
+                    If r.Count > 0 Then
+                        Return GetMovieSetInfo(r.Item(0).TMDB, FilteredOptions, False)
                     End If
             End Select
 
@@ -1263,12 +1194,12 @@ Namespace TMDB
         End Function
 
         Public Function GetSearchTVShowInfo(ByVal strShowName As String, ByRef oDBTV As Database.DBElement, ByVal eType As Enums.ScrapeType, ByRef ScrapeModifiers As Structures.ScrapeModifiers, ByRef FilteredOptions As Structures.ScrapeOptions) As MediaContainers.TVShow
-            Dim r As SearchResults_TVShow = SearchTVShow(strShowName)
+            Dim r As List(Of MediaContainers.TVShow) = SearchTVShow(strShowName)
 
             Select Case eType
                 Case Enums.ScrapeType.AllAsk, Enums.ScrapeType.FilterAsk, Enums.ScrapeType.MarkedAsk, Enums.ScrapeType.MissingAsk, Enums.ScrapeType.NewAsk, Enums.ScrapeType.SelectedAsk, Enums.ScrapeType.SingleField
-                    If r.Matches.Count = 1 Then
-                        Return GetTVShowInfo(r.Matches.Item(0).TMDB, ScrapeModifiers, FilteredOptions, False)
+                    If r.Count = 1 Then
+                        Return GetTVShowInfo(r.Item(0).TMDB, ScrapeModifiers, FilteredOptions, False)
                     Else
                         'Using dlgSearch As New dlgTMDBSearchResults_TV(_SpecialSettings, Me)
                         '    If dlgSearch.ShowDialog(r, strShowName, oDBTV.ShowPath) = DialogResult.OK Then
@@ -1280,13 +1211,13 @@ Namespace TMDB
                     End If
 
                 Case Enums.ScrapeType.AllSkip, Enums.ScrapeType.FilterSkip, Enums.ScrapeType.MarkedSkip, Enums.ScrapeType.MissingSkip, Enums.ScrapeType.NewSkip, Enums.ScrapeType.SelectedSkip
-                    If r.Matches.Count = 1 Then
-                        Return GetTVShowInfo(r.Matches.Item(0).TMDB, ScrapeModifiers, FilteredOptions, False)
+                    If r.Count = 1 Then
+                        Return GetTVShowInfo(r.Item(0).TMDB, ScrapeModifiers, FilteredOptions, False)
                     End If
 
                 Case Enums.ScrapeType.AllAuto, Enums.ScrapeType.FilterAuto, Enums.ScrapeType.MarkedAuto, Enums.ScrapeType.MissingAuto, Enums.ScrapeType.NewAuto, Enums.ScrapeType.SelectedAuto, Enums.ScrapeType.SingleScrape
-                    If r.Matches.Count > 0 Then
-                        Return GetTVShowInfo(r.Matches.Item(0).TMDB, ScrapeModifiers, FilteredOptions, False)
+                    If r.Count > 0 Then
+                        Return GetTVShowInfo(r.Item(0).TMDB, ScrapeModifiers, FilteredOptions, False)
                     End If
             End Select
 
@@ -1365,15 +1296,15 @@ Namespace TMDB
 
             Select Case Args.Search
                 Case SearchType.Movies
-                    Dim r As SearchResults_Movie = SearchMovie(Args.Parameter, Args.Year)
+                    Dim r As List(Of MediaContainers.Movie) = SearchMovie(Args.Parameter, Args.Year)
                     e.Result = New Results With {.ResultType = SearchType.Movies, .Result = r}
 
                 Case SearchType.MovieSets
-                    Dim r As SearchResults_MovieSet = SearchMovieSet(Args.Parameter)
+                    Dim r As List(Of MediaContainers.MovieSet) = SearchMovieSet(Args.Parameter)
                     e.Result = New Results With {.ResultType = SearchType.MovieSets, .Result = r}
 
                 Case SearchType.TVShows
-                    Dim r As SearchResults_TVShow = SearchTVShow(Args.Parameter)
+                    Dim r As List(Of MediaContainers.TVShow) = SearchTVShow(Args.Parameter)
                     e.Result = New Results With {.ResultType = SearchType.TVShows, .Result = r}
 
                 Case SearchType.SearchDetails_Movie
@@ -1395,13 +1326,13 @@ Namespace TMDB
 
             Select Case Res.ResultType
                 Case SearchType.Movies
-                    RaiseEvent SearchResultsDownloaded_Movie(DirectCast(Res.Result, SearchResults_Movie))
+                    RaiseEvent SearchResultsDownloaded_Movie(DirectCast(Res.Result, List(Of MediaContainers.Movie)))
 
                 Case SearchType.MovieSets
-                    RaiseEvent SearchResultsDownloaded_MovieSet(DirectCast(Res.Result, SearchResults_MovieSet))
+                    RaiseEvent SearchResultsDownloaded_MovieSet(DirectCast(Res.Result, List(Of MediaContainers.MovieSet)))
 
                 Case SearchType.TVShows
-                    RaiseEvent SearchResultsDownloaded_TVShow(DirectCast(Res.Result, SearchResults_TVShow))
+                    RaiseEvent SearchResultsDownloaded_TVShow(DirectCast(Res.Result, List(Of MediaContainers.TVShow)))
 
                 Case SearchType.SearchDetails_Movie
                     Dim movieInfo As MediaContainers.Movie = DirectCast(Res.Result, MediaContainers.Movie)
@@ -1417,10 +1348,10 @@ Namespace TMDB
             End Select
         End Sub
 
-        Private Function SearchMovie(ByVal strMovie As String, Optional ByVal iYear As Integer = 0) As SearchResults_Movie
-            If String.IsNullOrEmpty(strMovie) Then Return New SearchResults_Movie
+        Private Function SearchMovie(ByVal strMovie As String, Optional ByVal iYear As Integer = 0) As List(Of MediaContainers.Movie)
+            If String.IsNullOrEmpty(strMovie) Then Return New List(Of MediaContainers.Movie)
 
-            Dim R As New SearchResults_Movie
+            Dim R As New List(Of MediaContainers.Movie)
             Dim Page As Integer = 1
             Dim Movies As TMDbLib.Objects.General.SearchContainer(Of TMDbLib.Objects.Search.SearchMovie)
             Dim TotP As Integer
@@ -1487,7 +1418,7 @@ Namespace TMDB
                                                                                                      .ThumbPoster = tThumbPoster,
                                                                                                      .TMDBID = CStr(aMovie.Id),
                                                                                                      .Year = tYear}
-                            R.Matches.Add(lNewMovie)
+                            R.Add(lNewMovie)
                         Next
                     End If
                     Page = Page + 1
@@ -1504,10 +1435,10 @@ Namespace TMDB
             Return R
         End Function
 
-        Private Function SearchMovieSet(ByVal strMovieSet As String) As SearchResults_MovieSet
-            If String.IsNullOrEmpty(strMovieSet) Then Return New SearchResults_MovieSet
+        Private Function SearchMovieSet(ByVal strMovieSet As String) As List(Of MediaContainers.MovieSet)
+            If String.IsNullOrEmpty(strMovieSet) Then Return New List(Of MediaContainers.MovieSet)
 
-            Dim R As New SearchResults_MovieSet
+            Dim R As New List(Of MediaContainers.MovieSet)
             Dim Page As Integer = 1
             Dim MovieSets As TMDbLib.Objects.General.SearchContainer(Of TMDbLib.Objects.Search.SearchResultCollection)
             Dim TotP As Integer
@@ -1539,7 +1470,7 @@ Namespace TMDB
                             'If aMovieSet.overview IsNot Nothing AndAlso Not String.IsNullOrEmpty(aMovieSet.overview) Then
                             '    t3 = aMovieSet.overview
                             'End If
-                            R.Matches.Add(New MediaContainers.MovieSet(t1, t2, t3))
+                            R.Add(New MediaContainers.MovieSet(t1, t2, t3))
                         Next
                     End If
                     Page = Page + 1
@@ -1556,10 +1487,10 @@ Namespace TMDB
             Return R
         End Function
 
-        Private Function SearchTVShow(ByVal strShow As String) As SearchResults_TVShow
-            If String.IsNullOrEmpty(strShow) Then Return New SearchResults_TVShow
+        Private Function SearchTVShow(ByVal strShow As String) As List(Of MediaContainers.TVShow)
+            If String.IsNullOrEmpty(strShow) Then Return New List(Of MediaContainers.TVShow)
 
-            Dim R As New SearchResults_TVShow
+            Dim R As New List(Of MediaContainers.TVShow)
             Dim Page As Integer = 1
             Dim Shows As TMDbLib.Objects.General.SearchContainer(Of TMDbLib.Objects.Search.SearchTv)
             Dim TotP As Integer
@@ -1595,7 +1526,7 @@ Namespace TMDB
                             End If
                             Dim lNewShow As MediaContainers.TVShow = New MediaContainers.TVShow(String.Empty, t1, t2)
                             lNewShow.TMDB = CStr(aShow.Id)
-                            R.Matches.Add(lNewShow)
+                            R.Add(lNewShow)
                         Next
                     End If
                     Page = Page + 1

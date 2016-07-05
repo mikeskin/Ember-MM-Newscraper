@@ -4751,7 +4751,7 @@ Namespace MediaContainers
             End Set
         End Property
 
-        Public Property TVESeasons() As List(Of SeasonDetails)
+        Public Property TVSeasons() As List(Of SeasonDetails)
             Get
                 Return _tvseasons
             End Get

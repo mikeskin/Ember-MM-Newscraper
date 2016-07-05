@@ -383,8 +383,8 @@ Public Class dlgSettings
         Dim ModuleCounter As Integer = 1
         Dim tPanel As New Containers.SettingsPanel
         For Each s As ModulesManager._externalScraperModuleClass In ModulesManager.Instance.externalScraperModules
-            AddHandler s.ProcessorModule.ModuleSettingsChanged, AddressOf Handle_ModuleSettingsChanged
-            AddHandler s.ProcessorModule.SetupNeedsRestart, AddressOf Handle_SetupNeedsRestart
+            AddHandler s.ScraperModule.ModuleSettingsChanged, AddressOf Handle_ModuleSettingsChanged
+            AddHandler s.ScraperModule.SetupNeedsRestart, AddressOf Handle_SetupNeedsRestart
         Next
         For Each s As ModulesManager._externalScraperModuleSettingsPanelClass_Data_Movie In ModulesManager.Instance.externalScraperModulesSettingsPanels_Data_Movie.OrderBy(Function(x) x.ModuleOrder)
             tPanel = s.SettingsPanel.InjectSettingsPanel
@@ -487,8 +487,8 @@ Public Class dlgSettings
 
     Sub RemoveScraperPanels()
         For Each s As ModulesManager._externalScraperModuleClass In ModulesManager.Instance.externalScraperModules
-            RemoveHandler s.ProcessorModule.ModuleSettingsChanged, AddressOf Handle_ModuleSettingsChanged
-            RemoveHandler s.ProcessorModule.SetupNeedsRestart, AddressOf Handle_SetupNeedsRestart
+            RemoveHandler s.ScraperModule.ModuleSettingsChanged, AddressOf Handle_ModuleSettingsChanged
+            RemoveHandler s.ScraperModule.SetupNeedsRestart, AddressOf Handle_SetupNeedsRestart
         Next
         For Each s As ModulesManager._externalScraperModuleSettingsPanelClass_Data_Movie In ModulesManager.Instance.externalScraperModulesSettingsPanels_Data_Movie.OrderBy(Function(x) x.ModuleOrder)
             RemoveHandler s.SettingsPanel.ScraperSetupChanged, AddressOf Handle_ModuleSetupChanged
@@ -5727,7 +5727,7 @@ Public Class dlgSettings
 
         For Each s As ModulesManager._externalScraperModuleClass In ModulesManager.Instance.externalScraperModules
             Try
-                s.ProcessorModule.SaveSettingsPanel(Not isApply)
+                s.ScraperModule.SaveSettingsPanel(Not isApply)
             Catch ex As Exception
                 logger.Error(ex, New StackFrame().GetMethod().Name)
             End Try

@@ -27,7 +27,7 @@ Public Class Scanner
 
 #Region "Fields"
 
-    Shared logger As Logger = NLog.LogManager.GetCurrentClassLogger()
+    Shared logger As Logger = LogManager.GetCurrentClassLogger()
 
     Public MoviePaths As New List(Of String)
     Public SourceLastScan As New DateTime
@@ -773,7 +773,7 @@ Public Class Scanner
                     End If
 
                     'Scrape episode data
-                    If Not ModulesManager.Instance.ScrapeData_TVEpisode(cEpisode, Master.DefaultOptions_TV, False) Then
+                    If Not ModulesManager.Instance.RunScraper(cEpisode, Master.DefaultOptions_TV, False) Then
                         If cEpisode.TVEpisode.TitleSpecified Then
                             ToNfo = True
 

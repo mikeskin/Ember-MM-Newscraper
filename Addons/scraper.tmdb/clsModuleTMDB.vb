@@ -273,10 +273,37 @@ Public Class clsModuleTMDB
     Function RunScraper(ByRef DBElement As Database.DBElement, ByRef ScrapeModifiers As Structures.ScrapeModifiers, ByRef ScrapeType As Enums.ScrapeType, ByRef ScrapeOptions As Structures.ScrapeOptions) As Interfaces.ScrapeResults Implements Interfaces.ScraperModule.RunScraper
         Dim tScraperResults As New Interfaces.ScrapeResults
 
+        Select Case DBElement.ContentType
+            Case Enums.ContentType.Movie
+                logger.Trace("[TMDB] [RunScraper] [Movie] [Start]")
+
+                LoadSettings_Data_Movie()
+                _SpecialSettings_Data_Movie.PrefLanguage = DBElement.Language
+
+                Dim nMovie As MediaContainers.Movie = Nothing
+                Dim _scraper As New TMDB.Scraper(_SpecialSettings_Data_Movie)
+
+                Dim FilteredOptions As Structures.ScrapeOptions = Functions.ScrapeOptionsAndAlso(ScrapeOptions, ConfigScrapeOptions_Movie)
+
+                If DBElement.Movie.TMDBIDSpecified Then
+                    'TMDB-ID already available -> scrape and save data into an empty movie container (nMovie)
+                    nMovie = _scraper.GetMovieInfo(DBElement.Movie.TMDBID, FilteredOptions, False)
+                ElseIf DBElement.Movie.IDSpecified Then
+                    'IMDB-ID already available -> scrape and save data into an empty movie container (nMovie)
+                    nMovie = _scraper.GetMovieInfo(DBElement.Movie.ID, FilteredOptions, False)
+                Else
+                    logger.Trace("[TMDB] [RunScraper] [Movie] [Abort] No TMDB/IMDB ID")
+                    Return New Interfaces.ScrapeResults
+                End If
+
+                logger.Trace("[TMDB] [RunScraper] [Movie] [Done]")
+                Return tScraperResults
+        End Select
+
         Return tScraperResults
     End Function
 
-    Function RunSearch(ByVal strTitle As String, ByVal intYear As Integer, ByVal tContentType As Enums.ContentType) As Interfaces.SearchResults Implements Interfaces.ScraperModule.RunSearch
+    Function RunSearch(ByVal strTitle As String, ByVal strYear As String, ByVal tContentType As Enums.ContentType) As Interfaces.SearchResults Implements Interfaces.ScraperModule.RunSearch
         Dim tSearchResults As New Interfaces.SearchResults
 
         Return tSearchResults
@@ -908,63 +935,7 @@ Public Class clsModuleTMDB
     ''' <returns>Database.DBElement Object (nMovie) which contains the scraped data</returns>
     ''' <remarks></remarks>
     Function Scraper_Movie(ByRef oDBElement As Database.DBElement, ByRef ScrapeModifiers As Structures.ScrapeModifiers, ByRef ScrapeType As Enums.ScrapeType, ByRef ScrapeOptions As Structures.ScrapeOptions) As Interfaces.ModuleResult_Data_Movie
-        logger.Trace("[TMDB_Data] [Scraper_Movie] [Start]")
 
-        LoadSettings_Data_Movie()
-        _SpecialSettings_Data_Movie.PrefLanguage = oDBElement.Language
-
-        Dim nMovie As MediaContainers.Movie = Nothing
-        Dim _scraper As New TMDB.Scraper(_SpecialSettings_Data_Movie)
-
-        Dim FilteredOptions As Structures.ScrapeOptions = Functions.ScrapeOptionsAndAlso(ScrapeOptions, ConfigScrapeOptions_Movie)
-
-        If ScrapeModifiers.MainNFO AndAlso Not ScrapeModifiers.DoSearch Then
-            If oDBElement.Movie.TMDBIDSpecified Then
-                'TMDB-ID already available -> scrape and save data into an empty movie container (nMovie)
-                nMovie = _scraper.GetMovieInfo(oDBElement.Movie.TMDBID, FilteredOptions, False)
-            ElseIf oDBElement.Movie.IDSpecified Then
-                'IMDB-ID already available -> scrape and save data into an empty movie container (nMovie)
-                nMovie = _scraper.GetMovieInfo(oDBElement.Movie.ID, FilteredOptions, False)
-            ElseIf Not ScrapeType = Enums.ScrapeType.SingleScrape Then
-                'no IMDB-ID or TMDB-ID for movie --> search first and try to get ID!
-                If oDBElement.Movie.TitleSpecified Then
-                    nMovie = _scraper.GetSearchMovieInfo(oDBElement.Movie.Title, oDBElement, ScrapeType, FilteredOptions)
-                End If
-                'if still no search result -> exit
-                If nMovie Is Nothing Then
-                    logger.Trace("[TMDB_Data] [Scraper_Movie] [Abort] No search result found")
-                    Return New Interfaces.ModuleResult_Data_Movie With {.Result = Nothing}
-                End If
-            End If
-        End If
-
-        If nMovie Is Nothing Then
-            Select Case ScrapeType
-                Case Enums.ScrapeType.AllAuto, Enums.ScrapeType.FilterAuto, Enums.ScrapeType.MarkedAuto, Enums.ScrapeType.MissingAuto, Enums.ScrapeType.NewAuto, Enums.ScrapeType.SelectedAuto
-                    logger.Trace("[TMDB_Data] [Scraper_Movie] [Abort] No search result found")
-                    Return New Interfaces.ModuleResult_Data_Movie With {.Result = Nothing}
-            End Select
-        Else
-            Return New Interfaces.ModuleResult_Data_Movie With {.Result = nMovie}
-        End If
-
-        If ScrapeType = Enums.ScrapeType.SingleScrape OrElse ScrapeType = Enums.ScrapeType.SingleAuto Then
-            If Not oDBElement.Movie.TMDBIDSpecified Then
-                'Using dlgSearch As New dlgTMDBSearchResults_Movie(_SpecialSettings_Movie, _scraper)
-                '    If dlgSearch.ShowDialog(oDBElement.Movie.Title, oDBElement.Filename, FilteredOptions, oDBElement.Movie.Year) = DialogResult.OK Then
-                '        nMovie = _scraper.GetMovieInfo(dlgSearch.Result.TMDBID, FilteredOptions, False)
-                '        'if a movie is found, set DoSearch back to "false" for following scrapers
-                '        ScrapeModifiers.DoSearch = False
-                '    Else
-                '        logger.Trace(String.Format("[TMDB_Data] [Scraper_Movie] [Cancelled] Cancelled by user"))
-                '        Return New Interfaces.ModuleResult_Data_Movie With {.Cancelled = True, .Result = Nothing}
-                '    End If
-                'End Using
-            End If
-        End If
-
-        logger.Trace("[TMDB_Data] [Scraper_Movie] [Done]")
-        Return New Interfaces.ModuleResult_Data_Movie With {.Result = nMovie}
     End Function
 
     Function Scraper_MovieSet(ByRef oDBElement As Database.DBElement, ByRef ScrapeModifiers As Structures.ScrapeModifiers, ByRef ScrapeType As Enums.ScrapeType, ByRef ScrapeOptions As Structures.ScrapeOptions) As Interfaces.ModuleResult_Data_MovieSet

@@ -79,7 +79,7 @@ Public Class Interfaces
 
         Function QueryModifierCapabilities(ByVal tModifierType As Enums.ModifierType, ByVal tContentType As Enums.ContentType) As Boolean
         Function RunScraper(ByRef DBElement As Database.DBElement, ByRef ScrapeModifiers As Structures.ScrapeModifiers, ByRef ScrapeType As Enums.ScrapeType, ByRef ScrapeOptions As Structures.ScrapeOptions) As ScrapeResults
-        Function RunSearch(ByVal strTitle As String, ByVal intYear As Integer, ByVal tContentType As Enums.ContentType) As SearchResults
+        Function RunSearch(ByVal strTitle As String, ByVal strYear As String, ByVal tContentType As Enums.ContentType) As SearchResults
 
 #End Region 'Methods
 

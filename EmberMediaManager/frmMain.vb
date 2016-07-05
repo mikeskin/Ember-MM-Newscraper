@@ -11372,7 +11372,7 @@ Public Class frmMain
                     mnuScrapeModifierNFO.Visible = True
                     mnuScrapeModifierPoster.Enabled = .TVShowPosterAnyEnabled AndAlso ModulesManager.Instance.QueryScraperCapabilities_AnyEnabled(Enums.ModifierType.MainPoster, Enums.ContentType.TV)
                     mnuScrapeModifierPoster.Visible = True
-                    mnuScrapeModifierTheme.Enabled = .TvShowThemeAnyEnabled AndAlso ModulesManager.Instance.QueryScraperCapabilities_AnyEnabled(Enums.ModifierType.MainTheme, Enums.ContentType.TV)
+                    mnuScrapeModifierTheme.Enabled = .TVShowThemeAnyEnabled AndAlso ModulesManager.Instance.QueryScraperCapabilities_AnyEnabled(Enums.ModifierType.MainTheme, Enums.ContentType.TV)
                     mnuScrapeModifierTheme.Visible = True
                     mnuScrapeModifierTrailer.Enabled = False
                     mnuScrapeModifierTrailer.Visible = False
@@ -12113,7 +12113,7 @@ Public Class frmMain
         Dim MainFanartAllowed As Boolean = Master.eSettings.TVShowFanartAnyEnabled AndAlso ModulesManager.Instance.QueryScraperCapabilities_AnyEnabled(Enums.ModifierType.MainFanart, Enums.ContentType.TV)
         Dim MainLandscapeAllowed As Boolean = Master.eSettings.TVShowLandscapeAnyEnabled AndAlso ModulesManager.Instance.QueryScraperCapabilities_AnyEnabled(Enums.ModifierType.MainLandscape, Enums.ContentType.TV)
         Dim MainPosterAllowed As Boolean = Master.eSettings.TVShowPosterAnyEnabled AndAlso ModulesManager.Instance.QueryScraperCapabilities_AnyEnabled(Enums.ModifierType.MainPoster, Enums.ContentType.TV)
-        Dim MainThemeAllowed As Boolean = Master.eSettings.TvShowThemeAnyEnabled AndAlso ModulesManager.Instance.QueryScraperCapabilities_AnyEnabled(Enums.ModifierType.MainTheme, Enums.ContentType.TV)
+        Dim MainThemeAllowed As Boolean = Master.eSettings.TVShowThemeAnyEnabled AndAlso ModulesManager.Instance.QueryScraperCapabilities_AnyEnabled(Enums.ModifierType.MainTheme, Enums.ContentType.TV)
         Dim SeasonBannerAllowed As Boolean = Master.eSettings.TVSeasonBannerAnyEnabled AndAlso ModulesManager.Instance.QueryScraperCapabilities_AnyEnabled(Enums.ModifierType.SeasonBanner, Enums.ContentType.TV)
         Dim SeasonFanartAllowed As Boolean = Master.eSettings.TVSeasonFanartAnyEnabled AndAlso ModulesManager.Instance.QueryScraperCapabilities_AnyEnabled(Enums.ModifierType.SeasonFanart, Enums.ContentType.TV)
         Dim SeasonLandscapeAllowed As Boolean = Master.eSettings.TVSeasonLandscapeAnyEnabled AndAlso ModulesManager.Instance.QueryScraperCapabilities_AnyEnabled(Enums.ModifierType.SeasonLandscape, Enums.ContentType.TV)

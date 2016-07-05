@@ -849,7 +849,7 @@ Public Class dlgCustomScraper
                     mMainMetaDataAllowed = False
                     mMainNFOAllowed = .TVShowNFOAnyEnabled
                     mMainPosterAllowed = .TVShowPosterAnyEnabled AndAlso ModulesManager.Instance.QueryScraperCapabilities_AnyEnabled(Enums.ModifierType.MainPoster, Enums.ContentType.TV)
-                    mMainThemeAllowed = .TvShowThemeAnyEnabled AndAlso ModulesManager.Instance.QueryScraperCapabilities_AnyEnabled(Enums.ModifierType.MainTheme, Enums.ContentType.TV)
+                    mMainThemeAllowed = .TVShowThemeAnyEnabled AndAlso ModulesManager.Instance.QueryScraperCapabilities_AnyEnabled(Enums.ModifierType.MainTheme, Enums.ContentType.TV)
                     mMainTrailerAllowed = False
                     mSeasonBannerAllowed = .TVSeasonBannerAnyEnabled AndAlso ModulesManager.Instance.QueryScraperCapabilities_AnyEnabled(Enums.ModifierType.SeasonBanner, Enums.ContentType.TV)
                     mSeasonFanartAllowed = .TVSeasonFanartAnyEnabled AndAlso ModulesManager.Instance.QueryScraperCapabilities_AnyEnabled(Enums.ModifierType.SeasonFanart, Enums.ContentType.TV)
