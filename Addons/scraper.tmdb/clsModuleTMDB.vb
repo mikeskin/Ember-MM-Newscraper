@@ -280,17 +280,17 @@ Public Class clsModuleTMDB
                 LoadSettings_Data_Movie()
                 _SpecialSettings_Data_Movie.PrefLanguage = DBElement.Language
 
-                Dim nMovie As MediaContainers.Movie = Nothing
-                Dim _scraper As New TMDB.Scraper(_SpecialSettings_Data_Movie)
+                Dim _scraper As New TMDB.clsScraperTMDB(_SpecialSettings_Data_Movie)
 
                 Dim FilteredOptions As Structures.ScrapeOptions = Functions.ScrapeOptionsAndAlso(ScrapeOptions, ConfigScrapeOptions_Movie)
+                Dim FilteredModifiers As Structures.ScrapeModifiers = Functions.ScrapeModifiersAndAlso(ScrapeModifiers, ConfigScrapeModifier_Movie)
 
                 If DBElement.Movie.TMDBIDSpecified Then
                     'TMDB-ID already available -> scrape and save data into an empty movie container (nMovie)
-                    nMovie = _scraper.GetMovieInfo(DBElement.Movie.TMDBID, FilteredOptions, False)
+                    tScraperResults.tScraperResult = _scraper.GetInfo_Movie(DBElement.Movie.TMDBID, FilteredModifiers, FilteredOptions)
                 ElseIf DBElement.Movie.IDSpecified Then
                     'IMDB-ID already available -> scrape and save data into an empty movie container (nMovie)
-                    nMovie = _scraper.GetMovieInfo(DBElement.Movie.ID, FilteredOptions, False)
+                    tScraperResults.tScraperResult = _scraper.GetInfo_Movie(DBElement.Movie.ID, FilteredModifiers, FilteredOptions)
                 Else
                     logger.Trace("[TMDB] [RunScraper] [Movie] [Abort] No TMDB/IMDB ID")
                     Return New Interfaces.ScrapeResults
@@ -945,7 +945,7 @@ Public Class clsModuleTMDB
         _SpecialSettings_Data_MovieSet.PrefLanguage = oDBElement.Language
 
         Dim nMovieSet As MediaContainers.MovieSet = Nothing
-        Dim _scraper As New TMDB.Scraper(_SpecialSettings_Data_MovieSet)
+        Dim _scraper As New TMDB.clsScraperTMDB(_SpecialSettings_Data_MovieSet)
 
         Dim FilteredOptions As Structures.ScrapeOptions = Functions.ScrapeOptionsAndAlso(ScrapeOptions, ConfigScrapeOptions_MovieSet)
 
@@ -1008,7 +1008,7 @@ Public Class clsModuleTMDB
         _SpecialSettings_Data_TV.PrefLanguage = oDBElement.Language
 
         Dim nTVShow As MediaContainers.TVShow = Nothing
-        Dim _scraper As New TMDB.Scraper(_SpecialSettings_Data_TV)
+        Dim _scraper As New TMDB.clsScraperTMDB(_SpecialSettings_Data_TV)
 
         Dim FilteredOptions As Structures.ScrapeOptions = Functions.ScrapeOptionsAndAlso(ScrapeOptions, ConfigScrapeOptions_TV)
 
@@ -1073,7 +1073,7 @@ Public Class clsModuleTMDB
         _SpecialSettings_Data_TV.PrefLanguage = oDBElement.Language
 
         Dim nTVEpisode As New MediaContainers.EpisodeDetails
-        Dim _scraper As New TMDB.Scraper(_SpecialSettings_Data_TV)
+        Dim _scraper As New TMDB.clsScraperTMDB(_SpecialSettings_Data_TV)
 
         Dim FilteredOptions As Structures.ScrapeOptions = Functions.ScrapeOptionsAndAlso(ScrapeOptions, ConfigScrapeOptions_TV)
 
@@ -1111,7 +1111,7 @@ Public Class clsModuleTMDB
         _SpecialSettings_Data_TV.PrefLanguage = oDBElement.Language
 
         Dim nTVSeason As New MediaContainers.SeasonDetails
-        Dim _scraper As New TMDB.Scraper(_SpecialSettings_Data_TV)
+        Dim _scraper As New TMDB.clsScraperTMDB(_SpecialSettings_Data_TV)
 
         Dim FilteredOptions As Structures.ScrapeOptions = Functions.ScrapeOptionsAndAlso(ScrapeOptions, ConfigScrapeOptions_TV)
 

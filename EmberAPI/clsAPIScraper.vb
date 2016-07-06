@@ -60,67 +60,28 @@ Public Class Scraper
 
                     Dim ret = ModulesManager.Instance.RunScraper(oDBElement, tScrapeModifiers, tScrapeType, tScrapeOptions)
 
-                    If (modules.Count() <= 0) Then
-                        logger.Warn("[ModulesManager] [Scrape] [Movie] [Abort] No scrapers enabled")
-                    Else
-                        For Each _externalScraperModule As _externalScraperModuleClass In modules
-                            logger.Trace(String.Format("[ModulesManager] [Scrape] [Using] {0}", _externalScraperModule.ScraperModule.ModuleName))
-                            'AddHandler _externalScraperModule.ProcessorModule.ScraperEvent, AddressOf Handler_ScraperEvent_Movie
 
-                            ret = _externalScraperModule.ScraperModule.RunScraper(oDBElement, tScrapeModifiers, tScrapeType, tScrapeOptions)
 
-                            If ret.bCancelled Then Return ret.bCancelled
+                    'Merge scraperresults considering global datascraper settings
+                    tDBElement = NFO.MergeDataScraperResults_Movie(tDBElement, tScrapedData, tScrapeType, tScrapeOptions)
 
-                            If ret.tScraperResult.Movie IsNot Nothing Then
-                                tScrapedData.Add(ret.tScraperResult.Movie)
+                    'create cache paths for Actor Thumbs
+                    tDBElement.Movie.CreateCachePaths_ActorsThumbs()
+                End If
 
-                                'set new informations for following scrapers
-                                If ret.tScraperResult.Movie.IDSpecified Then
-                                    oDBElement.Movie.ID = ret.tScraperResult.Movie.ID
-                                End If
-                                If ret.tScraperResult.Movie.IMDBIDSpecified Then
-                                    oDBElement.Movie.IMDBID = ret.tScraperResult.Movie.IMDBID
-                                End If
-                                If ret.tScraperResult.Movie.OriginalTitleSpecified Then
-                                    oDBElement.Movie.OriginalTitle = ret.tScraperResult.Movie.OriginalTitle
-                                End If
-                                If ret.tScraperResult.Movie.TitleSpecified Then
-                                    oDBElement.Movie.Title = ret.tScraperResult.Movie.Title
-                                End If
-                                If ret.tScraperResult.Movie.TMDBIDSpecified Then
-                                    oDBElement.Movie.TMDBID = ret.tScraperResult.Movie.TMDBID
-                                End If
-                                If ret.tScraperResult.Movie.YearSpecified Then
-                                    oDBElement.Movie.Year = ret.tScraperResult.Movie.Year
-                                End If
-                            End If
-
-                            If ret.tScraperResult.Images IsNot Nothing Then
-                                tScrapedImages.Add(ret.tScraperResult.Images)
-                            End If
-                            'RemoveHandler _externalScraperModule.ProcessorModule.ScraperEvent, AddressOf Handler_ScraperEvent_Movie
-                            If ret.bBreakChain Then Exit For
-                        Next
-
-                        'Merge scraperresults considering global datascraper settings
-                        tDBElement = NFO.MergeDataScraperResults_Movie(tDBElement, tScrapedData, tScrapeType, tScrapeOptions)
-
-                        'create cache paths for Actor Thumbs
-                        tDBElement.Movie.CreateCachePaths_ActorsThumbs()
-                    End If
-
-                    If tScrapedData.Count > 0 Then
-                        logger.Trace(String.Format("[ModulesManager] [Scrape] [Movie] [Done] {0}", tDBElement.Filename))
-                    Else
-                        logger.Trace(String.Format("[ModulesManager] [Scrape] [Movie] [Done] [No Scraper Results] {0}", tDBElement.Filename))
-                        Return True 'TODO: need a new trigger
-                    End If
-                    Return ret.bCancelled
+                If tScrapedData.Count > 0 Then
+                    logger.Trace(String.Format("[ModulesManager] [Scrape] [Movie] [Done] {0}", tDBElement.Filename))
                 Else
-                    logger.Trace(String.Format("[ModulesManager] [Scrape] [Movie] [Abort] [Offline] {0}", tDBElement.Filename))
-                    Return False
+                    logger.Trace(String.Format("[ModulesManager] [Scrape] [Movie] [Done] [No Scraper Results] {0}", tDBElement.Filename))
+                    Return True 'TODO: need a new trigger
+                End If
+                Return ret.bCancelled
+                Else
+                logger.Trace(String.Format("[ModulesManager] [Scrape] [Movie] [Abort] [Offline] {0}", tDBElement.Filename))
+                Return False
                 End If
         End Select
+
         Return False
     End Function
 
