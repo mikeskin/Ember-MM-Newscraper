@@ -63,23 +63,23 @@ Public Class Scraper
 
 
                     'Merge scraperresults considering global datascraper settings
-                    tDBElement = NFO.MergeDataScraperResults_Movie(tDBElement, tScrapedData, tScrapeType, tScrapeOptions)
+                    'tDBElement = NFO.MergeDataScraperResults_Movie(tDBElement, ret., tScrapeType, tScrapeOptions)
 
                     'create cache paths for Actor Thumbs
                     tDBElement.Movie.CreateCachePaths_ActorsThumbs()
                 End If
 
-                If tScrapedData.Count > 0 Then
-                    logger.Trace(String.Format("[ModulesManager] [Scrape] [Movie] [Done] {0}", tDBElement.Filename))
-                Else
-                    logger.Trace(String.Format("[ModulesManager] [Scrape] [Movie] [Done] [No Scraper Results] {0}", tDBElement.Filename))
-                    Return True 'TODO: need a new trigger
-                End If
-                Return ret.bCancelled
-                Else
-                logger.Trace(String.Format("[ModulesManager] [Scrape] [Movie] [Abort] [Offline] {0}", tDBElement.Filename))
-                Return False
-                End If
+                'If tScrapedData.Count > 0 Then
+                '    logger.Trace(String.Format("[ModulesManager] [Scrape] [Movie] [Done] {0}", tDBElement.Filename))
+                'Else
+                '    logger.Trace(String.Format("[ModulesManager] [Scrape] [Movie] [Done] [No Scraper Results] {0}", tDBElement.Filename))
+                '    Return True 'TODO: need a new trigger
+                'End If
+                'Return ret.bCancelled
+                'Else
+                'logger.Trace(String.Format("[ModulesManager] [Scrape] [Movie] [Abort] [Offline] {0}", tDBElement.Filename))
+                'Return False
+                'End If
         End Select
 
         Return False
@@ -92,7 +92,7 @@ Public Class Scraper
         Select Case DBElement.ContentType
             Case Enums.ContentType.Movie
                 logger.Trace(String.Format("[Scraper] [DoSearch] [Movie] [Start] {0}", DBElement.Filename))
-                tSearchResults = ModulesManager.Instance.RunSearch(DBElement.Movie.Title, DBElement.Movie.Year, DBElement.ContentType)
+                tSearchResults = ModulesManager.Instance.RunSearch(DBElement.Movie.Title, DBElement.Movie.Year, DBElement.Language, DBElement.ContentType)
                 If tSearchResults.Movies.Count > 0 Then
                     DBElement.Movie = tSearchResults.Movies.Item(0)
                     Return True

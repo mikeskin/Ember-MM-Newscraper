@@ -49,7 +49,7 @@ Public Class Tag_Generic
 
     Public Event GenericEvent(ByVal mType As EmberAPI.Enums.ModuleEventType, ByRef _params As System.Collections.Generic.List(Of Object)) Implements EmberAPI.Interfaces.GenericModule.GenericEvent
 
-    Public Event ModuleEnabledChanged(ByVal Name As String, ByVal State As Boolean, ByVal diffOrder As Integer) Implements Interfaces.GenericModule.ModuleSetupChanged
+    Public Event ModuleEnabledChanged(ByVal Name As String, ByVal State As Boolean, ByVal diffOrder As Integer) Implements Interfaces.GenericModule.ModuleStateChanged
 
     Public Event ModuleSettingsChanged() Implements EmberAPI.Interfaces.GenericModule.ModuleSettingsChanged
 
@@ -166,7 +166,7 @@ Public Class Tag_Generic
         _AssemblyName = sAssemblyName
         LoadSettings()
     End Sub
-    Function InjectSetup() As Containers.SettingsPanel Implements Interfaces.GenericModule.InjectSetup
+    Function InjectSettingsPanel() As Containers.SettingsPanel Implements Interfaces.GenericModule.InjectSettingsPanel
         Dim SPanel As New Containers.SettingsPanel
         Me._setup = New frmSettingsHolder
         Me._setup.chkEnabled.Checked = Me._enabled

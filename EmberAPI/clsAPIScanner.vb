@@ -773,16 +773,16 @@ Public Class Scanner
                     End If
 
                     'Scrape episode data
-                    If Not ModulesManager.Instance.RunScraper(cEpisode, Master.DefaultOptions_TV, False) Then
-                        If cEpisode.TVEpisode.TitleSpecified Then
-                            ToNfo = True
+                    'If Not ModulesManager.Instance.RunScraper(cEpisode, Master.DefaultOptions_TV, False) Then
+                    '    If cEpisode.TVEpisode.TitleSpecified Then
+                    '        ToNfo = True
 
-                            'if we had info for it (based on title) and mediainfo scanning is enabled
-                            If Master.eSettings.TVScraperMetaDataScan Then
-                                MediaInfo.UpdateTVMediaInfo(cEpisode)
-                            End If
-                        End If
-                    End If
+                    '        'if we had info for it (based on title) and mediainfo scanning is enabled
+                    '        If Master.eSettings.TVScraperMetaDataScan Then
+                    '            MediaInfo.UpdateTVMediaInfo(cEpisode)
+                    '        End If
+                    '    End If
+                    'End If
                 Else
                     cEpisode.TVEpisode = New MediaContainers.EpisodeDetails
                 End If
@@ -988,7 +988,7 @@ Public Class Scanner
                                 Else
                                     'Scrape season info
                                     If isNew AndAlso tmpSeason.TVShow.AnyUniqueIDSpecified AndAlso tmpSeason.ShowIDSpecified Then
-                                        ModulesManager.Instance.ScrapeData_TVSeason(tmpSeason, Master.DefaultOptions_TV, False)
+                                        'ModulesManager.Instance.ScrapeData_TVSeason(tmpSeason, Master.DefaultOptions_TV, False)
                                     End If
                                 End If
 

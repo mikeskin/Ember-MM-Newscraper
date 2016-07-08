@@ -29,7 +29,7 @@ Public Class Interfaces
 
         Event GenericEvent(ByVal mType As Enums.ModuleEventType, ByRef _params As List(Of Object))
         Event ModuleSettingsChanged()
-        Event ModuleSetupChanged(ByVal Name As String, ByVal State As Boolean, ByVal diffOrder As Integer)
+        Event ModuleStateChanged(ByVal Name As String, ByVal State As Boolean, ByVal diffOrder As Integer)
         Event SetupNeedsRestart()
 
 #End Region 'Events
@@ -47,7 +47,7 @@ Public Class Interfaces
 #Region "Methods"
 
         Sub Init(ByVal sAssemblyName As String, ByVal sExecutable As String)
-        Function InjectSetup() As Containers.SettingsPanel
+        Function InjectSettingsPanel() As Containers.SettingsPanel
         Function RunGeneric(ByVal mType As Enums.ModuleEventType, ByRef _params As List(Of Object), ByRef _singleobjekt As Object, ByRef _dbelement As Database.DBElement) As ModuleResult
         Sub SaveSetup(ByVal DoDispose As Boolean)
 
@@ -60,6 +60,7 @@ Public Class Interfaces
 #Region "Events"
 
         Event ModuleSettingsChanged()
+        Event ModuleStateChanged(ByVal strName As String, ByVal bIsEnabled As Boolean, ByVal intDifforder As Integer)
         Event SetupNeedsRestart()
 
 #End Region 'Events
@@ -77,9 +78,10 @@ Public Class Interfaces
         Sub Init(ByVal sAssemblyName As String)
         Sub SaveSettingsPanel(ByVal DoDispose As Boolean)
 
+        Function InjectSettingsPanels() As List(Of Containers.SettingsPanel)
         Function QueryModifierCapabilities(ByVal tModifierType As Enums.ModifierType, ByVal tContentType As Enums.ContentType) As Boolean
         Function RunScraper(ByRef DBElement As Database.DBElement, ByRef ScrapeModifiers As Structures.ScrapeModifiers, ByRef ScrapeType As Enums.ScrapeType, ByRef ScrapeOptions As Structures.ScrapeOptions) As ScrapeResults
-        Function RunSearch(ByVal strTitle As String, ByVal strYear As String, ByVal tContentType As Enums.ContentType) As SearchResults
+        Function RunSearch(ByVal strTitle As String, ByVal strYear As String, ByVal strLanguage As String, ByVal tContentType As Enums.ContentType) As SearchResults
 
 #End Region 'Methods
 
@@ -89,7 +91,6 @@ Public Class Interfaces
 
 #Region "Events"
 
-        Event ScraperSetupChanged(ByVal name As String, ByVal State As Boolean, ByVal difforder As Integer)
 
 #End Region 'Events
 
@@ -101,7 +102,6 @@ Public Class Interfaces
 
 #Region "Methods"
 
-        Function InjectSettingsPanel() As Containers.SettingsPanel
         Sub ScraperOrderChanged()
 
 #End Region 'Methods
@@ -112,7 +112,6 @@ Public Class Interfaces
 
 #Region "Events"
 
-        Event ScraperSetupChanged(ByVal name As String, ByVal State As Boolean, ByVal difforder As Integer)
 
 #End Region 'Events
 
@@ -124,7 +123,6 @@ Public Class Interfaces
 
 #Region "Methods"
 
-        Function InjectSettingsPanel() As Containers.SettingsPanel
         Sub ScraperOrderChanged()
 
 #End Region 'Methods
@@ -135,7 +133,6 @@ Public Class Interfaces
 
 #Region "Events"
 
-        Event ScraperSetupChanged(ByVal name As String, ByVal State As Boolean, ByVal difforder As Integer)
 
 #End Region 'Events
 
@@ -147,7 +144,6 @@ Public Class Interfaces
 
 #Region "Methods"
 
-        Function InjectSettingsPanel() As Containers.SettingsPanel
         Sub ScraperOrderChanged()
 
 #End Region 'Methods
@@ -158,7 +154,6 @@ Public Class Interfaces
 
 #Region "Events"
 
-        Event ScraperSetupChanged(ByVal name As String, ByVal State As Boolean, ByVal difforder As Integer)
 
 #End Region 'Events
 
@@ -170,7 +165,6 @@ Public Class Interfaces
 
 #Region "Methods"
 
-        Function InjectSettingsPanel() As Containers.SettingsPanel
         Sub ScraperOrderChanged()
 
 #End Region 'Methods
@@ -181,7 +175,6 @@ Public Class Interfaces
 
 #Region "Events"
 
-        Event ScraperSetupChanged(ByVal name As String, ByVal State As Boolean, ByVal difforder As Integer)
 
 #End Region 'Events
 
@@ -192,7 +185,6 @@ Public Class Interfaces
 
 #Region "Methods"
 
-        Function InjectSettingsPanel() As Containers.SettingsPanel
         Sub ScraperOrderChanged()
 
 #End Region 'Methods
@@ -203,7 +195,6 @@ Public Class Interfaces
 
 #Region "Events"
 
-        Event ScraperSetupChanged(ByVal name As String, ByVal State As Boolean, ByVal difforder As Integer)
 
 #End Region 'Events
 
@@ -215,7 +206,6 @@ Public Class Interfaces
 
 #Region "Methods"
 
-        Function InjectSettingsPanel() As Containers.SettingsPanel
         Sub ScraperOrderChanged()
 
 #End Region 'Methods
@@ -226,7 +216,6 @@ Public Class Interfaces
 
 #Region "Events"
 
-        Event ScraperSetupChanged(ByVal name As String, ByVal State As Boolean, ByVal difforder As Integer)
 
 #End Region 'Events
 
@@ -238,7 +227,6 @@ Public Class Interfaces
 
 #Region "Methods"
 
-        Function InjectSetupScraper() As Containers.SettingsPanel
         Sub ScraperOrderChanged()
 
 #End Region 'Methods
@@ -249,7 +237,6 @@ Public Class Interfaces
 
 #Region "Events"
 
-        Event ScraperSetupChanged(ByVal name As String, ByVal State As Boolean, ByVal difforder As Integer)
 
 #End Region 'Events
 
@@ -261,7 +248,6 @@ Public Class Interfaces
 
 #Region "Methods"
 
-        Function InjectSetupScraper() As Containers.SettingsPanel
         Sub ScraperOrderChanged()
 
 #End Region 'Methods
@@ -272,7 +258,6 @@ Public Class Interfaces
 
 #Region "Events"
 
-        Event ScraperSetupChanged(ByVal name As String, ByVal State As Boolean, ByVal difforder As Integer)
 
 #End Region 'Events
 
@@ -284,7 +269,6 @@ Public Class Interfaces
 
 #Region "Methods"
 
-        Function InjectSetupScraper() As Containers.SettingsPanel
         Sub ScraperOrderChanged()
 
 #End Region 'Methods
@@ -455,7 +439,7 @@ Public Class Interfaces
 
         Public bBreakChain As Boolean
         Public bCancelled As Boolean
-        Public tScraperResult As MediaContainers.SearchResultsContainer
+        Public tResult As MediaContainers.SearchResultsContainer
 
 #End Region 'Fields
 

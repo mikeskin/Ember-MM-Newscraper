@@ -25,7 +25,7 @@ Public Class frmSettingsHolder_Data_Movie
 #Region "Events"
 
     Public Event ModuleSettingsChanged()
-    Public Event SetupScraperChanged(ByVal state As Boolean, ByVal difforder As Integer)
+    Public Event ModuleStateChanged(ByVal state As Boolean, ByVal difforder As Integer)
     Public Event SetupNeedsRestart()
 
 #End Region 'Events
@@ -54,7 +54,7 @@ Public Class frmSettingsHolder_Data_Movie
         If order < ModulesManager.Instance.externalScraperModulesSettingsPanels_Data_Movie.Count - 1 Then
             ModulesManager.Instance.externalScraperModulesSettingsPanels_Data_Movie.FirstOrDefault(Function(p) p.ModuleOrder = order + 1).ModuleOrder = order
             ModulesManager.Instance.externalScraperModulesSettingsPanels_Data_Movie.FirstOrDefault(Function(p) p.AssemblyName = clsModuleTMDB._AssemblyName).ModuleOrder = order + 1
-            RaiseEvent SetupScraperChanged(chkEnabled.Checked, 1)
+            RaiseEvent ModuleStateChanged(chkEnabled.Checked, 1)
             orderChanged()
         End If
     End Sub
@@ -64,7 +64,7 @@ Public Class frmSettingsHolder_Data_Movie
         If order > 0 Then
             ModulesManager.Instance.externalScraperModulesSettingsPanels_Data_Movie.FirstOrDefault(Function(p) p.ModuleOrder = order - 1).ModuleOrder = order
             ModulesManager.Instance.externalScraperModulesSettingsPanels_Data_Movie.FirstOrDefault(Function(p) p.AssemblyName = clsModuleTMDB._AssemblyName).ModuleOrder = order - 1
-            RaiseEvent SetupScraperChanged(chkEnabled.Checked, -1)
+            RaiseEvent ModuleStateChanged(chkEnabled.Checked, -1)
             orderChanged()
         End If
     End Sub
@@ -83,7 +83,7 @@ Public Class frmSettingsHolder_Data_Movie
     End Sub
 
     Private Sub cbEnabled_CheckedChanged(ByVal sender As Object, ByVal e As EventArgs) Handles chkEnabled.CheckedChanged
-        RaiseEvent SetupScraperChanged(chkEnabled.Checked, 0)
+        RaiseEvent ModuleStateChanged(chkEnabled.Checked, 0)
     End Sub
 
     Private Sub chkWriters_CheckedChanged(sender As Object, e As EventArgs) Handles chkWriters.CheckedChanged

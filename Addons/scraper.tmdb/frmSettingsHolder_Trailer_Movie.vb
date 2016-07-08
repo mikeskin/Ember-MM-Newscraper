@@ -34,7 +34,7 @@ Public Class frmSettingsHolder_Trailer_Movie
 
     Public Event ModuleSettingsChanged()
     Public Event SetupNeedsRestart()
-    Public Event SetupScraperChanged(ByVal state As Boolean, ByVal difforder As Integer)
+    Public Event ModuleStateChanged(ByVal state As Boolean, ByVal difforder As Integer)
 #End Region 'Events
 
 #Region "Methods"
@@ -43,7 +43,7 @@ Public Class frmSettingsHolder_Trailer_Movie
         If order < ModulesManager.Instance.externalScraperModulesSettingsPanels_Trailer_Movie.Count - 1 Then
             ModulesManager.Instance.externalScraperModulesSettingsPanels_Trailer_Movie.FirstOrDefault(Function(p) p.ModuleOrder = order + 1).ModuleOrder = order
             ModulesManager.Instance.externalScraperModulesSettingsPanels_Trailer_Movie.FirstOrDefault(Function(p) p.AssemblyName = clsModuleTMDB._AssemblyName).ModuleOrder = order + 1
-            RaiseEvent SetupScraperChanged(chkEnabled.Checked, 1)
+            RaiseEvent ModuleStateChanged(chkEnabled.Checked, 1)
             orderChanged()
         End If
     End Sub
@@ -53,13 +53,13 @@ Public Class frmSettingsHolder_Trailer_Movie
         If order > 0 Then
             ModulesManager.Instance.externalScraperModulesSettingsPanels_Trailer_Movie.FirstOrDefault(Function(p) p.ModuleOrder = order - 1).ModuleOrder = order
             ModulesManager.Instance.externalScraperModulesSettingsPanels_Trailer_Movie.FirstOrDefault(Function(p) p.AssemblyName = clsModuleTMDB._AssemblyName).ModuleOrder = order - 1
-            RaiseEvent SetupScraperChanged(chkEnabled.Checked, -1)
+            RaiseEvent ModuleStateChanged(chkEnabled.Checked, -1)
             orderChanged()
         End If
     End Sub
 
     Private Sub cbEnabled_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles chkEnabled.CheckedChanged
-        RaiseEvent SetupScraperChanged(chkEnabled.Checked, 0)
+        RaiseEvent ModuleStateChanged(chkEnabled.Checked, 0)
     End Sub
 
     Public Sub New()

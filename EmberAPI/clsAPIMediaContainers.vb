@@ -2192,6 +2192,7 @@ Namespace MediaContainers
 
         Private _oldtitle As String
         Private _plot As String
+        Private _thumbposter As New Image
         Private _title As String
         Private _tmdb As String
 
@@ -2277,6 +2278,21 @@ Namespace MediaContainers
                 _oldtitle = value
             End Set
         End Property
+        ''' <summary>
+        ''' Poster Thumb for preview in search results
+        ''' </summary>
+        ''' <value></value>
+        ''' <returns></returns>
+        ''' <remarks></remarks>
+        <XmlIgnore()>
+        Public Property ThumbPoster() As Image
+            Get
+                Return _thumbposter
+            End Get
+            Set(ByVal value As Image)
+                _thumbposter = value
+            End Set
+        End Property
 
         <XmlIgnore()>
         Public ReadOnly Property AnyUniqueIDSpecified() As Boolean
@@ -2299,6 +2315,7 @@ Namespace MediaContainers
         Public Sub Clear()
             _oldtitle = String.Empty
             _plot = String.Empty
+            _thumbposter = New Image
             _title = String.Empty
             _tmdb = String.Empty
         End Sub
@@ -2787,6 +2804,7 @@ Namespace MediaContainers
         Private _status As String
         Private _studios As New List(Of String)
         Private _tags As New List(Of String)
+        Private _thumbposter As New Image
         Private _title As String
         Private _tmdb As String
         Private _tvdb As String
@@ -3303,6 +3321,21 @@ Namespace MediaContainers
                 Return _knownseasons.Count > 0
             End Get
         End Property
+        ''' <summary>
+        ''' Poster Thumb for preview in search results
+        ''' </summary>
+        ''' <value></value>
+        ''' <returns></returns>
+        ''' <remarks></remarks>
+        <XmlIgnore()>
+        Public Property ThumbPoster() As Image
+            Get
+                Return _thumbposter
+            End Get
+            Set(ByVal value As Image)
+                _thumbposter = value
+            End Set
+        End Property
 
         <XmlIgnore()>
         Public ReadOnly Property AnyUniqueIDSpecified() As Boolean
@@ -3418,6 +3451,7 @@ Namespace MediaContainers
             _status = String.Empty
             _studios.Clear()
             _tags.Clear()
+            _thumbposter = New Image
             _title = String.Empty
             _tmdb = String.Empty
             _votes = String.Empty
@@ -4706,11 +4740,11 @@ Namespace MediaContainers
 
 #Region "Fields"
 
-        Private _movies As List(Of Movie)
-        Private _moviesets As List(Of MovieSet)
-        Private _tvepisodes As List(Of EpisodeDetails)
-        Private _tvseasons As List(Of SeasonDetails)
-        Private _tvshows As List(Of TVShow)
+        Private _movies As New List(Of Movie)
+        Private _moviesets As New List(Of MovieSet)
+        Private _tvepisodes As New List(Of EpisodeDetails)
+        Private _tvseasons As New List(Of SeasonDetails)
+        Private _tvshows As New List(Of TVShow)
 
 #End Region 'Fields
 

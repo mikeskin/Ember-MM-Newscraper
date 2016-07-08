@@ -26,7 +26,7 @@ Public Class frmSettingsHolder_Data_TV
 
     Public Event ModuleSettingsChanged()
 
-    Public Event SetupScraperChanged(ByVal state As Boolean, ByVal difforder As Integer)
+    Public Event ModuleStateChanged(ByVal state As Boolean, ByVal difforder As Integer)
 
     Public Event SetupNeedsRestart()
 
@@ -56,7 +56,7 @@ Public Class frmSettingsHolder_Data_TV
         If order < ModulesManager.Instance.externalScraperModulesSettingsPanels_Data_TV.Count - 1 Then
             ModulesManager.Instance.externalScraperModulesSettingsPanels_Data_TV.FirstOrDefault(Function(p) p.ModuleOrder = order + 1).ModuleOrder = order
             ModulesManager.Instance.externalScraperModulesSettingsPanels_Data_TV.FirstOrDefault(Function(p) p.AssemblyName = clsModuleTMDB._AssemblyName).ModuleOrder = order + 1
-            RaiseEvent SetupScraperChanged(chkEnabled.Checked, 1)
+            RaiseEvent ModuleStateChanged(chkEnabled.Checked, 1)
             orderChanged()
         End If
     End Sub
@@ -66,7 +66,7 @@ Public Class frmSettingsHolder_Data_TV
         If order > 0 Then
             ModulesManager.Instance.externalScraperModulesSettingsPanels_Data_TV.FirstOrDefault(Function(p) p.ModuleOrder = order - 1).ModuleOrder = order
             ModulesManager.Instance.externalScraperModulesSettingsPanels_Data_TV.FirstOrDefault(Function(p) p.AssemblyName = clsModuleTMDB._AssemblyName).ModuleOrder = order - 1
-            RaiseEvent SetupScraperChanged(chkEnabled.Checked, -1)
+            RaiseEvent ModuleStateChanged(chkEnabled.Checked, -1)
             orderChanged()
         End If
     End Sub
@@ -85,7 +85,7 @@ Public Class frmSettingsHolder_Data_TV
     End Sub
 
     Private Sub cbEnabled_CheckedChanged(ByVal sender As Object, ByVal e As EventArgs) Handles chkEnabled.CheckedChanged
-        RaiseEvent SetupScraperChanged(chkEnabled.Checked, 0)
+        RaiseEvent ModuleStateChanged(chkEnabled.Checked, 0)
     End Sub
 
     Private Sub SettingsChanged(ByVal sender As Object, ByVal e As EventArgs) Handles _

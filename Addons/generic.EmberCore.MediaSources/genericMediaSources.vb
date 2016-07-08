@@ -36,7 +36,7 @@ Public Class genericMediaSources
 
     Public Event ModuleSettingsChanged() Implements Interfaces.GenericModule.ModuleSettingsChanged
 
-    Public Event ModuleSetupChanged(ByVal Name As String, ByVal State As Boolean, ByVal diffOrder As Integer) Implements Interfaces.GenericModule.ModuleSetupChanged
+    Public Event ModuleStateChanged(ByVal Name As String, ByVal State As Boolean, ByVal diffOrder As Integer) Implements Interfaces.GenericModule.ModuleStateChanged
 
     Public Event SetupNeedsRestart() Implements Interfaces.GenericModule.SetupNeedsRestart
 
@@ -85,7 +85,7 @@ Public Class genericMediaSources
         'Master.eLang.LoadLanguage(Master.eSettings.Language, sExecutable)
     End Sub
 
-    Public Function InjectSetup() As EmberAPI.Containers.SettingsPanel Implements Interfaces.GenericModule.InjectSetup
+    Public Function InjectSettingsPanel() As EmberAPI.Containers.SettingsPanel Implements Interfaces.GenericModule.InjectSettingsPanel
         Dim SPanel As New Containers.SettingsPanel
         _setup = New frmMediaSources
         SPanel.Name = Master.eLang.GetString(784, "Media Sources Editor")
