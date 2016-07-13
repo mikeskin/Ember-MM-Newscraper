@@ -110,7 +110,7 @@ Public Class IMPA_Image
 
         LoadSettings()
 
-        ImagesContainer = IMPA.GetIMPAPosters(DBMovie.Movie.IMDBID)
+        ImagesContainer = IMPA.GetIMPAPosters(DBMovie.Movie.IMDB)
 
         Return New Interfaces.ModuleResult With {.breakChain = False}
     End Function

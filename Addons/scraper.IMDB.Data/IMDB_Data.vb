@@ -411,9 +411,9 @@ Public Class IMDB_Data
         Dim FilteredOptions As Structures.ScrapeOptions = Functions.ScrapeOptionsAndAlso(ScrapeOptions, ConfigScrapeOptions_Movie)
 
         If ScrapeModifiers.MainNFO AndAlso Not ScrapeModifiers.DoSearch Then
-            If Not String.IsNullOrEmpty(oDBElement.Movie.ID) Then
+            If Not String.IsNullOrEmpty(oDBElement.Movie.IMDB) Then
                 'IMDB-ID already available -> scrape and save data into an empty movie container (nMovie)
-                nMovie = _scraper.GetMovieInfo(oDBElement.Movie.ID, False, FilteredOptions)
+                nMovie = _scraper.GetMovieInfo(oDBElement.Movie.IMDB, False, FilteredOptions)
             ElseIf Not ScrapeType = Enums.ScrapeType.SingleScrape Then
                 'no IMDB-ID for movie --> search first!
                 nMovie = _scraper.GetSearchMovieInfo(oDBElement.Movie.Title, oDBElement.Movie.Year, oDBElement, ScrapeType, FilteredOptions)
@@ -432,10 +432,10 @@ Public Class IMDB_Data
         End If
 
         If ScrapeType = Enums.ScrapeType.SingleScrape OrElse ScrapeType = Enums.ScrapeType.SingleAuto Then
-            If String.IsNullOrEmpty(oDBElement.Movie.ID) AndAlso String.IsNullOrEmpty(oDBElement.Movie.TMDBID) Then
+            If String.IsNullOrEmpty(oDBElement.Movie.IMDB) AndAlso String.IsNullOrEmpty(oDBElement.Movie.TMDB) Then
                 Using dlgSearch As New dlgIMDBSearchResults_Movie(_SpecialSettings_Movie, _scraper)
                     If dlgSearch.ShowDialog(oDBElement.Movie.Title, oDBElement.Movie.Year, oDBElement.Filename, FilteredOptions) = DialogResult.OK Then
-                        nMovie = _scraper.GetMovieInfo(dlgSearch.Result.ID, False, FilteredOptions)
+                        nMovie = _scraper.GetMovieInfo(dlgSearch.Result.IMDB, False, FilteredOptions)
                         'if a movie is found, set DoSearch back to "false" for following scrapers
                         ScrapeModifiers.DoSearch = False
                     Else

@@ -55,7 +55,7 @@ Public Class frmSettingsHolder
         _fDummyMultiEpisode.FileName = "OldFileName"
         _fDummyMultiEpisode.Genre = "Comedy / Lovestory"
         _fDummyMultiEpisode.ID = -1
-        _fDummyMultiEpisode.IMDBID = ""
+        _fDummyMultiEpisode.IMDB = ""
         _fDummyMultiEpisode.IsBDMV = False
         _fDummyMultiEpisode.IsLocked = False
         _fDummyMultiEpisode.IsMultiEpisode = True
@@ -82,7 +82,7 @@ Public Class frmSettingsHolder
         _fDummyMultiEpisode.TVDBID = "58056"
         _fDummyMultiEpisode.VideoCodec = "xvid"
         _fDummyMultiEpisode.VideoSource = "dvd"
-        _fDummyMultiEpisode.Year = ""
+        _fDummyMultiEpisode.Year = "2007"
         Dim dMEpisode1 As New FileFolderRenamer.Episode With {.ID = 1, .Episode = 1, .Title = "Pilot"}
         Dim dMEpisode2 As New FileFolderRenamer.Episode With {.ID = 2, .Episode = 2, .Title = "The Big Bran Hypothesis"}
         Dim dMEpisodeList As New List(Of FileFolderRenamer.Episode)
@@ -102,7 +102,7 @@ Public Class frmSettingsHolder
         _fDummyMultiSeason.FileName = "OldFileName"
         _fDummyMultiSeason.Genre = "Comedy / Lovestory"
         _fDummyMultiSeason.ID = -1
-        _fDummyMultiSeason.IMDBID = ""
+        _fDummyMultiSeason.IMDB = ""
         _fDummyMultiSeason.IsBDMV = False
         _fDummyMultiSeason.IsLocked = False
         _fDummyMultiSeason.IsMultiEpisode = True
@@ -129,7 +129,7 @@ Public Class frmSettingsHolder
         _fDummyMultiSeason.TVDBID = "58056"
         _fDummyMultiSeason.VideoCodec = "xvid"
         _fDummyMultiSeason.VideoSource = "dvd"
-        _fDummyMultiSeason.Year = ""
+        _fDummyMultiSeason.Year = "2007"
         Dim dMSEpisode1 As New FileFolderRenamer.Episode With {.ID = 1, .Episode = 1, .Title = "Pilot"}
         Dim dMSEpisode2 As New FileFolderRenamer.Episode With {.ID = 2, .Episode = 2, .Title = "The Big Bran Hypothesis"}
         Dim dMSEpisode3 As New FileFolderRenamer.Episode With {.ID = 3, .Episode = 1, .Title = "The Bad Fish Paradigm"}
@@ -155,7 +155,7 @@ Public Class frmSettingsHolder
         _fDummySingleEpisode.FileName = "OldFileName"
         _fDummySingleEpisode.Genre = "Comedy / Lovestory"
         _fDummySingleEpisode.ID = -1
-        _fDummySingleEpisode.IMDBID = ""
+        _fDummySingleEpisode.IMDB = ""
         _fDummySingleEpisode.IsBDMV = False
         _fDummySingleEpisode.IsLocked = False
         _fDummySingleEpisode.IsMultiEpisode = False
@@ -182,7 +182,7 @@ Public Class frmSettingsHolder
         _fDummySingleEpisode.TVDBID = "58056"
         _fDummySingleEpisode.VideoCodec = "xvid"
         _fDummySingleEpisode.VideoSource = "dvd"
-        _fDummySingleEpisode.Year = ""
+        _fDummySingleEpisode.Year = "2007"
         Dim dSEpisode As New FileFolderRenamer.Episode With {.ID = 1, .Episode = 1, .Title = "Pilot"}
         Dim dSEpisodeList As New List(Of FileFolderRenamer.Episode)
         dSEpisodeList.Add(dSEpisode)
@@ -200,7 +200,7 @@ Public Class frmSettingsHolder
         _fDummySingleMovie.FileName = "OldFileName"
         _fDummySingleMovie.Genre = "Action / Sci-Fi"
         _fDummySingleMovie.ID = -1
-        _fDummySingleMovie.IMDBID = "0848228"
+        _fDummySingleMovie.IMDB = "0848228"
         _fDummySingleMovie.IsBDMV = False
         _fDummySingleMovie.IsLocked = False
         _fDummySingleMovie.IsMultiEpisode = False

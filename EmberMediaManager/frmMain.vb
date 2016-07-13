@@ -9307,8 +9307,8 @@ Public Class frmMain
 
         lblDirectors.Text = String.Join(" / ", currMovie.Movie.Directors.ToArray)
 
-        txtIMDBID.Text = currMovie.Movie.IMDBID
-        txtTMDBID.Text = currMovie.Movie.TMDBID
+        txtIMDBID.Text = currMovie.Movie.IMDB
+        txtTMDBID.Text = currMovie.Movie.TMDB
 
         txtFilePath.Text = currMovie.Filename
         txtTrailerPath.Text = If(Not String.IsNullOrEmpty(currMovie.Trailer.LocalFilePath), currMovie.Trailer.LocalFilePath, currMovie.Movie.Trailer)
@@ -12733,11 +12733,10 @@ Public Class frmMain
                     Dim tmpstring As String = String.Empty
                     For Each sRow As DataGridViewRow In dgvTVEpisodes.SelectedRows
                         If Not String.IsNullOrEmpty(sRow.Cells("strIMDB").Value.ToString) Then
-                            tmpstring = sRow.Cells("strIMDB").Value.ToString.Replace("tt", String.Empty)
                             If Not My.Resources.urlIMDB.EndsWith("/") Then
-                                Functions.Launch(String.Concat(My.Resources.urlIMDB, "/title/tt", tmpstring))
+                                Functions.Launch(String.Concat(My.Resources.urlIMDB, "/title/", sRow.Cells("strIMDB").Value.ToString))
                             Else
-                                Functions.Launch(String.Concat(My.Resources.urlIMDB, "title/tt", tmpstring))
+                                Functions.Launch(String.Concat(My.Resources.urlIMDB, "title/", sRow.Cells("strIMDB").Value.ToString))
                             End If
                         End If
                     Next
@@ -12820,11 +12819,10 @@ Public Class frmMain
                     Dim tmpstring As String = String.Empty
                     For Each sRow As DataGridViewRow In dgvMovies.SelectedRows
                         If Not String.IsNullOrEmpty(sRow.Cells("Imdb").Value.ToString) Then
-                            tmpstring = sRow.Cells("Imdb").Value.ToString.Replace("tt", String.Empty)
                             If Not My.Resources.urlIMDB.EndsWith("/") Then
-                                Functions.Launch(String.Concat(My.Resources.urlIMDB, "/title/tt", tmpstring))
+                                Functions.Launch(String.Concat(My.Resources.urlIMDB, "/title/", sRow.Cells("Imdb").Value.ToString))
                             Else
-                                Functions.Launch(String.Concat(My.Resources.urlIMDB, "title/tt", tmpstring))
+                                Functions.Launch(String.Concat(My.Resources.urlIMDB, "title/", sRow.Cells("Imdb").Value.ToString))
                             End If
                         End If
                     Next
@@ -17453,7 +17451,7 @@ Public Class frmMain
 
     Private Sub lblIMDBHeader_Click(ByVal sender As Object, ByVal e As System.EventArgs) Handles lblIMDBHeader.Click
         If Not String.IsNullOrEmpty(txtIMDBID.Text) Then
-            Functions.Launch(String.Format("http://www.imdb.com/title/tt{0}/", txtIMDBID.Text))
+            Functions.Launch(String.Format("http://www.imdb.com/title/{0}/", txtIMDBID.Text))
         End If
     End Sub
 
