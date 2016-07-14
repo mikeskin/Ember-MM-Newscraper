@@ -21,7 +21,7 @@
 Imports EmberAPI
 
 Public Class BulkRenamerModule
-    Implements Interfaces.GenericModule
+    Implements Interfaces.GenericEngine
 
 #Region "Delegates"
 
@@ -57,19 +57,19 @@ Public Class BulkRenamerModule
 
 #Region "Events"
 
-    Public Event GenericEvent(ByVal mType As Enums.ModuleEventType, ByRef _params As List(Of Object)) Implements Interfaces.GenericModule.GenericEvent
+    Public Event GenericEvent(ByVal mType As Enums.ModuleEventType, ByRef _params As List(Of Object)) Implements Interfaces.GenericEngine.GenericEvent
 
-    Public Event ModuleEnabledChanged(ByVal Name As String, ByVal State As Boolean, ByVal diffOrder As Integer) Implements Interfaces.GenericModule.ModuleStateChanged
+    Public Event ModuleEnabledChanged(ByVal Name As String, ByVal State As Boolean, ByVal diffOrder As Integer) Implements Interfaces.GenericEngine.ModuleStateChanged
 
-    Public Event ModuleSettingsChanged() Implements Interfaces.GenericModule.ModuleSettingsChanged
+    Public Event ModuleSettingsChanged() Implements Interfaces.GenericEngine.ModuleSettingsChanged
 
-    Public Event SetupNeedsRestart() Implements EmberAPI.Interfaces.GenericModule.SetupNeedsRestart
+    Public Event ModuleNeedsRestart() Implements EmberAPI.Interfaces.GenericEngine.ModuleNeedsRestart
 
 #End Region 'Events
 
 #Region "Properties"
 
-    Public ReadOnly Property ModuleType() As List(Of Enums.ModuleEventType) Implements Interfaces.GenericModule.ModuleType
+    Public ReadOnly Property ModuleType() As List(Of Enums.ModuleEventType) Implements Interfaces.GenericEngine.ModuleType
         Get
             Return New List(Of Enums.ModuleEventType)(New Enums.ModuleEventType() {Enums.ModuleEventType.AfterEdit_Movie, Enums.ModuleEventType.ScraperMulti_Movie, Enums.ModuleEventType.ScraperSingle_Movie,
                                                                                    Enums.ModuleEventType.AfterEdit_TVEpisode, Enums.ModuleEventType.ScraperMulti_TVEpisode, Enums.ModuleEventType.ScraperSingle_TVEpisode,
@@ -78,7 +78,7 @@ Public Class BulkRenamerModule
         End Get
     End Property
 
-    Property Enabled() As Boolean Implements Interfaces.GenericModule.Enabled
+    Property ModuleEnabled() As Boolean Implements Interfaces.GenericEngine.ModuleEnabled
         Get
             Return _enabled
         End Get
@@ -93,19 +93,19 @@ Public Class BulkRenamerModule
         End Set
     End Property
 
-    ReadOnly Property IsBusy() As Boolean Implements Interfaces.GenericModule.IsBusy
+    ReadOnly Property IsBusy() As Boolean Implements Interfaces.GenericEngine.IsBusy
         Get
             Return False
         End Get
     End Property
 
-    ReadOnly Property ModuleName() As String Implements Interfaces.GenericModule.ModuleName
+    ReadOnly Property ModuleName() As String Implements Interfaces.GenericEngine.ModuleName
         Get
             Return _Name
         End Get
     End Property
 
-    ReadOnly Property ModuleVersion() As String Implements Interfaces.GenericModule.ModuleVersion
+    ReadOnly Property ModuleVersion() As String Implements Interfaces.GenericEngine.ModuleVersion
         Get
             Return FileVersionInfo.GetVersionInfo(Reflection.Assembly.GetExecutingAssembly.Location).FileVersion.ToString
         End Get
@@ -115,7 +115,7 @@ Public Class BulkRenamerModule
 
 #Region "Methods"
 
-    Public Function RunGeneric(ByVal mType As Enums.ModuleEventType, ByRef _params As List(Of Object), ByRef _singleobjekt As Object, ByRef _dbelement As Database.DBElement) As Interfaces.ModuleResult Implements Interfaces.GenericModule.RunGeneric
+    Public Function RunGeneric(ByVal mType As Enums.ModuleEventType, ByRef _params As List(Of Object), ByRef _singleobjekt As Object, ByRef _dbelement As Database.DBElement) As Interfaces.ModuleResult Implements Interfaces.GenericEngine.RunGeneric
         Select Case mType
             Case Enums.ModuleEventType.AfterEdit_Movie
                 If MySettings.RenameEdit_Movies AndAlso Not String.IsNullOrEmpty(MySettings.FoldersPattern_Movies) AndAlso Not String.IsNullOrEmpty(MySettings.FilesPattern_Movies) Then
@@ -392,13 +392,13 @@ Public Class BulkRenamerModule
         RaiseEvent ModuleEnabledChanged(_Name, State, 0)
     End Sub
 
-    Sub Init(ByVal sAssemblyName As String, ByVal sExecutable As String) Implements Interfaces.GenericModule.Init
+    Sub Init(ByVal sAssemblyName As String, ByVal sExecutable As String) Implements Interfaces.GenericEngine.Init
         _AssemblyName = sAssemblyName
         LoadSettings()
     End Sub
 
-    Function InjectSettingsPanel() As Containers.SettingsPanel Implements Interfaces.GenericModule.InjectSettingsPanel
-        Dim SPanel As New Containers.SettingsPanel
+    Function InjectSettingsPanel() As Containers.SettingsPanel Implements Interfaces.GenericEngine.InjectSettingsPanel
+        Dim SPanel As New Containers.SettingsPanel(Enums.SettingsPanelType.Generic)
         _setup = New frmSettingsHolder
         _setup.chkEnabled.Checked = _enabled
         _setup.txtFolderPatternMovies.Text = MySettings.FoldersPattern_Movies
@@ -469,8 +469,8 @@ Public Class BulkRenamerModule
         RaiseEvent GenericEvent(Enums.ModuleEventType.Generic, New List(Of Object)(New Object() {"filllist", True, True, True}))
     End Sub
 
-    Sub SaveSetupModule(ByVal DoDispose As Boolean) Implements Interfaces.GenericModule.SaveSetup
-        Enabled = _setup.chkEnabled.Checked
+    Sub SaveSetupModule(ByVal DoDispose As Boolean) Implements Interfaces.GenericEngine.SaveSettings
+        ModuleEnabled = _setup.chkEnabled.Checked
         MySettings.FoldersPattern_Movies = _setup.txtFolderPatternMovies.Text
         MySettings.FoldersPattern_Seasons = _setup.txtFolderPatternSeasons.Text
         MySettings.FoldersPattern_Shows = _setup.txtFolderPatternShows.Text

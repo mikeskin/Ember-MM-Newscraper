@@ -25,7 +25,7 @@ Imports System.Xml.Serialization
 
 
 Public Class KodiInterface
-    Implements Interfaces.GenericModule
+    Implements Interfaces.GenericEngine
 
 #Region "Delegates"
 
@@ -90,10 +90,10 @@ Public Class KodiInterface
 
 #Region "Events"
 
-    Public Event GenericEvent(ByVal mType As Enums.ModuleEventType, ByRef _params As List(Of Object)) Implements Interfaces.GenericModule.GenericEvent
-    Public Event ModuleEnabledChanged(ByVal Name As String, ByVal State As Boolean, ByVal diffOrder As Integer) Implements Interfaces.GenericModule.ModuleStateChanged
-    Public Event ModuleSettingsChanged() Implements Interfaces.GenericModule.ModuleSettingsChanged
-    Public Event SetupNeedsRestart() Implements Interfaces.GenericModule.SetupNeedsRestart
+    Public Event GenericEvent(ByVal mType As Enums.ModuleEventType, ByRef _params As List(Of Object)) Implements Interfaces.GenericEngine.GenericEvent
+    Public Event ModuleEnabledChanged(ByVal Name As String, ByVal State As Boolean, ByVal diffOrder As Integer) Implements Interfaces.GenericEngine.ModuleStateChanged
+    Public Event ModuleSettingsChanged() Implements Interfaces.GenericEngine.ModuleSettingsChanged
+    Public Event ModuleNeedsRestart() Implements Interfaces.GenericEngine.ModuleNeedsRestart
 
 #End Region 'Events
 
@@ -101,7 +101,7 @@ Public Class KodiInterface
     ''' <summary>
     ''' Subscribe to Eventtypes here
     ''' </summary>
-    Public ReadOnly Property ModuleType() As List(Of Enums.ModuleEventType) Implements Interfaces.GenericModule.ModuleType
+    Public ReadOnly Property ModuleType() As List(Of Enums.ModuleEventType) Implements Interfaces.GenericEngine.ModuleType
         Get
             Return New List(Of Enums.ModuleEventType)(New Enums.ModuleEventType() {
                                                       Enums.ModuleEventType.BeforeEdit_Movie,
@@ -125,7 +125,7 @@ Public Class KodiInterface
         End Get
     End Property
 
-    Property Enabled() As Boolean Implements Interfaces.GenericModule.Enabled
+    Property ModuleEnabled() As Boolean Implements Interfaces.GenericEngine.ModuleEnabled
         Get
             Return _Enabled
         End Get
@@ -140,19 +140,19 @@ Public Class KodiInterface
         End Set
     End Property
 
-    ReadOnly Property IsBusy() As Boolean Implements Interfaces.GenericModule.IsBusy
+    ReadOnly Property IsBusy() As Boolean Implements Interfaces.GenericEngine.IsBusy
         Get
             Return Not TasksDone
         End Get
     End Property
 
-    ReadOnly Property ModuleName() As String Implements Interfaces.GenericModule.ModuleName
+    ReadOnly Property ModuleName() As String Implements Interfaces.GenericEngine.ModuleName
         Get
             Return _Name
         End Get
     End Property
 
-    ReadOnly Property ModuleVersion() As String Implements Interfaces.GenericModule.ModuleVersion
+    ReadOnly Property ModuleVersion() As String Implements Interfaces.GenericEngine.ModuleVersion
         Get
             Return FileVersionInfo.GetVersionInfo(System.Reflection.Assembly.GetExecutingAssembly.Location).FileVersion.ToString
         End Get
@@ -175,7 +175,7 @@ Public Class KodiInterface
     ''' For now we use concept of storing pool of API tasks in list (="TaskList") and use a timer object and its tick-event to get the work done
     ''' Timer tick event is async so we can queue with await all API tasks
     ''' </remarks>
-    Public Function RunGeneric(ByVal mType As Enums.ModuleEventType, ByRef _params As List(Of Object), ByRef _singleobjekt As Object, ByRef _dbelement As Database.DBElement) As Interfaces.ModuleResult Implements Interfaces.GenericModule.RunGeneric
+    Public Function RunGeneric(ByVal mType As Enums.ModuleEventType, ByRef _params As List(Of Object), ByRef _singleobjekt As Object, ByRef _dbelement As Database.DBElement) As Interfaces.ModuleResult Implements Interfaces.GenericEngine.RunGeneric
         If Not Master.isCL AndAlso (
                 mType = Enums.ModuleEventType.Remove_Movie OrElse
                 mType = Enums.ModuleEventType.Remove_TVEpisode OrElse
@@ -920,7 +920,7 @@ Public Class KodiInterface
     ''' - load XML configuration of hosts
     ''' 2015/06/26 Cocotus - First implementation, prepared by DanCooper
     ''' </remarks>
-    Sub Init(ByVal sAssemblyName As String, ByVal sExecutable As String) Implements Interfaces.GenericModule.Init
+    Sub Init(ByVal sAssemblyName As String, ByVal sExecutable As String) Implements Interfaces.GenericEngine.Init
         _AssemblyName = sAssemblyName
         LoadSettings()
     End Sub
@@ -1273,8 +1273,8 @@ Public Class KodiInterface
     ''' <remarks>
     ''' 2015/06/27 Cocotus - First implementation, prepared by DanCooper
     ''' Triggered when user enters settings in Ember
-    Function InjectSettingsPanel() As Containers.SettingsPanel Implements Interfaces.GenericModule.InjectSettingsPanel
-        Dim SPanel As New Containers.SettingsPanel
+    Function InjectSettingsPanel() As Containers.SettingsPanel Implements Interfaces.GenericEngine.InjectSettingsPanel
+        Dim SPanel As New Containers.SettingsPanel(Enums.SettingsPanelType.Generic)
         _setup = New frmSettingsHolder
         LoadSettings()
         _setup.chkEnabled.Checked = _Enabled
@@ -1312,8 +1312,8 @@ Public Class KodiInterface
         Return SPanel
     End Function
 
-    Sub SaveSetupModule(ByVal DoDispose As Boolean) Implements Interfaces.GenericModule.SaveSetup
-        Enabled = _setup.chkEnabled.Checked
+    Sub SaveSetupModule(ByVal DoDispose As Boolean) Implements Interfaces.GenericEngine.SaveSettings
+        ModuleEnabled = _setup.chkEnabled.Checked
         _SpecialSettings.SendNotifications = _setup.chkNotification.Checked
         _SpecialSettings.GetWatchedState = _setup.chkGetWatchedState.Checked AndAlso _setup.cbGetWatchedStateHost.SelectedItem IsNot Nothing
         _SpecialSettings.GetWatchedStateBeforeEdit_Movie = _setup.chkGetWatchedStateBeforeEdit_Movie.Checked
@@ -1326,7 +1326,7 @@ Public Class KodiInterface
 
         SaveSettings()
 
-        If Enabled Then PopulateMenus()
+        If ModuleEnabled Then PopulateMenus()
         If DoDispose Then
             RemoveHandler _setup.ModuleEnabledChanged, AddressOf Handle_ModuleEnabledChanged
             RemoveHandler _setup.ModuleSettingsChanged, AddressOf Handle_ModuleSettingsChanged

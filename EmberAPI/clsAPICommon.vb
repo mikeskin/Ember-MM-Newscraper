@@ -271,6 +271,7 @@ Public Class Containers
 
 #Region "Fields"
 
+        Dim _enabled As Boolean
         Dim _imageindex As Integer
         Dim _image As Image
         Dim _name As String
@@ -280,6 +281,7 @@ Public Class Containers
         Dim _prefix As String
         Dim _text As String
         Dim _type As String
+        Dim _settingspaneltype As Enums.SettingsPanelType
 
 #End Region 'Fields
 
@@ -288,13 +290,23 @@ Public Class Containers
         ''' Overload the default New() method to provide proper initialization of fields
         ''' </summary>
         ''' <remarks></remarks>
-        Public Sub New()
+        Public Sub New(ByVal tSettingsPanelType As Enums.SettingsPanelType)
             Clear()
+            _settingspaneltype = tSettingsPanelType
         End Sub
 
 #End Region 'Constructors
 
 #Region "Properties"
+
+        Public Property Enabled() As Boolean
+            Get
+                Return _enabled
+            End Get
+            Set(ByVal value As Boolean)
+                _enabled = value
+            End Set
+        End Property
 
         Public Property ImageIndex() As Integer
             Get
@@ -376,6 +388,15 @@ Public Class Containers
             End Get
             Set(ByVal value As String)
                 _type = value
+            End Set
+        End Property
+
+        Public Property SettingsPanelType() As Enums.SettingsPanelType
+            Get
+                Return _settingspaneltype
+            End Get
+            Set(ByVal value As Enums.SettingsPanelType)
+                _settingspaneltype = value
             End Set
         End Property
 
@@ -889,6 +910,34 @@ Public Class Enums
         SelectedAsk = 19
         SelectedSkip = 20
         None = 99
+    End Enum
+
+    Public Enum SettingsPanelType
+        Core = 0
+        Generic = 1
+        Movie = 2
+        MovieData = 3
+        MovieFile = 4
+        MovieGeneral = 5
+        MovieImage = 6
+        MovieSearch = 7
+        MovieSet = 8
+        MovieSetData = 9
+        MovieSetFile = 10
+        MovieSetGeneral = 11
+        MovieSetImage = 12
+        MovieSetSearch = 13
+        MovieTheme = 14
+        MovieTrailer = 15
+        Options = 16
+        TV = 17
+        TVData = 18
+        TVFile = 19
+        TVGeneral = 20
+        TVImage = 21
+        TVSearch = 22
+        TVTheme = 23
+        Master = 24
     End Enum
 
     Public Enum TaskManagerEventType As Integer
@@ -1870,6 +1919,7 @@ Public Class Structures
         Dim TV As Boolean
     End Structure
 
+    <Serializable()>
     Public Structure ScrapeModifiers
         Dim AllSeasonsBanner As Boolean
         Dim AllSeasonsFanart As Boolean
@@ -1912,7 +1962,7 @@ Public Class Structures
     ''' Structure representing posible scrape fields
     ''' </summary>
     ''' <remarks></remarks>
-    <Serializable()> _
+    <Serializable()>
     Public Structure ScrapeOptions
         Dim bEpisodeActors As Boolean
         Dim bEpisodeAired As Boolean

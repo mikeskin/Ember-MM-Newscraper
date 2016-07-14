@@ -22,7 +22,7 @@ Imports EmberAPI
 Imports System.IO
 
 Public Class MovieExporterModule
-    Implements Interfaces.GenericModule
+    Implements Interfaces.GenericEngine
 
 #Region "Delegates"
     Public Delegate Sub Delegate_AddToolsStripItem(control As System.Windows.Forms.ToolStripMenuItem, value As System.Windows.Forms.ToolStripItem)
@@ -44,22 +44,22 @@ Public Class MovieExporterModule
 
 #Region "Events"
 
-    Public Event GenericEvent(ByVal mType As Enums.ModuleEventType, ByRef _params As List(Of Object)) Implements Interfaces.GenericModule.GenericEvent
-    Public Event ModuleEnabledChanged(ByVal Name As String, ByVal State As Boolean, ByVal diffOrder As Integer) Implements Interfaces.GenericModule.ModuleStateChanged
-    Public Event ModuleSettingsChanged() Implements Interfaces.GenericModule.ModuleSettingsChanged
-    Public Event SetupNeedsRestart() Implements EmberAPI.Interfaces.GenericModule.SetupNeedsRestart
+    Public Event GenericEvent(ByVal mType As Enums.ModuleEventType, ByRef _params As List(Of Object)) Implements Interfaces.GenericEngine.GenericEvent
+    Public Event ModuleEnabledChanged(ByVal Name As String, ByVal State As Boolean, ByVal diffOrder As Integer) Implements Interfaces.GenericEngine.ModuleStateChanged
+    Public Event ModuleSettingsChanged() Implements Interfaces.GenericEngine.ModuleSettingsChanged
+    Public Event ModuleNeedsRestart() Implements EmberAPI.Interfaces.GenericEngine.ModuleNeedsRestart
 
 #End Region 'Events
 
 #Region "Properties"
 
-    Public ReadOnly Property ModuleType() As List(Of Enums.ModuleEventType) Implements Interfaces.GenericModule.ModuleType
+    Public ReadOnly Property ModuleType() As List(Of Enums.ModuleEventType) Implements Interfaces.GenericEngine.ModuleType
         Get
             Return New List(Of Enums.ModuleEventType)(New Enums.ModuleEventType() {Enums.ModuleEventType.Generic, Enums.ModuleEventType.CommandLine})
         End Get
     End Property
 
-    Property Enabled() As Boolean Implements Interfaces.GenericModule.Enabled
+    Property ModuleEnabled() As Boolean Implements Interfaces.GenericEngine.ModuleEnabled
         Get
             Return _enabled
         End Get
@@ -74,19 +74,19 @@ Public Class MovieExporterModule
         End Set
     End Property
 
-    ReadOnly Property IsBusy() As Boolean Implements Interfaces.GenericModule.IsBusy
+    ReadOnly Property IsBusy() As Boolean Implements Interfaces.GenericEngine.IsBusy
         Get
             Return False
         End Get
     End Property
 
-    ReadOnly Property ModuleName() As String Implements Interfaces.GenericModule.ModuleName
+    ReadOnly Property ModuleName() As String Implements Interfaces.GenericEngine.ModuleName
         Get
             Return _Name
         End Get
     End Property
 
-    ReadOnly Property ModuleVersion() As String Implements Interfaces.GenericModule.ModuleVersion
+    ReadOnly Property ModuleVersion() As String Implements Interfaces.GenericEngine.ModuleVersion
         Get
             Return FileVersionInfo.GetVersionInfo(System.Reflection.Assembly.GetExecutingAssembly.Location).FileVersion.ToString
         End Get
@@ -96,7 +96,7 @@ Public Class MovieExporterModule
 
 #Region "Methods"
 
-    Public Function RunGeneric(ByVal mType As Enums.ModuleEventType, ByRef _params As List(Of Object), ByRef _singleobjekt As Object, ByRef _dbelement As Database.DBElement) As Interfaces.ModuleResult Implements Interfaces.GenericModule.RunGeneric
+    Public Function RunGeneric(ByVal mType As Enums.ModuleEventType, ByRef _params As List(Of Object), ByRef _singleobjekt As Object, ByRef _dbelement As Database.DBElement) As Interfaces.ModuleResult Implements Interfaces.GenericEngine.RunGeneric
         Select Case mType
             Case Enums.ModuleEventType.CommandLine
                 Dim TemplateName As String = String.Empty
@@ -202,15 +202,15 @@ Public Class MovieExporterModule
         RaiseEvent ModuleSettingsChanged()
     End Sub
 
-    Sub Init(ByVal sAssemblyName As String, ByVal sExecutable As String) Implements Interfaces.GenericModule.Init
+    Sub Init(ByVal sAssemblyName As String, ByVal sExecutable As String) Implements Interfaces.GenericEngine.Init
         _AssemblyName = sAssemblyName
         LoadSettings()
     End Sub
 
-    Function InjectSettingsPanel() As Containers.SettingsPanel Implements Interfaces.GenericModule.InjectSettingsPanel
+    Function InjectSettingsPanel() As Containers.SettingsPanel Implements Interfaces.GenericEngine.InjectSettingsPanel
         Me._setup = New frmSettingsHolder
         Me._setup.cbEnabled.Checked = Me._enabled
-        Dim SPanel As New Containers.SettingsPanel
+        Dim SPanel As New Containers.SettingsPanel(Enums.SettingsPanelType.Generic)
 
         _setup.txtExportPath.Text = MySettings.ExportPath
         _setup.chkExportMissingEpisodes.Checked = MySettings.ExportMissingEpisodes
@@ -243,8 +243,8 @@ Public Class MovieExporterModule
         MySettings.ExportMissingEpisodes = AdvancedSettings.GetBooleanSetting("ExportMissingEpisodes", False)
     End Sub
 
-    Sub SaveSetup(ByVal DoDispose As Boolean) Implements Interfaces.GenericModule.SaveSetup
-        Me.Enabled = Me._setup.cbEnabled.Checked
+    Sub SaveSettings(ByVal DoDispose As Boolean) Implements Interfaces.GenericEngine.SaveSettings
+        Me.ModuleEnabled = Me._setup.cbEnabled.Checked
         MySettings.ExportPath = _setup.txtExportPath.Text
         MySettings.ExportMissingEpisodes = _setup.chkExportMissingEpisodes.Checked
         SaveSettings()

@@ -23,7 +23,7 @@ Imports System.IO
 Imports EmberAPI
 
 Public Class VLCPlayer
-    Implements Interfaces.GenericModule
+    Implements Interfaces.GenericEngine
 
 #Region "Fields"
 
@@ -42,19 +42,19 @@ Public Class VLCPlayer
 
 #Region "Events"
 
-    Public Event GenericEvent(ByVal mType As EmberAPI.Enums.ModuleEventType, ByRef _params As System.Collections.Generic.List(Of Object)) Implements EmberAPI.Interfaces.GenericModule.GenericEvent
+    Public Event GenericEvent(ByVal mType As EmberAPI.Enums.ModuleEventType, ByRef _params As System.Collections.Generic.List(Of Object)) Implements EmberAPI.Interfaces.GenericEngine.GenericEvent
 
-    Public Event ModuleEnabledChanged(ByVal Name As String, ByVal State As Boolean, ByVal diffOrder As Integer) Implements Interfaces.GenericModule.ModuleStateChanged
+    Public Event ModuleEnabledChanged(ByVal Name As String, ByVal State As Boolean, ByVal diffOrder As Integer) Implements Interfaces.GenericEngine.ModuleStateChanged
 
-    Public Event ModuleSettingsChanged() Implements Interfaces.GenericModule.ModuleSettingsChanged
+    Public Event ModuleSettingsChanged() Implements Interfaces.GenericEngine.ModuleSettingsChanged
 
-    Public Event SetupNeedsRestart() Implements EmberAPI.Interfaces.GenericModule.SetupNeedsRestart
+    Public Event ModuleNeedsRestart() Implements EmberAPI.Interfaces.GenericEngine.ModuleNeedsRestart
 
 #End Region 'Events
 
 #Region "Properties"
 
-    Public Property Enabled() As Boolean Implements EmberAPI.Interfaces.GenericModule.Enabled
+    Public Property ModuleEnabled() As Boolean Implements EmberAPI.Interfaces.GenericEngine.ModuleEnabled
         Get
             Return _enabled
         End Get
@@ -64,19 +64,19 @@ Public Class VLCPlayer
         End Set
     End Property
 
-    ReadOnly Property IsBusy() As Boolean Implements Interfaces.GenericModule.IsBusy
+    ReadOnly Property IsBusy() As Boolean Implements Interfaces.GenericEngine.IsBusy
         Get
             Return False
         End Get
     End Property
 
-    Public ReadOnly Property ModuleName() As String Implements EmberAPI.Interfaces.GenericModule.ModuleName
+    Public ReadOnly Property ModuleName() As String Implements EmberAPI.Interfaces.GenericEngine.ModuleName
         Get
             Return _name
         End Get
     End Property
 
-    Public ReadOnly Property ModuleType() As System.Collections.Generic.List(Of EmberAPI.Enums.ModuleEventType) Implements EmberAPI.Interfaces.GenericModule.ModuleType
+    Public ReadOnly Property ModuleType() As System.Collections.Generic.List(Of EmberAPI.Enums.ModuleEventType) Implements EmberAPI.Interfaces.GenericEngine.ModuleType
         Get
             Return New List(Of Enums.ModuleEventType)(New Enums.ModuleEventType() {Enums.ModuleEventType.MediaPlayer_Audio, Enums.ModuleEventType.MediaPlayer_Video,
                                                                                    Enums.ModuleEventType.MediaPlayerPlay_Audio, Enums.ModuleEventType.MediaPlayerPlay_Video,
@@ -86,7 +86,7 @@ Public Class VLCPlayer
         End Get
     End Property
 
-    Public ReadOnly Property ModuleVersion() As String Implements EmberAPI.Interfaces.GenericModule.ModuleVersion
+    Public ReadOnly Property ModuleVersion() As String Implements EmberAPI.Interfaces.GenericEngine.ModuleVersion
         Get
             Return FileVersionInfo.GetVersionInfo(System.Reflection.Assembly.GetExecutingAssembly.Location).FileVersion.ToString
         End Get
@@ -96,13 +96,13 @@ Public Class VLCPlayer
 
 #Region "Methods"
 
-    Public Sub Init(ByVal sAssemblyName As String, ByVal sExecutable As String) Implements EmberAPI.Interfaces.GenericModule.Init
+    Public Sub Init(ByVal sAssemblyName As String, ByVal sExecutable As String) Implements EmberAPI.Interfaces.GenericEngine.Init
         _AssemblyName = sAssemblyName
         LoadSettings()
     End Sub
 
-    Public Function InjectSettingsPanel() As EmberAPI.Containers.SettingsPanel Implements EmberAPI.Interfaces.GenericModule.InjectSettingsPanel
-        Dim SPanel As New Containers.SettingsPanel
+    Public Function InjectSettingsPanel() As EmberAPI.Containers.SettingsPanel Implements EmberAPI.Interfaces.GenericEngine.InjectSettingsPanel
+        Dim SPanel As New Containers.SettingsPanel(Enums.SettingsPanelType.Generic)
         _setup = New frmSettingsHolder
         LoadSettings()
         _setup.chkEnabled.Checked = Me._enabled
@@ -123,7 +123,7 @@ Public Class VLCPlayer
         Return SPanel
     End Function
 
-    Public Function RunGeneric(ByVal mType As EmberAPI.Enums.ModuleEventType, ByRef _params As System.Collections.Generic.List(Of Object), ByRef _singleobjekt As Object, ByRef _dbelement As Database.DBElement) As EmberAPI.Interfaces.ModuleResult Implements EmberAPI.Interfaces.GenericModule.RunGeneric
+    Public Function RunGeneric(ByVal mType As EmberAPI.Enums.ModuleEventType, ByRef _params As System.Collections.Generic.List(Of Object), ByRef _singleobjekt As Object, ByRef _dbelement As Database.DBElement) As EmberAPI.Interfaces.ModuleResult Implements EmberAPI.Interfaces.GenericEngine.RunGeneric
         Select Case mType
             Case Enums.ModuleEventType.MediaPlayer_Audio
                 If _MySettings.UseAsAudioPlayer Then
@@ -166,8 +166,8 @@ Public Class VLCPlayer
         End Using
     End Sub
 
-    Public Sub SaveSetup(ByVal DoDispose As Boolean) Implements EmberAPI.Interfaces.GenericModule.SaveSetup
-        Me.Enabled = _setup.chkEnabled.Checked
+    Public Sub SaveSettings(ByVal DoDispose As Boolean) Implements EmberAPI.Interfaces.GenericEngine.SaveSettings
+        Me.ModuleEnabled = _setup.chkEnabled.Checked
         _MySettings.UseAsAudioPlayer = _setup.chkUseAsAudioPlayer.Checked
         _MySettings.UseAsVideoPlayer = _setup.chkUseAsVideoPlayer.Checked
         _MySettings.VLCPath = _setup.txtVLCPath.Text

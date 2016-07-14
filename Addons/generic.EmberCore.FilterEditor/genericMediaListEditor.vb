@@ -22,7 +22,7 @@ Imports EmberAPI
 Imports System.Windows.Forms
 
 Public Class genericMediaListEditor
-    Implements Interfaces.GenericModule
+    Implements Interfaces.GenericEngine
 
 #Region "Delegates"
 
@@ -42,19 +42,19 @@ Public Class genericMediaListEditor
 
 #Region "Events"
 
-    Public Event GenericEvent(ByVal mType As EmberAPI.Enums.ModuleEventType, ByRef _params As System.Collections.Generic.List(Of Object)) Implements Interfaces.GenericModule.GenericEvent
+    Public Event GenericEvent(ByVal mType As EmberAPI.Enums.ModuleEventType, ByRef _params As System.Collections.Generic.List(Of Object)) Implements Interfaces.GenericEngine.GenericEvent
 
-    Public Event ModuleSettingsChanged() Implements Interfaces.GenericModule.ModuleSettingsChanged
+    Public Event ModuleSettingsChanged() Implements Interfaces.GenericEngine.ModuleSettingsChanged
 
-    Public Event ModuleStateChanged(ByVal Name As String, ByVal State As Boolean, ByVal diffOrder As Integer) Implements Interfaces.GenericModule.ModuleStateChanged
+    Public Event ModuleStateChanged(ByVal Name As String, ByVal State As Boolean, ByVal diffOrder As Integer) Implements Interfaces.GenericEngine.ModuleStateChanged
 
-    Public Event SetupNeedsRestart() Implements Interfaces.GenericModule.SetupNeedsRestart
+    Public Event ModuleNeedsRestart() Implements Interfaces.GenericEngine.ModuleNeedsRestart
 
 #End Region 'Events
 
 #Region "Properties"
 
-    Public Property Enabled() As Boolean Implements Interfaces.GenericModule.Enabled
+    Public Property ModuleEnabled() As Boolean Implements Interfaces.GenericEngine.ModuleEnabled
         Get
             Return True
         End Get
@@ -63,25 +63,25 @@ Public Class genericMediaListEditor
         End Set
     End Property
 
-    ReadOnly Property IsBusy() As Boolean Implements Interfaces.GenericModule.IsBusy
+    ReadOnly Property IsBusy() As Boolean Implements Interfaces.GenericEngine.IsBusy
         Get
             Return False
         End Get
     End Property
 
-    Public ReadOnly Property ModuleName() As String Implements Interfaces.GenericModule.ModuleName
+    Public ReadOnly Property ModuleName() As String Implements Interfaces.GenericEngine.ModuleName
         Get
             Return _name
         End Get
     End Property
 
-    Public ReadOnly Property ModuleType() As List(Of Enums.ModuleEventType) Implements Interfaces.GenericModule.ModuleType
+    Public ReadOnly Property ModuleType() As List(Of Enums.ModuleEventType) Implements Interfaces.GenericEngine.ModuleType
         Get
             Return New List(Of Enums.ModuleEventType)(New Enums.ModuleEventType() {Enums.ModuleEventType.Generic})
         End Get
     End Property
 
-    Public ReadOnly Property ModuleVersion() As String Implements Interfaces.GenericModule.ModuleVersion
+    Public ReadOnly Property ModuleVersion() As String Implements Interfaces.GenericEngine.ModuleVersion
         Get
             Return FileVersionInfo.GetVersionInfo(Reflection.Assembly.GetExecutingAssembly.Location).FileVersion.ToString
         End Get
@@ -91,12 +91,12 @@ Public Class genericMediaListEditor
 
 #Region "Methods"
 
-    Public Sub Init(ByVal sAssemblyName As String, ByVal sExecutable As String) Implements Interfaces.GenericModule.Init
+    Public Sub Init(ByVal sAssemblyName As String, ByVal sExecutable As String) Implements Interfaces.GenericEngine.Init
         _AssemblyName = sAssemblyName
     End Sub
 
-    Public Function InjectSettingsPanel() As EmberAPI.Containers.SettingsPanel Implements Interfaces.GenericModule.InjectSettingsPanel
-        Dim SPanel As New Containers.SettingsPanel
+    Public Function InjectSettingsPanel() As EmberAPI.Containers.SettingsPanel Implements Interfaces.GenericEngine.InjectSettingsPanel
+        Dim SPanel As New Containers.SettingsPanel(Enums.SettingsPanelType.Core)
         _setup = New frmSettingsHolder
         SPanel.Name = _name
         SPanel.Text = Master.eLang.GetString(1385, "Media List Editor")
@@ -116,14 +116,14 @@ Public Class genericMediaListEditor
     End Sub
 
     Private Sub Handle_SetupNeedsRestart()
-        RaiseEvent SetupNeedsRestart()
+        RaiseEvent ModuleNeedsRestart()
     End Sub
 
-    Public Function RunGeneric(ByVal mType As EmberAPI.Enums.ModuleEventType, ByRef _params As System.Collections.Generic.List(Of Object), ByRef _singleobjekt As Object, ByRef _dbelement As Database.DBElement) As Interfaces.ModuleResult Implements Interfaces.GenericModule.RunGeneric
+    Public Function RunGeneric(ByVal mType As EmberAPI.Enums.ModuleEventType, ByRef _params As System.Collections.Generic.List(Of Object), ByRef _singleobjekt As Object, ByRef _dbelement As Database.DBElement) As Interfaces.ModuleResult Implements Interfaces.GenericEngine.RunGeneric
         Return New Interfaces.ModuleResult With {.breakChain = False}
     End Function
 
-    Public Sub SaveSetup(ByVal DoDispose As Boolean) Implements Interfaces.GenericModule.SaveSetup
+    Public Sub SaveSettings(ByVal DoDispose As Boolean) Implements Interfaces.GenericEngine.SaveSettings
         If Not _setup Is Nothing Then _setup.SaveChanges()
         If DoDispose Then
             RemoveHandler _setup.ModuleSettingsChanged, AddressOf Handle_ModuleSettingsChanged

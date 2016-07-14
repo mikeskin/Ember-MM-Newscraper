@@ -5264,6 +5264,8 @@ Public Class Database
         Private _nfopath As String
         Private _ordering As Enums.EpisodeOrdering
         Private _outoftolerance As Boolean
+        Private _scrapemodifiers As New Structures.ScrapeModifiers
+        Private _scrapeoptions As New Structures.ScrapeOptions
         Private _seasons As New List(Of DBElement)
         Private _showid As Long
         Private _showpath As String
@@ -5620,6 +5622,24 @@ Public Class Database
             End Get
             Set(ByVal value As Boolean)
                 _outoftolerance = value
+            End Set
+        End Property
+
+        Public Property ScrapeModifiers() As Structures.ScrapeModifiers
+            Get
+                Return _scrapemodifiers
+            End Get
+            Set(ByVal value As Structures.ScrapeModifiers)
+                _scrapemodifiers = value
+            End Set
+        End Property
+
+        Public Property ScrapeOptions() As Structures.ScrapeOptions
+            Get
+                Return _scrapeoptions
+            End Get
+            Set(ByVal value As Structures.ScrapeOptions)
+                _scrapeoptions = value
             End Set
         End Property
 

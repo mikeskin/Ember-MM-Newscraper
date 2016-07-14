@@ -250,126 +250,126 @@ Public Class dlgSettings
     Private Sub AddPanels()
         SettingsPanels.Clear()
 
-        SettingsPanels.Add(New Containers.SettingsPanel With {
+        SettingsPanels.Add(New Containers.SettingsPanel(Enums.SettingsPanelType.MovieGeneral) With {
              .Name = "pnlMovies",
              .Text = Master.eLang.GetString(38, "General"),
              .ImageIndex = 2,
              .Type = Master.eLang.GetString(36, "Movies"),
              .Panel = pnlMovieGeneral,
              .Order = 100})
-        SettingsPanels.Add(New Containers.SettingsPanel With {
+        SettingsPanels.Add(New Containers.SettingsPanel(Enums.SettingsPanelType.MovieFile) With {
              .Name = "pnlSources",
              .Text = Master.eLang.GetString(555, "Files and Sources"),
              .ImageIndex = 5,
              .Type = Master.eLang.GetString(36, "Movies"),
              .Panel = pnlMovieSources,
              .Order = 200})
-        SettingsPanels.Add(New Containers.SettingsPanel With {
+        SettingsPanels.Add(New Containers.SettingsPanel(Enums.SettingsPanelType.MovieData) With {
              .Name = "pnlMovieData",
              .Text = Master.eLang.GetString(556, "Scrapers - Data"),
              .ImageIndex = 3,
              .Type = Master.eLang.GetString(36, "Movies"),
              .Panel = pnlMovieScraper,
              .Order = 300})
-        SettingsPanels.Add(New Containers.SettingsPanel With {
+        SettingsPanels.Add(New Containers.SettingsPanel(Enums.SettingsPanelType.MovieImage) With {
              .Name = "pnlMovieMedia",
              .Text = Master.eLang.GetString(557, "Scrapers - Images"),
              .ImageIndex = 6,
              .Type = Master.eLang.GetString(36, "Movies"),
              .Panel = pnlMovieImages,
              .Order = 400})
-        SettingsPanels.Add(New Containers.SettingsPanel With {
+        SettingsPanels.Add(New Containers.SettingsPanel(Enums.SettingsPanelType.MovieTrailer) With {
              .Name = "pnlMovieTrailer",
              .Text = Master.eLang.GetString(559, "Scrapers - Trailers"),
              .ImageIndex = 6,
              .Type = Master.eLang.GetString(36, "Movies"),
              .Panel = pnlMovieTrailers,
              .Order = 500})
-        SettingsPanels.Add(New Containers.SettingsPanel With {
+        SettingsPanels.Add(New Containers.SettingsPanel(Enums.SettingsPanelType.MovieTheme) With {
              .Name = "pnlMovieTheme",
              .Text = Master.eLang.GetString(1068, "Scrapers - Themes"),
              .ImageIndex = 11,
              .Type = Master.eLang.GetString(36, "Movies"),
              .Panel = pnlMovieThemes,
              .Order = 600})
-        SettingsPanels.Add(New Containers.SettingsPanel With {
+        SettingsPanels.Add(New Containers.SettingsPanel(Enums.SettingsPanelType.MovieSetGeneral) With {
              .Name = "pnlMovieSets",
              .Text = Master.eLang.GetString(38, "General"),
              .ImageIndex = 2,
              .Type = Master.eLang.GetString(1203, "MovieSets"),
              .Panel = pnlMovieSetGeneral,
              .Order = 100})
-        SettingsPanels.Add(New Containers.SettingsPanel With {
+        SettingsPanels.Add(New Containers.SettingsPanel(Enums.SettingsPanelType.MovieSetFile) With {
              .Name = "pnlMovieSetSources",
              .Text = Master.eLang.GetString(555, "Files and Sources"),
              .ImageIndex = 5,
              .Type = Master.eLang.GetString(1203, "MovieSets"),
              .Panel = pnlMovieSetSources,
              .Order = 200})
-        SettingsPanels.Add(New Containers.SettingsPanel With {
+        SettingsPanels.Add(New Containers.SettingsPanel(Enums.SettingsPanelType.MovieSetData) With {
              .Name = "pnlMovieSetData",
              .Text = Master.eLang.GetString(556, "Scrapers - Data"),
              .ImageIndex = 3,
              .Type = Master.eLang.GetString(1203, "MovieSets"),
              .Panel = pnlMovieSetScraper,
              .Order = 300})
-        SettingsPanels.Add(New Containers.SettingsPanel With {
+        SettingsPanels.Add(New Containers.SettingsPanel(Enums.SettingsPanelType.MovieSetImage) With {
              .Name = "pnlMovieSetMedia",
              .Text = Master.eLang.GetString(557, "Scrapers - Images"),
              .ImageIndex = 6,
              .Type = Master.eLang.GetString(1203, "MovieSets"),
              .Panel = pnlMovieSetImages,
              .Order = 400})
-        SettingsPanels.Add(New Containers.SettingsPanel With {
+        SettingsPanels.Add(New Containers.SettingsPanel(Enums.SettingsPanelType.MovieSetGeneral) With {
              .Name = "pnlShows",
              .Text = Master.eLang.GetString(38, "General"),
              .ImageIndex = 7,
              .Type = Master.eLang.GetString(653, "TV Shows"),
              .Panel = pnlTVGeneral,
              .Order = 100})
-        SettingsPanels.Add(New Containers.SettingsPanel With {
+        SettingsPanels.Add(New Containers.SettingsPanel(Enums.SettingsPanelType.TVFile) With {
              .Name = "pnlTVSources",
              .Text = Master.eLang.GetString(555, "Files and Sources"),
              .ImageIndex = 5,
              .Type = Master.eLang.GetString(653, "TV Shows"),
              .Panel = pnlTVSources,
              .Order = 200})
-        SettingsPanels.Add(New Containers.SettingsPanel With {
+        SettingsPanels.Add(New Containers.SettingsPanel(Enums.SettingsPanelType.TVData) With {
              .Name = "pnlTVData",
              .Text = Master.eLang.GetString(556, "Scrapers - Data"),
              .ImageIndex = 3,
              .Type = Master.eLang.GetString(653, "TV Shows"),
              .Panel = pnlTVScraper,
              .Order = 300})
-        SettingsPanels.Add(New Containers.SettingsPanel With {
+        SettingsPanels.Add(New Containers.SettingsPanel(Enums.SettingsPanelType.TVImage) With {
              .Name = "pnlTVMedia",
              .Text = Master.eLang.GetString(557, "Scrapers - Images"),
              .ImageIndex = 6,
              .Type = Master.eLang.GetString(653, "TV Shows"),
              .Panel = pnlTVImages,
              .Order = 400})
-        SettingsPanels.Add(New Containers.SettingsPanel With {
+        SettingsPanels.Add(New Containers.SettingsPanel(Enums.SettingsPanelType.TVTheme) With {
              .Name = "pnlTVTheme",
              .Text = Master.eLang.GetString(1068, "Scrapers - Themes"),
              .ImageIndex = 11,
              .Type = Master.eLang.GetString(653, "TV Shows"),
              .Panel = pnlTVThemes,
              .Order = 500})
-        SettingsPanels.Add(New Containers.SettingsPanel With {
+        SettingsPanels.Add(New Containers.SettingsPanel(Enums.SettingsPanelType.Options) With {
              .Name = "pnlGeneral",
              .Text = Master.eLang.GetString(38, "General"),
              .ImageIndex = 0,
              .Type = Master.eLang.GetString(390, "Options"),
              .Panel = pnlGeneral,
              .Order = 100})
-        SettingsPanels.Add(New Containers.SettingsPanel With {
+        SettingsPanels.Add(New Containers.SettingsPanel(Enums.SettingsPanelType.Options) With {
              .Name = "pnlExtensions",
              .Text = Master.eLang.GetString(553, "File System"),
              .ImageIndex = 4,
              .Type = Master.eLang.GetString(390, "Options"),
              .Panel = pnlFileSystem,
              .Order = 200})
-        SettingsPanels.Add(New Containers.SettingsPanel With {
+        SettingsPanels.Add(New Containers.SettingsPanel(Enums.SettingsPanelType.Options) With {
              .Name = "pnlProxy",
              .Text = Master.eLang.GetString(421, "Connection"),
              .ImageIndex = 1,
@@ -381,9 +381,9 @@ Public Class dlgSettings
 
     Sub AddScraperPanels()
         Dim ModuleCounter As Integer = 1
-        Dim tPanel As New Containers.SettingsPanel
-        For Each s As ModulesManager._externalScraperModuleClass In ModulesManager.Instance.externalScraperModules '.OrderBy(Function(x) x.ModuleOrder)
-            Dim nSettingsPanels As List(Of Containers.SettingsPanel) = s.ScraperModule.InjectSettingsPanels
+        Dim tPanel As Containers.SettingsPanel
+        For Each sModule As ModulesManager._externalModuleClass In ModulesManager.Instance.externalModules '.OrderBy(Function(x) x.ModuleOrder)
+            Dim nSettingsPanels As List(Of Containers.SettingsPanel) = sModule.Base.InjectSettingsPanels
             For Each cSettingsPanel In nSettingsPanels
                 tPanel = cSettingsPanel
                 tPanel.Order += ModuleCounter
@@ -391,9 +391,9 @@ Public Class dlgSettings
                 AddHelpHandlers(tPanel.Panel, tPanel.Prefix)
                 ModuleCounter += 1
             Next
-            AddHandler s.ScraperModule.ModuleSettingsChanged, AddressOf Handle_ModuleSettingsChanged
-            AddHandler s.ScraperModule.ModuleStateChanged, AddressOf Handle_ModuleStateChanged
-            AddHandler s.ScraperModule.SetupNeedsRestart, AddressOf Handle_SetupNeedsRestart
+            AddHandler sModule.Base.ModuleNeedsRestart, AddressOf Handle_SetupNeedsRestart
+            AddHandler sModule.Base.ModuleSettingsChanged, AddressOf Handle_ModuleSettingsChanged
+            AddHandler sModule.Base.ModuleStateChanged, AddressOf Handle_ModuleStateChanged
         Next
         ModuleCounter = 1
         For Each s As ModulesManager._externalGenericModuleClass In ModulesManager.Instance.externalGenericModules
@@ -407,23 +407,23 @@ Public Class dlgSettings
                 SettingsPanels.Add(tPanel)
                 AddHelpHandlers(tPanel.Panel, tPanel.Prefix)
                 ModuleCounter += 1
+                AddHandler s.ProcessorModule.ModuleNeedsRestart, AddressOf Handle_SetupNeedsRestart
                 AddHandler s.ProcessorModule.ModuleSettingsChanged, AddressOf Handle_ModuleSettingsChanged
-                AddHandler s.ProcessorModule.ModuleStateChanged, AddressOf Handle_ModuleStateChanged
-                AddHandler s.ProcessorModule.SetupNeedsRestart, AddressOf Handle_SetupNeedsRestart
+                'AddHandler s.ProcessorModule.ModuleStateChanged, AddressOf Handle_ModuleStateChanged
             End If
         Next
     End Sub
 
     Sub RemoveScraperPanels()
-        For Each s As ModulesManager._externalScraperModuleClass In ModulesManager.Instance.externalScraperModules
-            RemoveHandler s.ScraperModule.ModuleSettingsChanged, AddressOf Handle_ModuleSettingsChanged
-            RemoveHandler s.ScraperModule.ModuleStateChanged, AddressOf Handle_ModuleStateChanged
-            RemoveHandler s.ScraperModule.SetupNeedsRestart, AddressOf Handle_SetupNeedsRestart
+        For Each s As ModulesManager._externalModuleClass In ModulesManager.Instance.externalModules
+            RemoveHandler s.Base.ModuleNeedsRestart, AddressOf Handle_SetupNeedsRestart
+            RemoveHandler s.Base.ModuleSettingsChanged, AddressOf Handle_ModuleSettingsChanged
+            RemoveHandler s.Base.ModuleStateChanged, AddressOf Handle_ModuleStateChanged
         Next
         For Each s As ModulesManager._externalGenericModuleClass In ModulesManager.Instance.externalGenericModules
+            RemoveHandler s.ProcessorModule.ModuleNeedsRestart, AddressOf Handle_SetupNeedsRestart
             RemoveHandler s.ProcessorModule.ModuleSettingsChanged, AddressOf Handle_ModuleSettingsChanged
-            RemoveHandler s.ProcessorModule.ModuleStateChanged, AddressOf Handle_ModuleStateChanged
-            RemoveHandler s.ProcessorModule.SetupNeedsRestart, AddressOf Handle_SetupNeedsRestart
+            'RemoveHandler s.ProcessorModule.ModuleStateChanged, AddressOf Handle_ModuleStateChanged
         Next
     End Sub
 
@@ -3733,71 +3733,46 @@ Public Class dlgSettings
         SetApplyButton(True)
     End Sub
 
-    Private Sub Handle_ModuleStateChanged(ByVal Name As String, ByVal bIsEnabled As Boolean, ByVal diffOrder As Integer)
+    Private Sub Handle_ModuleStateChanged(ByVal strAssemblyName As String, ByVal tPanelType As Enums.SettingsPanelType, ByVal bIsEnabled As Boolean, ByVal intDifforder As Integer)
         If Name = "!#RELOAD" Then
             FillSettings()
             Return
         End If
-        Dim tSetPan As New Containers.SettingsPanel
-        Dim oSetPan As New Containers.SettingsPanel
+        Dim tSetPan As Containers.SettingsPanel
+        Dim oSetPan As Containers.SettingsPanel
         SuspendLayout()
-        tSetPan = SettingsPanels.FirstOrDefault(Function(s) s.Name = Name)
+        tSetPan = SettingsPanels.FirstOrDefault(Function(s) s.Name = strAssemblyName And s.SettingsPanelType = tPanelType)
 
         If tSetPan IsNot Nothing Then
             tSetPan.ImageIndex = If(bIsEnabled, 9, 10)
 
             Try
-                'If tvSettings.Nodes.Count > 0 AndAlso tvSettings.Nodes(0).TreeView.IsDisposed Then Return 'Dont know yet why we need this. second call to settings will raise Exception with treview been disposed
-                Dim t() As TreeNode = tvSettingsList.Nodes.Find(Name, True)
+                Dim t() As TreeNode = tvSettingsList.Nodes.Find(strAssemblyName, True)
 
                 If t.Count > 0 Then
-                    If Not diffOrder = 0 Then
+                    If Not intDifforder = 0 Then
                         Dim p As TreeNode = t(0).Parent
                         Dim i As Integer = t(0).Index
-                        If diffOrder < 0 AndAlso Not t(0).PrevNode Is Nothing Then
+                        If intDifforder < 0 AndAlso Not t(0).PrevNode Is Nothing Then
                             oSetPan = SettingsPanels.FirstOrDefault(Function(s) s.Name = t(0).PrevNode.Name)
-                            If oSetPan IsNot Nothing Then oSetPan.Order = i + (diffOrder * -1)
+                            If oSetPan IsNot Nothing Then oSetPan.Order = i + (intDifforder * -1)
                         End If
-                        If diffOrder > 0 AndAlso Not t(0).NextNode Is Nothing Then
+                        If intDifforder > 0 AndAlso Not t(0).NextNode Is Nothing Then
                             oSetPan = SettingsPanels.FirstOrDefault(Function(s) s.Name = t(0).NextNode.Name)
-                            If oSetPan IsNot Nothing Then oSetPan.Order = i + (diffOrder * -1)
+                            If oSetPan IsNot Nothing Then oSetPan.Order = i + (intDifforder * -1)
                         End If
                         p.Nodes.Remove(t(0))
-                        p.Nodes.Insert(i + diffOrder, t(0))
+                        p.Nodes.Insert(i + intDifforder, t(0))
                         t(0).TreeView.SelectedNode = t(0)
-                        tSetPan.Order = i + diffOrder
+                        tSetPan.Order = i + intDifforder
                     End If
                     t(0).ImageIndex = If(bIsEnabled, 9, 10)
                     t(0).SelectedImageIndex = If(bIsEnabled, 9, 10)
                     pbSettingsCurrent.Image = ilSettings.Images(If(bIsEnabled, 9, 10))
                 End If
 
-                For Each s As ModulesManager._externalScraperModuleSettingsPanelClass_Data_Movie In (ModulesManager.Instance.externalScraperModulesSettingsPanels_Data_Movie.Where(Function(y) y.AssemblyName <> Name))
-                    s.SettingsPanel.ScraperOrderChanged()
-                Next
-                For Each s As ModulesManager._externalScraperModuleSettingsPanelClass_Data_MovieSet In (ModulesManager.Instance.externalScraperModulesSettingsPanels_Data_MovieSet.Where(Function(y) y.AssemblyName <> Name))
-                    s.SettingsPanel.ScraperOrderChanged()
-                Next
-                For Each s As ModulesManager._externalScraperModuleSettingsPanelClass_Data_TV In (ModulesManager.Instance.externalScraperModulesSettingsPanels_Data_TV.Where(Function(y) y.AssemblyName <> Name))
-                    s.SettingsPanel.ScraperOrderChanged()
-                Next
-                For Each s As ModulesManager._externalScraperModuleSettingsPanelClass_Image_Movie In (ModulesManager.Instance.externalScraperModulesSettingsPanels_Image_Movie.Where(Function(y) y.AssemblyName <> Name))
-                    s.SettingsPanel.ScraperOrderChanged()
-                Next
-                For Each s As ModulesManager._externalScraperModuleSettingsPanelClass_Image_MovieSet In (ModulesManager.Instance.externalScraperModulesSettingsPanels_Image_MovieSet.Where(Function(y) y.AssemblyName <> Name))
-                    s.SettingsPanel.ScraperOrderChanged()
-                Next
-                For Each s As ModulesManager._externalScraperModuleSettingsPanelClass_Image_TV In (ModulesManager.Instance.externalScraperModulesSettingsPanels_Image_TV.Where(Function(y) y.AssemblyName <> Name))
-                    s.SettingsPanel.ScraperOrderChanged()
-                Next
-                For Each s As ModulesManager._externalScraperModuleSettingsPanelClass_Theme_Movie In (ModulesManager.Instance.externalScraperModulesSettingsPanels_Theme_Movie.Where(Function(y) y.AssemblyName <> Name))
-                    s.SettingsPanel.ScraperOrderChanged()
-                Next
-                For Each s As ModulesManager._externalScraperModuleSettingsPanelClass_Theme_TV In (ModulesManager.Instance.externalScraperModulesSettingsPanels_Theme_TV.Where(Function(y) y.AssemblyName <> Name))
-                    s.SettingsPanel.ScraperOrderChanged()
-                Next
-                For Each s As ModulesManager._externalScraperModuleSettingsPanelClass_Trailer_Movie In (ModulesManager.Instance.externalScraperModulesSettingsPanels_Trailer_Movie.Where(Function(y) y.AssemblyName <> Name))
-                    s.SettingsPanel.ScraperOrderChanged()
+                For Each s As ModulesManager._externalModuleClass In (ModulesManager.Instance.externalModules.Where(Function(y) Not y.AssemblyName = strAssemblyName))
+                    s.Base.ModuleOrderChanged(tPanelType)
                 Next
             Catch ex As Exception
                 logger.Error(ex, New StackFrame().GetMethod().Name)
@@ -5628,16 +5603,16 @@ Public Class dlgSettings
 
         End With
 
-        For Each s As ModulesManager._externalScraperModuleClass In ModulesManager.Instance.externalScraperModules
+        For Each s As ModulesManager._externalModuleClass In ModulesManager.Instance.externalModules
             Try
-                s.ScraperModule.SaveSettingsPanel(Not isApply)
+                s.Base.SaveSettingsPanel(Not isApply)
             Catch ex As Exception
                 logger.Error(ex, New StackFrame().GetMethod().Name)
             End Try
         Next
         For Each s As ModulesManager._externalGenericModuleClass In ModulesManager.Instance.externalGenericModules
             Try
-                s.ProcessorModule.SaveSetup(Not isApply)
+                s.ProcessorModule.SaveSettings(Not isApply)
             Catch ex As Exception
                 logger.Error(ex, New StackFrame().GetMethod().Name)
             End Try

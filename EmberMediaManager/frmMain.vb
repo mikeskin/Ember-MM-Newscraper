@@ -1860,11 +1860,13 @@ Public Class frmMain
             logger.Trace(String.Format("[Movie Scraper] [Start] Scraping {0}", OldListTitle))
 
             DBScrapeMovie = Master.DB.Load_Movie(Convert.ToInt64(tScrapeItem.DataRow.Item("idMovie")))
+            DBScrapeMovie.ScrapeModifiers = tScrapeItem.ScrapeModifiers
+            DBScrapeMovie.ScrapeOptions = Args.ScrapeOptions
 
             '*********
 
             Dim nScraper As New Scraper
-            If nScraper.DoScrape(DBScrapeMovie, tScrapeItem.ScrapeModifiers, Args.ScrapeType, Args.ScrapeOptions, Args.ScrapeList.Count = 1) Then
+            If nScraper.DoScrape(DBScrapeMovie, Args.ScrapeType, Args.ScrapeList.Count = 1) Then
 
             End If
 

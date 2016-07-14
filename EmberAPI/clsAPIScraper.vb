@@ -34,14 +34,14 @@ Public Class Scraper
 
 #Region "Methods"
 
-    Public Function DoScrape(ByRef tDBElement As Database.DBElement, ByVal tScrapeModifiers As Structures.ScrapeModifiers, ByVal tScrapeType As Enums.ScrapeType, ByVal tScrapeOptions As Structures.ScrapeOptions, ByVal bShowMessage As Boolean) As Boolean
+    Public Function DoScrape(ByRef tDBElement As Database.DBElement, ByVal tScrapeType As Enums.ScrapeType, ByVal bShowMessage As Boolean) As Boolean
         Select Case tDBElement.ContentType
             Case Enums.ContentType.Movie
                 logger.Trace(String.Format("[Scraper] [DoScrape] [Movie] [Start] {0}", tDBElement.Filename))
                 If tDBElement.IsOnline OrElse FileUtils.Common.CheckOnlineStatus_Movie(tDBElement, bShowMessage) Then
 
                     'clean DBMovie if the movie is to be changed. For this, all existing (incorrect) information must be deleted and the images triggers set to remove.
-                    If tScrapeModifiers.DoSearch Then
+                    If tDBElement.ScrapeModifiers.DoSearch Then
                         tDBElement.ImagesContainer = New MediaContainers.ImagesContainer
                         tDBElement.Movie = New MediaContainers.Movie
 
@@ -52,13 +52,14 @@ Public Class Scraper
                     'create a clone of DBMovie
                     Dim oDBElement As Database.DBElement = CType(tDBElement.CloneDeep, Database.DBElement)
 
+                    'search movie if no unique ID is known
                     If Not tDBElement.Movie.AnyUniqueIDSpecified Then
                         If Not DoSearch(oDBElement, tScrapeType) Then
                             Return False
                         End If
                     End If
 
-                    Dim ret = ModulesManager.Instance.RunScraper(oDBElement, tScrapeModifiers, tScrapeType, tScrapeOptions)
+                    Dim ret = ModulesManager.Instance.RunScraper(oDBElement, tScrapeType)
 
 
 
@@ -92,7 +93,9 @@ Public Class Scraper
         Select Case DBElement.ContentType
             Case Enums.ContentType.Movie
                 logger.Trace(String.Format("[Scraper] [DoSearch] [Movie] [Start] {0}", DBElement.Filename))
-                tSearchResults = ModulesManager.Instance.RunSearch(DBElement.Movie.Title, DBElement.Movie.Year, DBElement.Language, DBElement.ContentType)
+                Dim intYear As Integer
+                Integer.TryParse(DBElement.Movie.Year, intYear)
+                tSearchResults = ModulesManager.Instance.RunSearch(DBElement.Movie.Title, intYear, DBElement.Language, DBElement.ContentType)
                 If tSearchResults.Movies.Count > 0 Then
                     DBElement.Movie = tSearchResults.Movies.Item(0)
                     Return True

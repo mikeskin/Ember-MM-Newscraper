@@ -21,7 +21,7 @@
 Imports EmberAPI
 
 Public Class genericMetadataEditor
-    Implements Interfaces.GenericModule
+    Implements Interfaces.GenericEngine
 
 #Region "Fields"
 
@@ -32,16 +32,16 @@ Public Class genericMetadataEditor
 
 #Region "Events"
 
-    Public Event GenericEvent(ByVal mType As Enums.ModuleEventType, ByRef _params As List(Of Object)) Implements Interfaces.GenericModule.GenericEvent
-    Public Event ModuleSettingsChanged() Implements Interfaces.GenericModule.ModuleSettingsChanged
-    Public Event ModuleStateChanged(ByVal Name As String, ByVal State As Boolean, ByVal diffOrder As Integer) Implements Interfaces.GenericModule.ModuleStateChanged
-    Public Event SetupNeedsRestart() Implements Interfaces.GenericModule.SetupNeedsRestart
+    Public Event GenericEvent(ByVal mType As Enums.ModuleEventType, ByRef _params As List(Of Object)) Implements Interfaces.GenericEngine.GenericEvent
+    Public Event ModuleSettingsChanged() Implements Interfaces.GenericEngine.ModuleSettingsChanged
+    Public Event ModuleStateChanged(ByVal Name As String, ByVal State As Boolean, ByVal diffOrder As Integer) Implements Interfaces.GenericEngine.ModuleStateChanged
+    Public Event ModuleNeedsRestart() Implements Interfaces.GenericEngine.ModuleNeedsRestart
 
 #End Region 'Events
 
 #Region "Properties"
 
-    Public Property Enabled() As Boolean Implements Interfaces.GenericModule.Enabled
+    Public Property ModuleEnabled() As Boolean Implements Interfaces.GenericEngine.ModuleEnabled
         Get
             Return True
         End Get
@@ -49,25 +49,25 @@ Public Class genericMetadataEditor
         End Set
     End Property
 
-    ReadOnly Property IsBusy() As Boolean Implements Interfaces.GenericModule.IsBusy
+    ReadOnly Property IsBusy() As Boolean Implements Interfaces.GenericEngine.IsBusy
         Get
             Return False
         End Get
     End Property
 
-    Public ReadOnly Property ModuleName() As String Implements Interfaces.GenericModule.ModuleName
+    Public ReadOnly Property ModuleName() As String Implements Interfaces.GenericEngine.ModuleName
         Get
             Return "Audio & Video Codec Mapping"
         End Get
     End Property
 
-    Public ReadOnly Property ModuleType() As List(Of Enums.ModuleEventType) Implements Interfaces.GenericModule.ModuleType
+    Public ReadOnly Property ModuleType() As List(Of Enums.ModuleEventType) Implements Interfaces.GenericEngine.ModuleType
         Get
             Return New List(Of Enums.ModuleEventType)(New Enums.ModuleEventType() {Enums.ModuleEventType.Generic})
         End Get
     End Property
 
-    Public ReadOnly Property ModuleVersion() As String Implements Interfaces.GenericModule.ModuleVersion
+    Public ReadOnly Property ModuleVersion() As String Implements Interfaces.GenericEngine.ModuleVersion
         Get
             Return FileVersionInfo.GetVersionInfo(Reflection.Assembly.GetExecutingAssembly.Location).FileVersion.ToString
         End Get
@@ -77,12 +77,12 @@ Public Class genericMetadataEditor
 
 #Region "Methods"
 
-    Public Sub Init(ByVal sAssemblyName As String, ByVal sExecutable As String) Implements Interfaces.GenericModule.Init
+    Public Sub Init(ByVal sAssemblyName As String, ByVal sExecutable As String) Implements Interfaces.GenericEngine.Init
         _AssemblyName = sAssemblyName
     End Sub
 
-    Public Function InjectSettingsPanel() As Containers.SettingsPanel Implements Interfaces.GenericModule.InjectSettingsPanel
-        Dim SPanel As New Containers.SettingsPanel
+    Public Function InjectSettingsPanel() As Containers.SettingsPanel Implements Interfaces.GenericEngine.InjectSettingsPanel
+        Dim SPanel As New Containers.SettingsPanel(Enums.SettingsPanelType.Core)
         _setup = New frmSettingsHolder
         SPanel.Name = Master.eLang.GetString(785, "Audio & Video Codec Mapping")
         SPanel.Text = Master.eLang.GetString(785, "Audio & Video Codec Mapping")
@@ -100,11 +100,11 @@ Public Class genericMetadataEditor
         RaiseEvent ModuleSettingsChanged()
     End Sub
 
-    Public Function RunGeneric(ByVal mType As Enums.ModuleEventType, ByRef _params As List(Of Object), ByRef _singleobjekt As Object, ByRef _dbelement As Database.DBElement) As Interfaces.ModuleResult Implements Interfaces.GenericModule.RunGeneric
+    Public Function RunGeneric(ByVal mType As Enums.ModuleEventType, ByRef _params As List(Of Object), ByRef _singleobjekt As Object, ByRef _dbelement As Database.DBElement) As Interfaces.ModuleResult Implements Interfaces.GenericEngine.RunGeneric
 
     End Function
 
-    Public Sub SaveSetup(ByVal DoDispose As Boolean) Implements Interfaces.GenericModule.SaveSetup
+    Public Sub SaveSettings(ByVal DoDispose As Boolean) Implements Interfaces.GenericEngine.SaveSettings
         _setup.SaveChanges()
         If DoDispose Then
             RemoveHandler _setup.ModuleSettingsChanged, AddressOf Handle_ModuleSettingsChanged

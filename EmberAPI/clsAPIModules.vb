@@ -34,7 +34,7 @@ Public Class ModulesManager
     Public Shared VersionList As New List(Of VersionItem)
 
     Public externalGenericModules As New List(Of _externalGenericModuleClass)
-    Public externalScraperModules As New List(Of _externalScraperModuleClass)
+    Public externalModules As New List(Of _externalModuleClass)
     Public RuntimeObjects As New EmberRuntimeObjects
 
     'Singleton Instace for module manager .. allways use this one
@@ -79,10 +79,10 @@ Public Class ModulesManager
         VersionList.Clear()
         VersionList.Add(New VersionItem With {.AssemblyFileName = "*EmberAPP", .Name = "Ember Application", .Version = My.Application.Info.Version.ToString()})
         VersionList.Add(New VersionItem With {.AssemblyFileName = "*EmberAPI", .Name = "Ember API", .Version = Functions.EmberAPIVersion()})
-        For Each _externalScraperModule As _externalScraperModuleClass In externalScraperModules
-            VersionList.Add(New VersionItem With {.Name = _externalScraperModule.ScraperModule.ModuleName,
+        For Each _externalScraperModule As _externalModuleClass In externalModules
+            VersionList.Add(New VersionItem With {.Name = _externalScraperModule.Base.ModuleName,
               .AssemblyFileName = _externalScraperModule.AssemblyFilename,
-              .Version = _externalScraperModule.ScraperModule.ModuleVersion})
+              .Version = _externalScraperModule.Base.ModuleVersion})
         Next
         For Each _externalModule As _externalGenericModuleClass In externalGenericModules
             VersionList.Add(New VersionItem With {.Name = _externalModule.ProcessorModule.ModuleName,
@@ -159,51 +159,74 @@ Public Class ModulesManager
 
             For Each tAssemblyItem As AssemblyListItem In AssemblyList
                 'Loop through each of the assemeblies type
+                Dim test = tAssemblyItem.Assembly.GetTypes
                 For Each fileType As Type In tAssemblyItem.Assembly.GetTypes
 
-                    Dim fType As Type = fileType.GetInterface("GenericModule")
-                    If Not fType Is Nothing Then
-                        Dim ProcessorModule As Interfaces.GenericModule 'Object
-                        ProcessorModule = CType(Activator.CreateInstance(fileType), Interfaces.GenericModule)
+                    Dim fType As Type = fileType.GetInterface("Base")
+                    If fType IsNot Nothing Then
+                        Dim Base As Interfaces.Base
+                        Base = CType(Activator.CreateInstance(fileType), Interfaces.Base)
 
-                        Dim GenericModule As New _externalGenericModuleClass
-                        GenericModule.ProcessorModule = ProcessorModule
-                        GenericModule.AssemblyName = tAssemblyItem.AssemblyName
-                        GenericModule.AssemblyFileName = tAssemblyItem.Assembly.ManifestModule.Name
-                        GenericModule.Type = ProcessorModule.ModuleType
-                        externalGenericModules.Add(GenericModule)
+                        Dim tExternalModule As New _externalModuleClass
+                        tExternalModule.Base = Base
+                        tExternalModule.AssemblyName = tAssemblyItem.AssemblyName
+                        tExternalModule.AssemblyFilename = tAssemblyItem.Assembly.ManifestModule.Name
 
-                        GenericModule.ProcessorModule.Init(GenericModule.AssemblyName, GenericModule.AssemblyFileName)
-
-                        Dim bFound As Boolean = False
-                        For Each i In Master.eSettings.EmberModules
-                            If i.AssemblyName = GenericModule.AssemblyName Then
-                                GenericModule.ProcessorModule.Enabled = i.ModuleEnabled
-                                bFound = True
-                            End If
-                        Next
-
-                        'Enable all Core Modules by default if no setting was found
-                        If Not bFound AndAlso GenericModule.AssemblyFileName.Contains("generic.EmberCore") Then
-                            GenericModule.ProcessorModule.Enabled = True
+                        fType = fileType.GetInterface("GenericEngine")
+                        If fType IsNot Nothing Then
+                            Dim GenericEngine As Interfaces.GenericEngine
+                            GenericEngine = CType(Activator.CreateInstance(fileType), Interfaces.GenericEngine)
+                            tExternalModule.GenericEngine = GenericEngine
                         End If
-                        AddHandler ProcessorModule.GenericEvent, AddressOf GenericRunCallBack
+
+                        fType = fileType.GetInterface("ScraperEngine")
+                        If fType IsNot Nothing Then
+                            Dim ScraperEngine As Interfaces.ScraperEngine
+                            ScraperEngine = CType(Activator.CreateInstance(fileType), Interfaces.ScraperEngine)
+                            tExternalModule.ScraperEngine = ScraperEngine
+                        End If
+
+                        fType = fileType.GetInterface("SearchEngine")
+                        If fType IsNot Nothing Then
+                            Dim SearchEngine As Interfaces.SearchEngine
+                            SearchEngine = CType(Activator.CreateInstance(fileType), Interfaces.SearchEngine)
+                            tExternalModule.SearchEngine = SearchEngine
+                        End If
+
+                        externalModules.Add(tExternalModule)
+
+                        tExternalModule.Base.Init(tExternalModule.AssemblyName)
+                        logger.Trace(String.Concat("[ModulesManager] [LoadModules] Loaded: ", tExternalModule.AssemblyName))
                     End If
 
-                    fType = fileType.GetInterface("ScraperModule")
-                    If Not fType Is Nothing Then
-                        Dim ProcessorModule As Interfaces.ScraperModule
-                        ProcessorModule = CType(Activator.CreateInstance(fileType), Interfaces.ScraperModule)
+                    'fType = fileType.GetInterface("GenericModule")
+                    'If Not fType Is Nothing Then
+                    '    Dim ProcessorModule As Interfaces.GenericEngine 'Object
+                    '    ProcessorModule = CType(Activator.CreateInstance(fileType), Interfaces.GenericEngine)
 
-                        Dim ScraperModule As New _externalScraperModuleClass
-                        ScraperModule.ScraperModule = ProcessorModule
-                        ScraperModule.AssemblyName = tAssemblyItem.AssemblyName
-                        ScraperModule.AssemblyFilename = tAssemblyItem.Assembly.ManifestModule.Name
-                        externalScraperModules.Add(ScraperModule)
+                    '    Dim GenericModule As New _externalGenericModuleClass
+                    '    GenericModule.ProcessorModule = ProcessorModule
+                    '    GenericModule.AssemblyName = tAssemblyItem.AssemblyName
+                    '    GenericModule.AssemblyFileName = tAssemblyItem.Assembly.ManifestModule.Name
+                    '    GenericModule.Type = ProcessorModule.ModuleType
+                    '    externalGenericModules.Add(GenericModule)
 
-                        ScraperModule.ScraperModule.Init(ScraperModule.AssemblyName)
-                        logger.Trace(String.Concat("[ModulesManager] [LoadModules] Loaded: ", ScraperModule.AssemblyName))
-                    End If
+                    '    GenericModule.ProcessorModule.Init(GenericModule.AssemblyName, GenericModule.AssemblyFileName)
+
+                    '    Dim bFound As Boolean = False
+                    '    For Each i In Master.eSettings.EmberModules
+                    '        If i.AssemblyName = GenericModule.AssemblyName Then
+                    '            GenericModule.ProcessorModule.ModuleEnabled = i.ModuleEnabled
+                    '            bFound = True
+                    '        End If
+                    '    Next
+
+                    '    'Enable all Core Modules by default if no setting was found
+                    '    If Not bFound AndAlso GenericModule.AssemblyFileName.Contains("generic.EmberCore") Then
+                    '        GenericModule.ProcessorModule.ModuleEnabled = True
+                    '    End If
+                    '    AddHandler ProcessorModule.GenericEvent, AddressOf GenericRunCallBack
+                    'End If
 
                     'fType = fileType.GetInterface("ScraperModuleSettingsPanel_Data_Movie")
                     'If Not fType Is Nothing Then
@@ -248,7 +271,7 @@ Public Class ModulesManager
 
             'Enable default Modules
             If Not DataScraperAnyEnabled_Movie AndAlso Not DataScraperFound_Movie Then
-                SetScraperEnable_Data_Movie("scraper.Data.TMDB", True)
+                SetScraperEnable("scraper.Data.TMDB", Enums.SettingsPanelType.MovieData, True)
             End If
             If Not ImageScraperAnyEnabled_Movie AndAlso Not ImageScraperFound_Movie Then
                 SetScraperEnable_Image_Movie("scraper.Image.FanartTV", True)
@@ -296,64 +319,64 @@ Public Class ModulesManager
         End If
     End Function
 
-    Function QueryScraperCapabilities(ByVal externalScraperModule As _externalScraperModuleClass, ByVal tScrapeModifiers As Structures.ScrapeModifiers, ByVal tContentType As Enums.ContentType) As Boolean
+    Function QueryScraperCapabilities(ByVal externalScraperModule As _externalModuleClass, ByVal tScrapeModifiers As Structures.ScrapeModifiers, ByVal tContentType As Enums.ContentType) As Boolean
         While Not ModulesLoaded
             Application.DoEvents()
         End While
 
-        If tScrapeModifiers.EpisodeFanart AndAlso externalScraperModule.ScraperModule.QueryModifierCapabilities(Enums.ModifierType.EpisodeFanart, tContentType) Then Return True
-        If tScrapeModifiers.EpisodePoster AndAlso externalScraperModule.ScraperModule.QueryModifierCapabilities(Enums.ModifierType.EpisodePoster, tContentType) Then Return True
-        If tScrapeModifiers.MainBanner AndAlso externalScraperModule.ScraperModule.QueryModifierCapabilities(Enums.ModifierType.MainBanner, tContentType) Then Return True
-        If tScrapeModifiers.MainCharacterArt AndAlso externalScraperModule.ScraperModule.QueryModifierCapabilities(Enums.ModifierType.MainCharacterArt, tContentType) Then Return True
-        If tScrapeModifiers.MainClearArt AndAlso externalScraperModule.ScraperModule.QueryModifierCapabilities(Enums.ModifierType.MainClearArt, tContentType) Then Return True
-        If tScrapeModifiers.MainClearLogo AndAlso externalScraperModule.ScraperModule.QueryModifierCapabilities(Enums.ModifierType.MainClearLogo, tContentType) Then Return True
-        If tScrapeModifiers.MainDiscArt AndAlso externalScraperModule.ScraperModule.QueryModifierCapabilities(Enums.ModifierType.MainDiscArt, tContentType) Then Return True
-        If tScrapeModifiers.MainExtrafanarts AndAlso externalScraperModule.ScraperModule.QueryModifierCapabilities(Enums.ModifierType.MainFanart, tContentType) Then Return True
-        If tScrapeModifiers.MainExtrathumbs AndAlso externalScraperModule.ScraperModule.QueryModifierCapabilities(Enums.ModifierType.MainFanart, tContentType) Then Return True
-        If tScrapeModifiers.MainFanart AndAlso externalScraperModule.ScraperModule.QueryModifierCapabilities(Enums.ModifierType.MainFanart, tContentType) Then Return True
-        If tScrapeModifiers.MainLandscape AndAlso externalScraperModule.ScraperModule.QueryModifierCapabilities(Enums.ModifierType.MainLandscape, tContentType) Then Return True
-        If tScrapeModifiers.MainPoster AndAlso externalScraperModule.ScraperModule.QueryModifierCapabilities(Enums.ModifierType.MainPoster, tContentType) Then Return True
-        If tScrapeModifiers.MainSubtitles AndAlso externalScraperModule.ScraperModule.QueryModifierCapabilities(Enums.ModifierType.MainSubtitle, tContentType) Then Return True
-        If tScrapeModifiers.MainTheme AndAlso externalScraperModule.ScraperModule.QueryModifierCapabilities(Enums.ModifierType.MainTheme, tContentType) Then Return True
-        If tScrapeModifiers.MainTrailer AndAlso externalScraperModule.ScraperModule.QueryModifierCapabilities(Enums.ModifierType.MainTrailer, tContentType) Then Return True
-        If tScrapeModifiers.SeasonBanner AndAlso externalScraperModule.ScraperModule.QueryModifierCapabilities(Enums.ModifierType.SeasonBanner, tContentType) Then Return True
-        If tScrapeModifiers.SeasonFanart AndAlso externalScraperModule.ScraperModule.QueryModifierCapabilities(Enums.ModifierType.SeasonFanart, tContentType) Then Return True
-        If tScrapeModifiers.SeasonLandscape AndAlso externalScraperModule.ScraperModule.QueryModifierCapabilities(Enums.ModifierType.SeasonLandscape, tContentType) Then Return True
-        If tScrapeModifiers.SeasonPoster AndAlso externalScraperModule.ScraperModule.QueryModifierCapabilities(Enums.ModifierType.SeasonPoster, tContentType) Then Return True
+        If tScrapeModifiers.EpisodeFanart AndAlso externalScraperModule.ScraperEngine.QueryCapabilities(Enums.ModifierType.EpisodeFanart, tContentType) Then Return True
+        If tScrapeModifiers.EpisodePoster AndAlso externalScraperModule.ScraperEngine.QueryCapabilities(Enums.ModifierType.EpisodePoster, tContentType) Then Return True
+        If tScrapeModifiers.MainBanner AndAlso externalScraperModule.ScraperEngine.QueryCapabilities(Enums.ModifierType.MainBanner, tContentType) Then Return True
+        If tScrapeModifiers.MainCharacterArt AndAlso externalScraperModule.ScraperEngine.QueryCapabilities(Enums.ModifierType.MainCharacterArt, tContentType) Then Return True
+        If tScrapeModifiers.MainClearArt AndAlso externalScraperModule.ScraperEngine.QueryCapabilities(Enums.ModifierType.MainClearArt, tContentType) Then Return True
+        If tScrapeModifiers.MainClearLogo AndAlso externalScraperModule.ScraperEngine.QueryCapabilities(Enums.ModifierType.MainClearLogo, tContentType) Then Return True
+        If tScrapeModifiers.MainDiscArt AndAlso externalScraperModule.ScraperEngine.QueryCapabilities(Enums.ModifierType.MainDiscArt, tContentType) Then Return True
+        If tScrapeModifiers.MainExtrafanarts AndAlso externalScraperModule.ScraperEngine.QueryCapabilities(Enums.ModifierType.MainFanart, tContentType) Then Return True
+        If tScrapeModifiers.MainExtrathumbs AndAlso externalScraperModule.ScraperEngine.QueryCapabilities(Enums.ModifierType.MainFanart, tContentType) Then Return True
+        If tScrapeModifiers.MainFanart AndAlso externalScraperModule.ScraperEngine.QueryCapabilities(Enums.ModifierType.MainFanart, tContentType) Then Return True
+        If tScrapeModifiers.MainLandscape AndAlso externalScraperModule.ScraperEngine.QueryCapabilities(Enums.ModifierType.MainLandscape, tContentType) Then Return True
+        If tScrapeModifiers.MainPoster AndAlso externalScraperModule.ScraperEngine.QueryCapabilities(Enums.ModifierType.MainPoster, tContentType) Then Return True
+        If tScrapeModifiers.MainSubtitles AndAlso externalScraperModule.ScraperEngine.QueryCapabilities(Enums.ModifierType.MainSubtitle, tContentType) Then Return True
+        If tScrapeModifiers.MainTheme AndAlso externalScraperModule.ScraperEngine.QueryCapabilities(Enums.ModifierType.MainTheme, tContentType) Then Return True
+        If tScrapeModifiers.MainTrailer AndAlso externalScraperModule.ScraperEngine.QueryCapabilities(Enums.ModifierType.MainTrailer, tContentType) Then Return True
+        If tScrapeModifiers.SeasonBanner AndAlso externalScraperModule.ScraperEngine.QueryCapabilities(Enums.ModifierType.SeasonBanner, tContentType) Then Return True
+        If tScrapeModifiers.SeasonFanart AndAlso externalScraperModule.ScraperEngine.QueryCapabilities(Enums.ModifierType.SeasonFanart, tContentType) Then Return True
+        If tScrapeModifiers.SeasonLandscape AndAlso externalScraperModule.ScraperEngine.QueryCapabilities(Enums.ModifierType.SeasonLandscape, tContentType) Then Return True
+        If tScrapeModifiers.SeasonPoster AndAlso externalScraperModule.ScraperEngine.QueryCapabilities(Enums.ModifierType.SeasonPoster, tContentType) Then Return True
 
         Return False
     End Function
 
-    Function QueryScraperCapabilities(ByVal externalScraperModule As _externalScraperModuleClass, ByVal tImageType As Enums.ModifierType, ByVal tContentType As Enums.ContentType) As Boolean
+    Function QueryScraperCapabilities(ByVal externalScraperModule As _externalModuleClass, ByVal tImageType As Enums.ModifierType, ByVal tContentType As Enums.ContentType) As Boolean
         While Not ModulesLoaded
             Application.DoEvents()
         End While
 
         Select Case tImageType
             Case Enums.ModifierType.AllSeasonsBanner
-                If externalScraperModule.ScraperModule.QueryModifierCapabilities(Enums.ModifierType.MainBanner, tContentType) OrElse
-                    externalScraperModule.ScraperModule.QueryModifierCapabilities(Enums.ModifierType.SeasonBanner, tContentType) Then Return True
+                If externalScraperModule.ScraperEngine.QueryCapabilities(Enums.ModifierType.MainBanner, tContentType) OrElse
+                    externalScraperModule.ScraperEngine.QueryCapabilities(Enums.ModifierType.SeasonBanner, tContentType) Then Return True
             Case Enums.ModifierType.AllSeasonsFanart
-                If externalScraperModule.ScraperModule.QueryModifierCapabilities(Enums.ModifierType.MainFanart, tContentType) OrElse
-                    externalScraperModule.ScraperModule.QueryModifierCapabilities(Enums.ModifierType.SeasonFanart, tContentType) Then Return True
+                If externalScraperModule.ScraperEngine.QueryCapabilities(Enums.ModifierType.MainFanart, tContentType) OrElse
+                    externalScraperModule.ScraperEngine.QueryCapabilities(Enums.ModifierType.SeasonFanart, tContentType) Then Return True
             Case Enums.ModifierType.AllSeasonsLandscape
-                If externalScraperModule.ScraperModule.QueryModifierCapabilities(Enums.ModifierType.MainLandscape, tContentType) OrElse
-                    externalScraperModule.ScraperModule.QueryModifierCapabilities(Enums.ModifierType.SeasonLandscape, tContentType) Then Return True
+                If externalScraperModule.ScraperEngine.QueryCapabilities(Enums.ModifierType.MainLandscape, tContentType) OrElse
+                    externalScraperModule.ScraperEngine.QueryCapabilities(Enums.ModifierType.SeasonLandscape, tContentType) Then Return True
             Case Enums.ModifierType.AllSeasonsPoster
-                If externalScraperModule.ScraperModule.QueryModifierCapabilities(Enums.ModifierType.MainPoster, tContentType) OrElse
-                    externalScraperModule.ScraperModule.QueryModifierCapabilities(Enums.ModifierType.SeasonPoster, tContentType) Then Return True
+                If externalScraperModule.ScraperEngine.QueryCapabilities(Enums.ModifierType.MainPoster, tContentType) OrElse
+                    externalScraperModule.ScraperEngine.QueryCapabilities(Enums.ModifierType.SeasonPoster, tContentType) Then Return True
             Case Enums.ModifierType.EpisodeFanart
-                If externalScraperModule.ScraperModule.QueryModifierCapabilities(Enums.ModifierType.MainFanart, tContentType) OrElse
-                    externalScraperModule.ScraperModule.QueryModifierCapabilities(Enums.ModifierType.EpisodeFanart, tContentType) Then Return True
+                If externalScraperModule.ScraperEngine.QueryCapabilities(Enums.ModifierType.MainFanart, tContentType) OrElse
+                    externalScraperModule.ScraperEngine.QueryCapabilities(Enums.ModifierType.EpisodeFanart, tContentType) Then Return True
             Case Enums.ModifierType.MainExtrafanarts
-                Return externalScraperModule.ScraperModule.QueryModifierCapabilities(Enums.ModifierType.MainFanart, tContentType)
+                Return externalScraperModule.ScraperEngine.QueryCapabilities(Enums.ModifierType.MainFanart, tContentType)
             Case Enums.ModifierType.MainExtrathumbs
-                Return externalScraperModule.ScraperModule.QueryModifierCapabilities(Enums.ModifierType.MainFanart, tContentType)
+                Return externalScraperModule.ScraperEngine.QueryCapabilities(Enums.ModifierType.MainFanart, tContentType)
             Case Enums.ModifierType.SeasonFanart
-                If externalScraperModule.ScraperModule.QueryModifierCapabilities(Enums.ModifierType.MainFanart, tContentType) OrElse
-                    externalScraperModule.ScraperModule.QueryModifierCapabilities(Enums.ModifierType.SeasonFanart, tContentType) Then Return True
+                If externalScraperModule.ScraperEngine.QueryCapabilities(Enums.ModifierType.MainFanart, tContentType) OrElse
+                    externalScraperModule.ScraperEngine.QueryCapabilities(Enums.ModifierType.SeasonFanart, tContentType) Then Return True
             Case Else
-                Return externalScraperModule.ScraperModule.QueryModifierCapabilities(tImageType, tContentType)
+                Return externalScraperModule.ScraperEngine.QueryCapabilities(tImageType, tContentType)
         End Select
 
         Return False
@@ -364,7 +387,7 @@ Public Class ModulesManager
         While Not ModulesLoaded
             Application.DoEvents()
         End While
-        For Each _externalScraperModule As _externalScraperModuleClass In externalScraperModules.Where(Function(e) e.ScraperModule.AnyScraperEnabled)
+        For Each _externalScraperModule As _externalModuleClass In externalModules '.Where(Function(e) e.ScraperModule.ModuleEnabled)
             ret = QueryScraperCapabilities(_externalScraperModule, tImageType, tContentType)
             If ret Then Exit For
         Next
@@ -389,7 +412,7 @@ Public Class ModulesManager
         End While
 
         Try
-            Dim modules As IEnumerable(Of _externalGenericModuleClass) = externalGenericModules.Where(Function(e) e.ProcessorModule.ModuleType.Contains(mType) AndAlso e.ProcessorModule.Enabled)
+            Dim modules As IEnumerable(Of _externalGenericModuleClass) = externalGenericModules.Where(Function(e) e.ProcessorModule.ModuleType.Contains(mType) AndAlso e.ProcessorModule.ModuleEnabled)
             If (modules.Count() <= 0) Then
                 logger.Warn("[ModulesManager] [RunGeneric] No generic modules defined <{0}>", mType.ToString)
             Else
@@ -400,40 +423,42 @@ Public Class ModulesManager
                     Catch ex As Exception
                         logger.Error(ex, New StackFrame().GetMethod().Name & Convert.ToChar(Keys.Tab) & "Error scraping movies images using <" & _externalGenericModule.ProcessorModule.ModuleName & ">")
                     End Try
-                    If ret.breakChain OrElse RunOnlyOne Then Exit For
+                    If ret.bBreakChain OrElse RunOnlyOne Then Exit For
                 Next
             End If
         Catch ex As Exception
             logger.Error(ex, New StackFrame().GetMethod().Name)
         End Try
 
-        Return ret.Cancelled
+        Return ret.bCancelled
     End Function
 
-    Public Function RunSearch(ByVal strTitle As String, ByVal strYear As String, ByVal strLanguage As String, ByVal tContentType As Enums.ContentType) As MediaContainers.SearchResultsContainer
+    Public Function RunSearch(ByVal strTitle As String, ByVal intYear As Integer, ByVal strLanguage As String, ByVal tContentType As Enums.ContentType) As MediaContainers.SearchResultsContainer
         Dim tSearchResults As New MediaContainers.SearchResultsContainer
         Dim ret As Interfaces.SearchResults
 
-        Dim modules As IEnumerable(Of _externalScraperModuleClass) = externalScraperModules.Where(Function(e) e.ScraperModule.AnyScraperEnabled)
+        Dim modules As IEnumerable(Of _externalModuleClass) = externalModules.Where(Function(e) e.SearchEngine IsNot Nothing)
 
-        For Each _externalScraperModule As _externalScraperModuleClass In modules
-            ret = _externalScraperModule.ScraperModule.RunSearch(strTitle, strYear, strLanguage, tContentType)
-            tSearchResults.Movies.AddRange(ret.tResult.Movies)
-            tSearchResults.MovieSets.AddRange(ret.tResult.MovieSets)
-            tSearchResults.TVEpisodes.AddRange(ret.tResult.TVEpisodes)
-            tSearchResults.TVSeasons.AddRange(ret.tResult.TVSeasons)
-            tSearchResults.TVShows.AddRange(ret.tResult.TVShows)
+        For Each _externalScraperModule As _externalModuleClass In modules
+            ret = _externalScraperModule.SearchEngine.RunSearch(strTitle, intYear, strLanguage, tContentType)
+            If ret.tResult IsNot Nothing Then
+                tSearchResults.Movies.AddRange(ret.tResult.Movies)
+                tSearchResults.MovieSets.AddRange(ret.tResult.MovieSets)
+                tSearchResults.TVEpisodes.AddRange(ret.tResult.TVEpisodes)
+                tSearchResults.TVSeasons.AddRange(ret.tResult.TVSeasons)
+                tSearchResults.TVShows.AddRange(ret.tResult.TVShows)
+            End If
         Next
 
         Return tSearchResults
     End Function
 
-    Public Function RunScraper(ByVal tDBElement As Database.DBElement, ByVal tScrapeModifiers As Structures.ScrapeModifiers, ByVal tScrapeType As Enums.ScrapeType, ByVal tScrapeOptions As Structures.ScrapeOptions) As MediaContainers.ScrapeResultsContainer
+    Public Function RunScraper(ByVal tDBElement As Database.DBElement, ByVal tScrapeType As Enums.ScrapeType) As MediaContainers.ScrapeResultsContainer
         Select Case tDBElement.ContentType
             Case Enums.ContentType.Movie
                 logger.Trace(String.Format("[ModulesManager] [Scrape] [Movie] [Start] {0}", tDBElement.Filename))
 
-                Dim modules As IEnumerable(Of _externalScraperModuleClass) = externalScraperModules.Where(Function(e) e.ScraperModule.AnyScraperEnabled) '.OrderBy(Function(e) e.ModuleOrder)
+                Dim modules As IEnumerable(Of _externalModuleClass) = externalModules.Where(Function(e) e.ScraperEngine IsNot Nothing) '.OrderBy(Function(e) e.ModuleOrder)
                 Dim ret As Interfaces.ScrapeResults
                 Dim tScrapedData As New List(Of MediaContainers.Movie)
                 Dim tScrapedImages As New List(Of MediaContainers.ImageResultsContainer)
@@ -447,14 +472,14 @@ Public Class ModulesManager
                 If (modules.Count() <= 0) Then
                     logger.Warn("[ModulesManager] [Scrape] [Movie] [Abort] No scrapers enabled")
                 Else
-                    For Each _externalScraperModule As _externalScraperModuleClass In modules
-                        logger.Trace(String.Format("[ModulesManager] [Scrape] [Using] {0}", _externalScraperModule.ScraperModule.ModuleName))
+                    For Each _externalScraperModule As _externalModuleClass In modules
+                        logger.Trace(String.Format("[ModulesManager] [Scrape] [Using] {0}", _externalScraperModule.Base.ModuleName))
                         'AddHandler _externalScraperModule.ProcessorModule.ScraperEvent, AddressOf Handler_ScraperEvent_Movie
 
-                        ret = _externalScraperModule.ScraperModule.RunScraper(tDBElement, tScrapeModifiers, tScrapeType, tScrapeOptions)
+                        ret = _externalScraperModule.ScraperEngine.RunScraper(tDBElement)
 
                         If Not ret.bCancelled Then
-                            tScrapedData.Add(ret.tScraperResult.Movie)
+                            tScrapedData.Add(ret.tResult.Movie)
 
                             ''set new informations for following scrapers
                             'If ret.tScraperResult.Movie.IDSpecified Then
@@ -477,15 +502,15 @@ Public Class ModulesManager
                             'End If
                         End If
 
-                        If ret.tScraperResult.Images IsNot Nothing Then
-                            tScrapedImages.Add(ret.tScraperResult.Images)
+                        If ret.tResult.Images IsNot Nothing Then
+                            tScrapedImages.Add(ret.tResult.Images)
                         End If
                         'RemoveHandler _externalScraperModule.ProcessorModule.ScraperEvent, AddressOf Handler_ScraperEvent_Movie
                         If ret.bBreakChain Then Exit For
                     Next
 
                     'Merge scraperresults considering global datascraper settings
-                    tDBElement = NFO.MergeDataScraperResults_Movie(tDBElement, tScrapedData, tScrapeType, tScrapeOptions)
+                    tDBElement = NFO.MergeDataScraperResults_Movie(tDBElement, tScrapedData, tScrapeType)
 
                     'create cache paths for Actor Thumbs
                     tDBElement.Movie.CreateCachePaths_ActorsThumbs()
@@ -1168,16 +1193,16 @@ Public Class ModulesManager
             Dim t As New _XMLEmberModuleClass
             t.AssemblyName = _externalProcessorModule.AssemblyName
             t.AssemblyFileName = _externalProcessorModule.AssemblyFileName
-            t.ModuleEnabled = _externalProcessorModule.ProcessorModule.Enabled
+            t.ModuleEnabled = _externalProcessorModule.ProcessorModule.ModuleEnabled
             t.ContentType = _externalProcessorModule.ContentType
             tmpForXML.Add(t)
         Next
-        For Each _externalScraperModule As _externalScraperModuleClass In externalScraperModules
-            For Each nSettingsPanel As Containers.SettingsPanel In _externalScraperModule.ScraperModule.InjectSettingsPanels
+        For Each _externalScraperModule As _externalModuleClass In externalModules
+            For Each nSettingsPanel As Containers.SettingsPanel In _externalScraperModule.Base.InjectSettingsPanels
                 Dim t As New _XMLEmberModuleClass
                 t.AssemblyName = _externalScraperModule.AssemblyName
                 t.AssemblyFileName = _externalScraperModule.AssemblyFilename
-                't.ModuleEnabled = nSettingsPanel..SettingsPanel.ScraperEnabled
+                t.ModuleEnabled = nSettingsPanel.Enabled
                 t.ModuleOrder = nSettingsPanel.Order
                 't.ContentType = nSettingsPanel.ContentType
                 tmpForXML.Add(t)
@@ -1199,7 +1224,7 @@ Public Class ModulesManager
         Else
             For Each _externalProcessorModule As _externalGenericModuleClass In modules
                 Try
-                    _externalProcessorModule.ProcessorModule.Enabled = value
+                    _externalProcessorModule.ProcessorModule.ModuleEnabled = value
                 Catch ex As Exception
                     logger.Error(ex, New StackFrame().GetMethod().Name & Convert.ToChar(Keys.Tab) & "Could not set module <" & ModuleAssembly & "> to enabled status <" & value & ">")
                 End Try
@@ -1207,24 +1232,24 @@ Public Class ModulesManager
         End If
     End Sub
 
-    Public Sub SetScraperEnable_Data_Movie(ByVal ModuleAssembly As String, ByVal value As Boolean)
-        'If (String.IsNullOrEmpty(ModuleAssembly)) Then
-        '    logger.Error("[ModulesManager] [SetScraperEnable_Data_Movie] Invalid ModuleAssembly")
-        '    Return
-        'End If
+    Public Sub SetScraperEnable(ByVal strModuleAssembly As String, ByVal tType As Enums.SettingsPanelType, ByVal bValue As Boolean)
+        If (String.IsNullOrEmpty(strModuleAssembly)) Then
+            logger.Error(String.Format("[ModulesManager] [SetScraperEnable] Invalid ModuleAssembly: <{0}>", strModuleAssembly))
+            Return
+        End If
 
-        'Dim modules As IEnumerable(Of _externalScraperModuleSettingsPanelClass_Data_Movie) = externalScraperModulesSettingsPanels_Data_Movie.Where(Function(p) p.AssemblyName = ModuleAssembly)
-        'If (modules.Count < 0) Then
-        '    logger.Warn("[ModulesManager] [SetScraperEnable_Data_Movie]  modules of type <{0}> were found", ModuleAssembly)
-        'Else
-        '    For Each _externalScraperModule As _externalScraperModuleSettingsPanelClass_Data_Movie In modules
-        '        Try
-        '            _externalScraperModule.SettingsPanel.ScraperEnabled = value
-        '        Catch ex As Exception
-        '            logger.Error(ex, New StackFrame().GetMethod().Name & Convert.ToChar(Keys.Tab) & "Could not set module <" & ModuleAssembly & "> to enabled status <" & value & ">")
-        '        End Try
-        '    Next
-        'End If
+        Dim modules As IEnumerable(Of _externalModuleClass) = externalModules.Where(Function(p) p.AssemblyName = strModuleAssembly)
+        If (modules.Count < 0) Then
+            logger.Warn(String.Format("[ModulesManager] [SetScraperEnable_Data_Movie]  modules of type <{0}> were found", strModuleAssembly))
+        Else
+            For Each _externalScraperModule As _externalModuleClass In modules
+                Try
+                    '_externalScraperModule.Base.SettingsPanel.ScraperEnabled = bValue
+                Catch ex As Exception
+                    logger.Error(ex, New StackFrame().GetMethod().Name & Convert.ToChar(Keys.Tab) & "Could not set module <" & strModuleAssembly & "> to enabled status <" & bValue & ">")
+                End Try
+            Next
+        End If
     End Sub
 
     Public Sub SetScraperEnable_Data_MovieSet(ByVal ModuleAssembly As String, ByVal value As Boolean)
@@ -1714,7 +1739,7 @@ Public Class ModulesManager
         'Public Enabled As Boolean
         Public AssemblyName As String
         Public ModuleOrder As Integer 'TODO: not important at this point.. for 1.5
-        Public ProcessorModule As Interfaces.GenericModule 'Object
+        Public ProcessorModule As Interfaces.GenericEngine 'Object
         Public Type As List(Of Enums.ModuleEventType)
         Public ContentType As Enums.ContentType = Enums.ContentType.Generic
 
@@ -1722,13 +1747,16 @@ Public Class ModulesManager
 
     End Class
 
-    Class _externalScraperModuleClass
+    Class _externalModuleClass
 
 #Region "Fields"
 
         Public AssemblyFilename As String
         Public AssemblyName As String
-        Public ScraperModule As Interfaces.ScraperModule
+        Public Base As Interfaces.Base
+        Public GenericEngine As Interfaces.GenericEngine
+        Public ScraperEngine As Interfaces.ScraperEngine
+        Public SearchEngine As Interfaces.SearchEngine
         'Public SettingsPanels As List(Of Interfaces.ScraperModuleSettingsPanel_Data_Movie)
 
 #End Region 'Fields
