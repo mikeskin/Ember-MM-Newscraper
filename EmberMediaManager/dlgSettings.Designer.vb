@@ -1620,6 +1620,9 @@ Partial Class dlgSettings
         Me.scSettingsBody = New System.Windows.Forms.SplitContainer()
         Me.scSettingsMain = New System.Windows.Forms.SplitContainer()
         Me.tblSettingsFooter = New System.Windows.Forms.TableLayoutPanel()
+        Me.pnlMovieSearch = New System.Windows.Forms.Panel()
+        Me.pnlMovieSetSearch = New System.Windows.Forms.Panel()
+        Me.pnlTVSearch = New System.Windows.Forms.Panel()
         Me.gbGeneralMiscOpts.SuspendLayout()
         Me.tblGeneralMisc.SuspendLayout()
         Me.gbGeneralThemes.SuspendLayout()
@@ -4695,6 +4698,7 @@ Partial Class dlgSettings
         Me.ilSettings.Images.SetKeyName(9, "settingscheck.png")
         Me.ilSettings.Images.SetKeyName(10, "settingsx.png")
         Me.ilSettings.Images.SetKeyName(11, "note.png")
+        Me.ilSettings.Images.SetKeyName(12, "search.png")
         '
         'tvSettingsList
         '
@@ -22120,7 +22124,7 @@ Partial Class dlgSettings
         Me.chkMovieSetPosterPrefOnly.AutoSize = True
         Me.tblMovieSetImagesPosterOpts.SetColumnSpan(Me.chkMovieSetPosterPrefOnly, 2)
         Me.chkMovieSetPosterPrefOnly.Font = New System.Drawing.Font("Segoe UI", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.chkMovieSetPosterPrefOnly.Location = New System.Drawing.Point(186, 25)
+        Me.chkMovieSetPosterPrefOnly.Location = New System.Drawing.Point(158, 25)
         Me.chkMovieSetPosterPrefOnly.Name = "chkMovieSetPosterPrefOnly"
         Me.chkMovieSetPosterPrefOnly.Size = New System.Drawing.Size(50, 17)
         Me.chkMovieSetPosterPrefOnly.TabIndex = 2
@@ -22704,6 +22708,36 @@ Partial Class dlgSettings
         Me.tblSettingsFooter.Size = New System.Drawing.Size(1207, 74)
         Me.tblSettingsFooter.TabIndex = 0
         '
+        'pnlMovieSearch
+        '
+        Me.pnlMovieSearch.AutoSize = True
+        Me.pnlMovieSearch.BackColor = System.Drawing.Color.White
+        Me.pnlMovieSearch.Location = New System.Drawing.Point(900, 900)
+        Me.pnlMovieSearch.Name = "pnlMovieSearch"
+        Me.pnlMovieSearch.Size = New System.Drawing.Size(200, 100)
+        Me.pnlMovieSearch.TabIndex = 0
+        Me.pnlMovieSearch.Visible = False
+        '
+        'pnlMovieSetSearch
+        '
+        Me.pnlMovieSetSearch.AutoSize = True
+        Me.pnlMovieSetSearch.BackColor = System.Drawing.Color.White
+        Me.pnlMovieSetSearch.Location = New System.Drawing.Point(900, 900)
+        Me.pnlMovieSetSearch.Name = "pnlMovieSetSearch"
+        Me.pnlMovieSetSearch.Size = New System.Drawing.Size(200, 100)
+        Me.pnlMovieSetSearch.TabIndex = 0
+        Me.pnlMovieSetSearch.Visible = False
+        '
+        'pnlTVSearch
+        '
+        Me.pnlTVSearch.AutoSize = True
+        Me.pnlTVSearch.BackColor = System.Drawing.Color.White
+        Me.pnlTVSearch.Location = New System.Drawing.Point(900, 900)
+        Me.pnlTVSearch.Name = "pnlTVSearch"
+        Me.pnlTVSearch.Size = New System.Drawing.Size(200, 100)
+        Me.pnlTVSearch.TabIndex = 1
+        Me.pnlTVSearch.Visible = False
+        '
         'dlgSettings
         '
         Me.AcceptButton = Me.btnOK
@@ -22711,6 +22745,9 @@ Partial Class dlgSettings
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi
         Me.CancelButton = Me.btnCancel
         Me.ClientSize = New System.Drawing.Size(1214, 861)
+        Me.Controls.Add(Me.pnlMovieSearch)
+        Me.Controls.Add(Me.pnlMovieSetSearch)
+        Me.Controls.Add(Me.pnlTVSearch)
         Me.Controls.Add(Me.pnlTVGeneral)
         Me.Controls.Add(Me.pnlMovieSources)
         Me.Controls.Add(Me.pnlTVSources)
@@ -25118,4 +25155,7 @@ End Sub
     Friend WithEvents tblMovieScraperCollectionOpts As TableLayoutPanel
     Friend WithEvents chkMovieScraperCollectionsExtendedInfo As CheckBox
     Friend WithEvents chkMovieScraperCollectionsYAMJCompatibleSets As CheckBox
+    Friend WithEvents pnlMovieSearch As Panel
+    Friend WithEvents pnlMovieSetSearch As Panel
+    Friend WithEvents pnlTVSearch As Panel
 End Class
