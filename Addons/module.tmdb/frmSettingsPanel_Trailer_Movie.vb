@@ -18,10 +18,9 @@
 ' # along with Ember Media Manager.  If not, see <http://www.gnu.org/licenses/>. #
 ' ################################################################################
 
-Imports System.IO
 Imports EmberAPI
 
-Public Class frmSettingsHolder_Trailer_Movie
+Public Class frmSettingsPanel_Trailer_Movie
 
 #Region "Fields"
 
@@ -41,20 +40,20 @@ Public Class frmSettingsHolder_Trailer_Movie
 
 #Region "Methods"
     Private Sub btnDown_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnDown.Click
-        'Dim order As Integer = ModulesManager.Instance.externalScrapersModules_Trailer_Movie.FirstOrDefault(Function(p) p.AssemblyName = clsModuleYouTube._AssemblyName).ModuleOrder
-        'If order < ModulesManager.Instance.externalScrapersModules_Trailer_Movie.Count - 1 Then
-        '    ModulesManager.Instance.externalScrapersModules_Trailer_Movie.FirstOrDefault(Function(p) p.ModuleOrder = order + 1).ModuleOrder = order
-        '    ModulesManager.Instance.externalScrapersModules_Trailer_Movie.FirstOrDefault(Function(p) p.AssemblyName = clsModuleYouTube._AssemblyName).ModuleOrder = order + 1
+        'Dim order As Integer = ModulesManager.Instance.externalScraperModulesSettingsPanels_Trailer_Movie.FirstOrDefault(Function(p) p.AssemblyName = clsModuleTMDB._AssemblyName).ModuleOrder
+        'If order < ModulesManager.Instance.externalScraperModulesSettingsPanels_Trailer_Movie.Count - 1 Then
+        '    ModulesManager.Instance.externalScraperModulesSettingsPanels_Trailer_Movie.FirstOrDefault(Function(p) p.ModuleOrder = order + 1).ModuleOrder = order
+        '    ModulesManager.Instance.externalScraperModulesSettingsPanels_Trailer_Movie.FirstOrDefault(Function(p) p.AssemblyName = clsModuleTMDB._AssemblyName).ModuleOrder = order + 1
         '    RaiseEvent ModuleStateChanged(chkEnabled.Checked, 1)
         '    orderChanged()
         'End If
     End Sub
 
     Private Sub btnUp_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnUp.Click
-        'Dim order As Integer = ModulesManager.Instance.externalScrapersModules_Trailer_Movie.FirstOrDefault(Function(p) p.AssemblyName = clsModuleYouTube._AssemblyName).ModuleOrder
+        'Dim order As Integer = ModulesManager.Instance.externalScraperModulesSettingsPanels_Trailer_Movie.FirstOrDefault(Function(p) p.AssemblyName = clsModuleTMDB._AssemblyName).ModuleOrder
         'If order > 0 Then
-        '    ModulesManager.Instance.externalScrapersModules_Trailer_Movie.FirstOrDefault(Function(p) p.ModuleOrder = order - 1).ModuleOrder = order
-        '    ModulesManager.Instance.externalScrapersModules_Trailer_Movie.FirstOrDefault(Function(p) p.AssemblyName = clsModuleYouTube._AssemblyName).ModuleOrder = order - 1
+        '    ModulesManager.Instance.externalScraperModulesSettingsPanels_Trailer_Movie.FirstOrDefault(Function(p) p.ModuleOrder = order - 1).ModuleOrder = order
+        '    ModulesManager.Instance.externalScraperModulesSettingsPanels_Trailer_Movie.FirstOrDefault(Function(p) p.AssemblyName = clsModuleTMDB._AssemblyName).ModuleOrder = order - 1
         '    RaiseEvent ModuleStateChanged(chkEnabled.Checked, -1)
         '    orderChanged()
         'End If
@@ -70,9 +69,9 @@ Public Class frmSettingsHolder_Trailer_Movie
     End Sub
 
     Sub orderChanged()
-        'Dim order As Integer = ModulesManager.Instance.externalScrapersModules_Trailer_Movie.FirstOrDefault(Function(p) p.AssemblyName = clsModuleYouTube._AssemblyName).ModuleOrder
-        'If ModulesManager.Instance.externalScrapersModules_Trailer_Movie.Count > 1 Then
-        '    btnDown.Enabled = (order < ModulesManager.Instance.externalScrapersModules_Trailer_Movie.Count - 1)
+        'Dim order As Integer = ModulesManager.Instance.externalScraperModulesSettingsPanels_Trailer_Movie.FirstOrDefault(Function(p) p.AssemblyName = clsModuleTMDB._AssemblyName).ModuleOrder
+        'If ModulesManager.Instance.externalScraperModulesSettingsPanels_Trailer_Movie.Count > 1 Then
+        '    btnDown.Enabled = (order < ModulesManager.Instance.externalScraperModulesSettingsPanels_Trailer_Movie.Count - 1)
         '    btnUp.Enabled = (order > 0)
         'Else
         '    btnDown.Enabled = False
@@ -80,10 +79,26 @@ Public Class frmSettingsHolder_Trailer_Movie
         'End If
     End Sub
 
+    Private Sub pbApiKeyInfo_Click(sender As System.Object, e As System.EventArgs) Handles pbApiKeyInfo.Click
+        Functions.Launch(My.Resources.urlAPIKey)
+    End Sub
+
     Sub SetUp()
+        lblApiKey.Text = Master.eLang.GetString(870, "TMDB API Key")
         chkEnabled.Text = Master.eLang.GetString(774, "Enabled")
+        chkFallBackEng.Text = Master.eLang.GetString(922, "Fallback to english")
+        gbScraperTrailerOpts.Text = Master.eLang.GetString(283, "Trailers - Scraper specific")
         lblInfoBottom.Text = String.Format(Master.eLang.GetString(790, "These settings are specific to this module.{0}Please refer to the global settings for more options."), Environment.NewLine)
         lblScraperOrder.Text = Master.eLang.GetString(168, "Scrape Order")
+        txtApiKey.WatermarkText = Master.eLang.GetString(1189, "Ember Media Manager Embedded API Key")
+    End Sub
+
+    Private Sub txtApiKey_TextChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles txtApiKey.TextChanged
+        RaiseEvent ModuleSettingsChanged()
+    End Sub
+
+    Private Sub chkFallBackEng_CheckedChanged(sender As System.Object, e As System.EventArgs) Handles chkFallBackEng.CheckedChanged
+        RaiseEvent ModuleSettingsChanged()
     End Sub
 
 #End Region 'Methods

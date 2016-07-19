@@ -49,9 +49,6 @@ Public Class ModulesManager
 #Region "Events"
 
     Public Event GenericEvent(ByVal mType As Enums.ModuleEventType, ByRef _params As List(Of Object))
-    Event ScraperEvent_Movie(ByVal eType As Enums.ScraperEventType, ByVal Parameter As Object)
-    Event ScraperEvent_MovieSet(ByVal eType As Enums.ScraperEventType, ByVal Parameter As Object)
-    Event ScraperEvent_TV(ByVal eType As Enums.ScraperEventType, ByVal Parameter As Object)
 
 #End Region 'Events
 
@@ -110,18 +107,6 @@ Public Class ModulesManager
             li.SubItems.Add(v.Version)
         Next
         dlgVersions.ShowDialog()
-    End Sub
-
-    Public Sub Handler_ScraperEvent_Movie(ByVal eType As Enums.ScraperEventType, ByVal Parameter As Object)
-        RaiseEvent ScraperEvent_Movie(eType, Parameter)
-    End Sub
-
-    Public Sub Handler_ScraperEvent_MovieSet(ByVal eType As Enums.ScraperEventType, ByVal Parameter As Object)
-        RaiseEvent ScraperEvent_MovieSet(eType, Parameter)
-    End Sub
-
-    Public Sub Handler_ScraperEvent_TV(ByVal eType As Enums.ScraperEventType, ByVal Parameter As Object)
-        RaiseEvent ScraperEvent_TV(eType, Parameter)
     End Sub
 
     Public Sub LoadAllModules()

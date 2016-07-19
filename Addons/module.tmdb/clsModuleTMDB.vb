@@ -52,13 +52,13 @@ Public Class clsModuleTMDB
     Private _ScraperEnabled_Image_MovieSet As Boolean = False
     Private _ScraperEnabled_Image_TV As Boolean = False
     Private _ScraperEnabled_Trailer_Movie As Boolean = False
-    Private _sPanel_Data_Movie As frmSettingsHolder_Data_Movie
-    Private _sPanel_Data_MovieSet As frmSettingsHolder_Data_MovieSet
-    Private _sPanel_Data_TV As frmSettingsHolder_Data_TV
-    Private _sPanel_Image_Movie As frmSettingsHolder_Image_Movie
-    Private _sPanel_Image_MovieSet As frmSettingsHolder_Image_MovieSet
-    Private _sPanel_Image_TV As frmSettingsHolder_Image_TV
-    Private _sPanel_Trailer_Movie As frmSettingsHolder_Trailer_Movie
+    Private _sPanel_Data_Movie As frmSettingsPanel_Data_Movie
+    Private _sPanel_Data_MovieSet As frmSettingsPanel_Data_MovieSet
+    Private _sPanel_Data_TV As frmSettingsPanel_Data_TV
+    Private _sPanel_Image_Movie As frmSettingsPanel_Image_Movie
+    Private _sPanel_Image_MovieSet As frmSettingsPanel_Image_MovieSet
+    Private _sPanel_Image_TV As frmSettingsPanel_Image_TV
+    Private _sPanel_Trailer_Movie As frmSettingsPanel_Trailer_Movie
 
     'SearchEngine
     Private _SearchEngineEnabled_Movie As Boolean = False
@@ -279,7 +279,7 @@ Public Class clsModuleTMDB
 
     Function InjectSettingsPanel_Data_Movie() As Containers.SettingsPanel
         Dim sPanel As New Containers.SettingsPanel(Enums.SettingsPanelType.MovieData)
-        _sPanel_Data_Movie = New frmSettingsHolder_Data_Movie
+        _sPanel_Data_Movie = New frmSettingsPanel_Data_Movie
         _sPanel_Data_Movie.chkEnabled.Checked = _ScraperEnabled_Data_Movie
         _sPanel_Data_Movie.chkActors.Checked = ConfigScrapeOptions_Movie.bMainActors
         _sPanel_Data_Movie.chkCollectionID.Checked = ConfigScrapeOptions_Movie.bMainCollectionID
@@ -309,8 +309,6 @@ Public Class clsModuleTMDB
         sPanel.Text = "TMDB"
         sPanel.Prefix = "TMDBMovieInfo_"
         sPanel.Order = 110
-        sPanel.Parent = "pnlMovieData"
-        sPanel.Type = Master.eLang.GetString(36, "Movies")
         sPanel.ImageIndex = If(_ScraperEnabled_Data_Movie, 9, 10)
         sPanel.Panel = _sPanel_Data_Movie.pnlSettings
 
@@ -323,7 +321,7 @@ Public Class clsModuleTMDB
 
     Function InjectSettingsPanel_Data_MovieSet() As Containers.SettingsPanel
         Dim sPanel As New Containers.SettingsPanel(Enums.SettingsPanelType.MovieSetData)
-        _sPanel_Data_MovieSet = New frmSettingsHolder_Data_MovieSet
+        _sPanel_Data_MovieSet = New frmSettingsPanel_Data_MovieSet
         _sPanel_Data_MovieSet.chkEnabled.Checked = _ScraperEnabled_Data_MovieSet
         _sPanel_Data_MovieSet.chkFallBackEng.Checked = _SpecialSettings_Data_MovieSet.FallBackEng
         _sPanel_Data_MovieSet.chkGetAdultItems.Checked = _SpecialSettings_Data_MovieSet.GetAdultItems
@@ -337,8 +335,6 @@ Public Class clsModuleTMDB
         sPanel.Text = "TMDB"
         sPanel.Prefix = "TMDBMovieSetInfo_"
         sPanel.Order = 110
-        sPanel.Parent = "pnlMovieSetData"
-        sPanel.Type = Master.eLang.GetString(1203, "MovieSets")
         sPanel.ImageIndex = If(_ScraperEnabled_Data_MovieSet, 9, 10)
         sPanel.Panel = _sPanel_Data_MovieSet.pnlSettings
 
@@ -351,7 +347,7 @@ Public Class clsModuleTMDB
 
     Function InjectSettingsPanel_Data_TV() As Containers.SettingsPanel
         Dim sPanel As New Containers.SettingsPanel(Enums.SettingsPanelType.TVData)
-        _sPanel_Data_TV = New frmSettingsHolder_Data_TV
+        _sPanel_Data_TV = New frmSettingsPanel_Data_TV
         _sPanel_Data_TV.chkEnabled.Checked = _ScraperEnabled_Data_TV
         _sPanel_Data_TV.chkFallBackEng.Checked = _SpecialSettings_Data_TV.FallBackEng
         _sPanel_Data_TV.chkGetAdultItems.Checked = _SpecialSettings_Data_TV.GetAdultItems
@@ -387,8 +383,6 @@ Public Class clsModuleTMDB
         sPanel.Text = "TMDB"
         sPanel.Prefix = "TMDBTVInfo_"
         sPanel.Order = 110
-        sPanel.Parent = "pnlTVData"
-        sPanel.Type = Master.eLang.GetString(653, "TV Shows")
         sPanel.ImageIndex = If(_ScraperEnabled_Data_TV, 9, 10)
         sPanel.Panel = _sPanel_Data_TV.pnlSettings
 
@@ -401,7 +395,7 @@ Public Class clsModuleTMDB
 
     Function InjectSettingsPanel_Image_Movie() As Containers.SettingsPanel
         Dim sPanel As New Containers.SettingsPanel(Enums.SettingsPanelType.MovieImage)
-        _sPanel_Image_Movie = New frmSettingsHolder_Image_Movie
+        _sPanel_Image_Movie = New frmSettingsPanel_Image_Movie
         _sPanel_Image_Movie.chkEnabled.Checked = _ScraperEnabled_Image_Movie
         _sPanel_Image_Movie.chkScrapeFanart.Checked = ConfigScrapeModifier_Movie.MainFanart
         _sPanel_Image_Movie.chkScrapePoster.Checked = ConfigScrapeModifier_Movie.MainPoster
@@ -413,8 +407,6 @@ Public Class clsModuleTMDB
         sPanel.Text = "TMDB"
         sPanel.Prefix = "TMDBMovieMedia_"
         sPanel.Order = 110
-        sPanel.Parent = "pnlMovieMedia"
-        sPanel.Type = Master.eLang.GetString(36, "Movies")
         sPanel.ImageIndex = If(_ScraperEnabled_Image_Movie, 9, 10)
         sPanel.Panel = _sPanel_Image_Movie.pnlSettings
 
@@ -427,7 +419,7 @@ Public Class clsModuleTMDB
 
     Function InjectSettingsPanel_Image_MovieSet() As Containers.SettingsPanel
         Dim sPanel As New Containers.SettingsPanel(Enums.SettingsPanelType.MovieSetImage)
-        _sPanel_Image_MovieSet = New frmSettingsHolder_Image_MovieSet
+        _sPanel_Image_MovieSet = New frmSettingsPanel_Image_MovieSet
         _sPanel_Image_MovieSet.chkEnabled.Checked = _ScraperEnabled_Image_MovieSet
         _sPanel_Image_MovieSet.chkScrapeFanart.Checked = ConfigScrapeModifier_MovieSet.MainFanart
         _sPanel_Image_MovieSet.chkScrapePoster.Checked = ConfigScrapeModifier_MovieSet.MainPoster
@@ -439,8 +431,6 @@ Public Class clsModuleTMDB
         sPanel.Text = "TMDB"
         sPanel.Prefix = "TMDBMovieSetMedia_"
         sPanel.Order = 110
-        sPanel.Parent = "pnlMovieSetMedia"
-        sPanel.Type = Master.eLang.GetString(1203, "MovieSets")
         sPanel.ImageIndex = If(_ScraperEnabled_Image_MovieSet, 9, 10)
         sPanel.Panel = _sPanel_Image_MovieSet.pnlSettings
 
@@ -453,7 +443,7 @@ Public Class clsModuleTMDB
 
     Function InjectSettingsPanel_Image_TV() As Containers.SettingsPanel
         Dim sPanel As New Containers.SettingsPanel(Enums.SettingsPanelType.TVImage)
-        _sPanel_Image_TV = New frmSettingsHolder_Image_TV
+        _sPanel_Image_TV = New frmSettingsPanel_Image_TV
         _sPanel_Image_TV.chkEnabled.Checked = _ScraperEnabled_Image_TV
         _sPanel_Image_TV.chkScrapeEpisodePoster.Checked = ConfigScrapeModifier_TV.EpisodePoster
         _sPanel_Image_TV.chkScrapeSeasonPoster.Checked = ConfigScrapeModifier_TV.SeasonPoster
@@ -467,8 +457,6 @@ Public Class clsModuleTMDB
         sPanel.Text = "TMDB"
         sPanel.Prefix = "TMDBTVMedia_"
         sPanel.Order = 110
-        sPanel.Parent = "pnlTVMedia"
-        sPanel.Type = Master.eLang.GetString(653, "TV Shows")
         sPanel.ImageIndex = If(_ScraperEnabled_Image_TV, 9, 10)
         sPanel.Panel = _sPanel_Image_TV.pnlSettings
 
@@ -481,7 +469,7 @@ Public Class clsModuleTMDB
 
     Function InjectSettingsPanel_Trailer_Movie() As Containers.SettingsPanel
         Dim sPanel As New Containers.SettingsPanel(Enums.SettingsPanelType.MovieTrailer)
-        _sPanel_Trailer_Movie = New frmSettingsHolder_Trailer_Movie
+        _sPanel_Trailer_Movie = New frmSettingsPanel_Trailer_Movie
         _sPanel_Trailer_Movie.chkEnabled.Checked = _ScraperEnabled_Trailer_Movie
         _sPanel_Trailer_Movie.txtApiKey.Text = _strPrivateAPIKey
         _sPanel_Trailer_Movie.chkFallBackEng.Checked = _SpecialSettings_Trailer_Movie.FallBackEng
@@ -492,8 +480,6 @@ Public Class clsModuleTMDB
         sPanel.Text = "TMDB"
         sPanel.Prefix = "TMDBTrailer_"
         sPanel.Order = 110
-        sPanel.Parent = "pnlMovieTrailer"
-        sPanel.Type = Master.eLang.GetString(36, "Movies")
         sPanel.ImageIndex = If(_ScraperEnabled_Trailer_Movie, 9, 10)
         sPanel.Panel = _sPanel_Trailer_Movie.pnlSettings
 

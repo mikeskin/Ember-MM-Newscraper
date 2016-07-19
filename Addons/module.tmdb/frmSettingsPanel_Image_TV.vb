@@ -22,7 +22,7 @@ Imports System.IO
 Imports EmberAPI
 Imports System.Diagnostics
 
-Public Class frmSettingsHolder_Image_TV
+Public Class frmSettingsPanel_Image_TV
 
 #Region "Events"
 

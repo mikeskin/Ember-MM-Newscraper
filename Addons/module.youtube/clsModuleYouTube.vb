@@ -33,7 +33,7 @@ Public Class clsModuleYouTube
     Public Shared ConfigScrapeModifier_Movie As New Structures.ScrapeModifiers
 
     Private _ScraperEnabled_Trailer_Movie As Boolean = False
-    Private _sPanel_Trailer_Movie As frmSettingsHolder_Trailer_Movie
+    Private _sPanel_Trailer_Movie As frmSettingsPanel_Trailer_Movie
 
 #End Region 'Fields
 
@@ -143,26 +143,24 @@ Public Class clsModuleYouTube
     End Function
 
     Function InjectSettingsPanel_Trailer_Movie() As Containers.SettingsPanel
-        Dim Spanel As New Containers.SettingsPanel(Enums.SettingsPanelType.MovieTrailer)
-        _sPanel_Trailer_Movie = New frmSettingsHolder_Trailer_Movie
+        Dim sPanel As New Containers.SettingsPanel(Enums.SettingsPanelType.MovieTrailer)
+        _sPanel_Trailer_Movie = New frmSettingsPanel_Trailer_Movie
         _sPanel_Trailer_Movie.chkEnabled.Checked = _ScraperEnabled_Trailer_Movie
 
         _sPanel_Trailer_Movie.orderChanged()
 
-        Spanel.Name = _AssemblyName
-        Spanel.Text = "YouTube"
-        Spanel.Prefix = "YouTubeTrailer_"
-        Spanel.Order = 110
-        Spanel.Parent = "pnlMovieTrailer"
-        Spanel.Type = Master.eLang.GetString(36, "Movies")
-        Spanel.ImageIndex = If(_ScraperEnabled_Trailer_Movie, 9, 10)
-        Spanel.Panel = _sPanel_Trailer_Movie.pnlSettings
+        sPanel.Name = _AssemblyName
+        sPanel.Text = "YouTube"
+        sPanel.Prefix = "YouTubeTrailer_"
+        sPanel.Order = 110
+        sPanel.ImageIndex = If(_ScraperEnabled_Trailer_Movie, 9, 10)
+        sPanel.Panel = _sPanel_Trailer_Movie.pnlSettings
 
         AddHandler _sPanel_Trailer_Movie.ModuleNeedsRestart, AddressOf Handle_ModuleNeedsRestart
         AddHandler _sPanel_Trailer_Movie.ModuleSettingsChanged, AddressOf Handle_ModuleSettingsChanged
         AddHandler _sPanel_Trailer_Movie.ModuleStateChanged, AddressOf Handle_ModuleStateChanged
 
-        Return Spanel
+        Return sPanel
     End Function
 
     Sub LoadSettings()

@@ -22,7 +22,7 @@ Imports System.IO
 Imports EmberAPI
 Imports System.Diagnostics
 
-Public Class frmSettingsHolder_Image_Movie
+Public Class frmSettingsPanel_Image_MovieSet
 
 #Region "Events"
 
@@ -48,27 +48,27 @@ Public Class frmSettingsHolder_Image_Movie
     End Sub
 
     Private Sub btnDown_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnDown.Click
-        'Dim order As Integer = ModulesManager.Instance.externalScraperModulesSettingsPanels_Image_Movie.FirstOrDefault(Function(p) p.AssemblyName = clsModuleTMDB._AssemblyName).ModuleOrder
-        'If order < ModulesManager.Instance.externalScraperModulesSettingsPanels_Image_Movie.Count - 1 Then
-        '    ModulesManager.Instance.externalScraperModulesSettingsPanels_Image_Movie.FirstOrDefault(Function(p) p.ModuleOrder = order + 1).ModuleOrder = order
-        '    ModulesManager.Instance.externalScraperModulesSettingsPanels_Image_Movie.FirstOrDefault(Function(p) p.AssemblyName = clsModuleTMDB._AssemblyName).ModuleOrder = order + 1
+        'Dim order As Integer = ModulesManager.Instance.externalScraperModulesSettingsPanels_Image_MovieSet.FirstOrDefault(Function(p) p.AssemblyName = clsModuleTMDB._AssemblyName).ModuleOrder
+        'If order < ModulesManager.Instance.externalScraperModulesSettingsPanels_Image_MovieSet.Count - 1 Then
+        '    ModulesManager.Instance.externalScraperModulesSettingsPanels_Image_MovieSet.FirstOrDefault(Function(p) p.ModuleOrder = order + 1).ModuleOrder = order
+        '    ModulesManager.Instance.externalScraperModulesSettingsPanels_Image_MovieSet.FirstOrDefault(Function(p) p.AssemblyName = clsModuleTMDB._AssemblyName).ModuleOrder = order + 1
         '    RaiseEvent ModuleStateChanged(chkEnabled.Checked, 1)
         '    orderChanged()
         'End If
     End Sub
 
     Private Sub btnUp_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnUp.Click
-        'Dim order As Integer = ModulesManager.Instance.externalScraperModulesSettingsPanels_Image_Movie.FirstOrDefault(Function(p) p.AssemblyName = clsModuleTMDB._AssemblyName).ModuleOrder
+        'Dim order As Integer = ModulesManager.Instance.externalScraperModulesSettingsPanels_Image_MovieSet.FirstOrDefault(Function(p) p.AssemblyName = clsModuleTMDB._AssemblyName).ModuleOrder
         'If order > 0 Then
-        '    ModulesManager.Instance.externalScraperModulesSettingsPanels_Image_Movie.FirstOrDefault(Function(p) p.ModuleOrder = order - 1).ModuleOrder = order
-        '    ModulesManager.Instance.externalScraperModulesSettingsPanels_Image_Movie.FirstOrDefault(Function(p) p.AssemblyName = clsModuleTMDB._AssemblyName).ModuleOrder = order - 1
+        '    ModulesManager.Instance.externalScraperModulesSettingsPanels_Image_MovieSet.FirstOrDefault(Function(p) p.ModuleOrder = order - 1).ModuleOrder = order
+        '    ModulesManager.Instance.externalScraperModulesSettingsPanels_Image_MovieSet.FirstOrDefault(Function(p) p.AssemblyName = clsModuleTMDB._AssemblyName).ModuleOrder = order - 1
         '    RaiseEvent ModuleStateChanged(chkEnabled.Checked, -1)
         '    orderChanged()
         'End If
     End Sub
 
     Private Sub cbEnabled_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles chkEnabled.CheckedChanged
-        RaiseEvent ModuleStateChanged(chkEnabled.Checked, Enums.SettingsPanelType.MovieImage, 0)
+        RaiseEvent ModuleStateChanged(chkEnabled.Checked, Enums.SettingsPanelType.MovieSetImage, 0)
     End Sub
 
     Private Sub chkScrapeFanart_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles chkScrapeFanart.CheckedChanged
@@ -80,9 +80,9 @@ Public Class frmSettingsHolder_Image_Movie
     End Sub
 
     Sub orderChanged()
-        'Dim order As Integer = ModulesManager.Instance.externalScraperModulesSettingsPanels_Image_Movie.FirstOrDefault(Function(p) p.AssemblyName = clsModuleTMDB._AssemblyName).ModuleOrder
-        'If ModulesManager.Instance.externalScraperModulesSettingsPanels_Image_Movie.Count > 1 Then
-        '    btnDown.Enabled = (order < ModulesManager.Instance.externalScraperModulesSettingsPanels_Image_Movie.Count - 1)
+        'Dim order As Integer = ModulesManager.Instance.externalScraperModulesSettingsPanels_Image_MovieSet.FirstOrDefault(Function(p) p.AssemblyName = clsModuleTMDB._AssemblyName).ModuleOrder
+        'If ModulesManager.Instance.externalScraperModulesSettingsPanels_Image_MovieSet.Count > 1 Then
+        '    btnDown.Enabled = (order < ModulesManager.Instance.externalScraperModulesSettingsPanels_Image_MovieSet.Count - 1)
         '    btnUp.Enabled = (order > 0)
         'Else
         '    btnDown.Enabled = False

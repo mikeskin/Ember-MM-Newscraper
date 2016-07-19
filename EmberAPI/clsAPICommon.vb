@@ -271,17 +271,16 @@ Public Class Containers
 
 #Region "Fields"
 
+        Dim _childpaneltype As Enums.SettingsPanelType
         Dim _enabled As Boolean
-        Dim _imageindex As Integer
         Dim _image As Image
+        Dim _imageindex As Integer
         Dim _name As String
         Dim _order As Integer
         Dim _panel As Panel
-        Dim _parent As String
+        Dim _paneltype As Enums.SettingsPanelType
         Dim _prefix As String
         Dim _text As String
-        Dim _type As String
-        Dim _settingspaneltype As Enums.SettingsPanelType
 
 #End Region 'Fields
 
@@ -292,12 +291,21 @@ Public Class Containers
         ''' <remarks></remarks>
         Public Sub New(ByVal tSettingsPanelType As Enums.SettingsPanelType)
             Clear()
-            _settingspaneltype = tSettingsPanelType
+            _paneltype = tSettingsPanelType
         End Sub
 
 #End Region 'Constructors
 
 #Region "Properties"
+
+        Public Property ChildPanelType() As Enums.SettingsPanelType
+            Get
+                Return _childpaneltype
+            End Get
+            Set(ByVal value As Enums.SettingsPanelType)
+                _childpaneltype = value
+            End Set
+        End Property
 
         Public Property Enabled() As Boolean
             Get
@@ -305,15 +313,6 @@ Public Class Containers
             End Get
             Set(ByVal value As Boolean)
                 _enabled = value
-            End Set
-        End Property
-
-        Public Property ImageIndex() As Integer
-            Get
-                Return _imageindex
-            End Get
-            Set(ByVal value As Integer)
-                _imageindex = value
             End Set
         End Property
 
@@ -326,6 +325,16 @@ Public Class Containers
                 _image = value
             End Set
         End Property
+
+        Public Property ImageIndex() As Integer
+            Get
+                Return _imageindex
+            End Get
+            Set(ByVal value As Integer)
+                _imageindex = value
+            End Set
+        End Property
+
 
         Public Property Name() As String
             Get
@@ -355,12 +364,12 @@ Public Class Containers
             End Set
         End Property
 
-        Public Property Parent() As String
+        Public Property PanelType() As Enums.SettingsPanelType
             Get
-                Return _parent
+                Return _paneltype
             End Get
-            Set(ByVal value As String)
-                _parent = value
+            Set(ByVal value As Enums.SettingsPanelType)
+                _paneltype = value
             End Set
         End Property
 
@@ -382,38 +391,20 @@ Public Class Containers
             End Set
         End Property
 
-        Public Property Type() As String
-            Get
-                Return _type
-            End Get
-            Set(ByVal value As String)
-                _type = value
-            End Set
-        End Property
-
-        Public Property SettingsPanelType() As Enums.SettingsPanelType
-            Get
-                Return _settingspaneltype
-            End Get
-            Set(ByVal value As Enums.SettingsPanelType)
-                _settingspaneltype = value
-            End Set
-        End Property
-
 #End Region 'Properties
 
 #Region "Methods"
 
         Public Sub Clear()
-            _imageindex = 0
+            _childpaneltype = Nothing
             _image = Nothing
+            _imageindex = 0
             _name = String.Empty
             _order = 0
             _panel = New Panel
-            _parent = String.Empty
+            _paneltype = Nothing
             _prefix = String.Empty
             _text = String.Empty
-            _type = String.Empty
         End Sub
 
 #End Region 'Methods
@@ -930,14 +921,16 @@ Public Class Enums
         MovieTheme = 14
         MovieTrailer = 15
         Options = 16
-        TV = 17
-        TVData = 18
-        TVFile = 19
-        TVGeneral = 20
-        TVImage = 21
-        TVSearch = 22
-        TVTheme = 23
-        Master = 24
+        OptionsConnection = 17
+        OptionsFileSystem = 18
+        OptionsGeneral = 19
+        TV = 20
+        TVData = 21
+        TVFile = 22
+        TVGeneral = 23
+        TVImage = 24
+        TVSearch = 25
+        TVTheme = 26
     End Enum
 
     Public Enum TaskManagerEventType As Integer

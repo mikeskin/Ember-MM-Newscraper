@@ -20,7 +20,7 @@
 
 Imports EmberAPI
 
-Public Class frmSettingsHolder_Data_Movie
+Public Class frmSettingsPanel_Data_Movie
 
 #Region "Events"
 

@@ -1,5 +1,5 @@
 ﻿<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
-Partial Class frmSettingsHolder_Image_Movie
+Partial Class frmSettingsPanel_Image_Movie
     Inherits System.Windows.Forms.Form
 
     'Form overrides dispose to clean up the component list.
@@ -22,7 +22,7 @@ Partial Class frmSettingsHolder_Image_Movie
     'Do not modify it using the code editor.
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
-        Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(frmSettingsHolder_Image_Movie))
+        Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(frmSettingsPanel_Image_Movie))
         Me.pnlSettings = New System.Windows.Forms.Panel()
         Me.pnlSettingsMain = New System.Windows.Forms.Panel()
         Me.tblSettingsMain = New System.Windows.Forms.TableLayoutPanel()
