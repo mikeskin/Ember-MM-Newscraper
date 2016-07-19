@@ -397,10 +397,10 @@ Public Class dlgSettings
                            .ImageIndex = 1,
                            .Panel = pnlProxy,
                            .Order = 300})
-        AddScraperPanels()
+        AddExternalModulesPanels()
     End Sub
 
-    Sub AddScraperPanels()
+    Sub AddExternalModulesPanels()
         Dim ModuleCounter As Integer = 1
         Dim tPanel As Containers.SettingsPanel
         For Each sModule As ModulesManager._externalModuleClass In ModulesManager.Instance.externalModules '.OrderBy(Function(x) x.ModuleOrder)
@@ -416,35 +416,30 @@ Public Class dlgSettings
             AddHandler sModule.Base.ModuleSettingsChanged, AddressOf Handle_ModuleSettingsChanged
             AddHandler sModule.Base.ModuleStateChanged, AddressOf Handle_ModuleStateChanged
         Next
-        ModuleCounter = 1
-        For Each s As ModulesManager._externalGenericModuleClass In ModulesManager.Instance.externalGenericModules
-            tPanel = s.ProcessorModule.InjectSettingsPanel
-            If Not tPanel Is Nothing Then
-                tPanel.Order += ModuleCounter
-                If tPanel.ImageIndex = -1 AndAlso Not tPanel.Image Is Nothing Then
-                    ilSettings.Images.Add(String.Concat(s.AssemblyName, tPanel.Name), tPanel.Image)
-                    tPanel.ImageIndex = ilSettings.Images.IndexOfKey(String.Concat(s.AssemblyName, tPanel.Name))
-                End If
-                SettingsPanels.Add(tPanel)
-                AddHelpHandlers(tPanel.Panel, tPanel.Prefix)
-                ModuleCounter += 1
-                AddHandler s.ProcessorModule.ModuleNeedsRestart, AddressOf Handle_SetupNeedsRestart
-                AddHandler s.ProcessorModule.ModuleSettingsChanged, AddressOf Handle_ModuleSettingsChanged
-                'AddHandler s.ProcessorModule.ModuleStateChanged, AddressOf Handle_ModuleStateChanged
-            End If
-        Next
+        'ModuleCounter = 1
+        'For Each s As ModulesManager._externalGenericModuleClass In ModulesManager.Instance.externalGenericModules
+        '    tPanel = s.ProcessorModule.InjectSettingsPanel
+        '    If Not tPanel Is Nothing Then
+        '        tPanel.Order += ModuleCounter
+        '        If tPanel.ImageIndex = -1 AndAlso Not tPanel.Image Is Nothing Then
+        '            ilSettings.Images.Add(String.Concat(s.AssemblyName, tPanel.Name), tPanel.Image)
+        '            tPanel.ImageIndex = ilSettings.Images.IndexOfKey(String.Concat(s.AssemblyName, tPanel.Name))
+        '        End If
+        '        SettingsPanels.Add(tPanel)
+        '        AddHelpHandlers(tPanel.Panel, tPanel.Prefix)
+        '        ModuleCounter += 1
+        '        AddHandler s.ProcessorModule.ModuleNeedsRestart, AddressOf Handle_SetupNeedsRestart
+        '        AddHandler s.ProcessorModule.ModuleSettingsChanged, AddressOf Handle_ModuleSettingsChanged
+        '        'AddHandler s.ProcessorModule.ModuleStateChanged, AddressOf Handle_ModuleStateChanged
+        '    End If
+        'Next
     End Sub
 
-    Sub RemoveScraperPanels()
+    Sub RemoveExternalModulesPanels()
         For Each s As ModulesManager._externalModuleClass In ModulesManager.Instance.externalModules
             RemoveHandler s.Base.ModuleNeedsRestart, AddressOf Handle_SetupNeedsRestart
             RemoveHandler s.Base.ModuleSettingsChanged, AddressOf Handle_ModuleSettingsChanged
             RemoveHandler s.Base.ModuleStateChanged, AddressOf Handle_ModuleStateChanged
-        Next
-        For Each s As ModulesManager._externalGenericModuleClass In ModulesManager.Instance.externalGenericModules
-            RemoveHandler s.ProcessorModule.ModuleNeedsRestart, AddressOf Handle_SetupNeedsRestart
-            RemoveHandler s.ProcessorModule.ModuleSettingsChanged, AddressOf Handle_ModuleSettingsChanged
-            'RemoveHandler s.ProcessorModule.ModuleStateChanged, AddressOf Handle_ModuleStateChanged
         Next
     End Sub
 
@@ -725,7 +720,7 @@ Public Class dlgSettings
 
     Private Sub btnCancel_Click(ByVal sender As Object, ByVal e As EventArgs) Handles btnCancel.Click
         If Not didApply Then sResult.DidCancel = True
-        RemoveScraperPanels()
+        RemoveExternalModulesPanels()
         Close()
     End Sub
 
@@ -953,7 +948,7 @@ Public Class dlgSettings
     Private Sub btnOK_Click(ByVal sender As Object, ByVal e As EventArgs) Handles btnOK.Click
         NoUpdate = True
         SaveSettings(False)
-        RemoveScraperPanels()
+        RemoveExternalModulesPanels()
         Close()
     End Sub
 
@@ -5629,13 +5624,6 @@ Public Class dlgSettings
         For Each s As ModulesManager._externalModuleClass In ModulesManager.Instance.externalModules
             Try
                 s.Base.SaveSettingsPanel(Not isApply)
-            Catch ex As Exception
-                logger.Error(ex, New StackFrame().GetMethod().Name)
-            End Try
-        Next
-        For Each s As ModulesManager._externalGenericModuleClass In ModulesManager.Instance.externalGenericModules
-            Try
-                s.ProcessorModule.SaveSettings(Not isApply)
             Catch ex As Exception
                 logger.Error(ex, New StackFrame().GetMethod().Name)
             End Try

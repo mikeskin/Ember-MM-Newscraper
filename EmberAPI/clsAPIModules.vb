@@ -33,7 +33,6 @@ Public Class ModulesManager
     Public Shared AssemblyList As New List(Of AssemblyListItem)
     Public Shared VersionList As New List(Of VersionItem)
 
-    Public externalGenericModules As New List(Of _externalGenericModuleClass)
     Public externalModules As New List(Of _externalModuleClass)
     Public RuntimeObjects As New EmberRuntimeObjects
 
@@ -76,15 +75,12 @@ Public Class ModulesManager
         VersionList.Clear()
         VersionList.Add(New VersionItem With {.AssemblyFileName = "*EmberAPP", .Name = "Ember Application", .Version = My.Application.Info.Version.ToString()})
         VersionList.Add(New VersionItem With {.AssemblyFileName = "*EmberAPI", .Name = "Ember API", .Version = Functions.EmberAPIVersion()})
-        For Each _externalScraperModule As _externalModuleClass In externalModules
-            VersionList.Add(New VersionItem With {.Name = _externalScraperModule.Base.ModuleName,
-              .AssemblyFileName = _externalScraperModule.AssemblyFilename,
-              .Version = _externalScraperModule.Base.ModuleVersion})
-        Next
-        For Each _externalModule As _externalGenericModuleClass In externalGenericModules
-            VersionList.Add(New VersionItem With {.Name = _externalModule.ProcessorModule.ModuleName,
-              .AssemblyFileName = _externalModule.AssemblyFileName,
-              .Version = _externalModule.ProcessorModule.ModuleVersion})
+        For Each tExternalModule As _externalModuleClass In externalModules
+            VersionList.Add(New VersionItem With {
+                            .Name = tExternalModule.Base.ModuleName,
+                            .AssemblyFileName = tExternalModule.AssemblyFilename,
+                            .Version = tExternalModule.Base.ModuleVersion
+                            })
         Next
     End Sub
 
@@ -169,6 +165,14 @@ Public Class ModulesManager
                             Dim ScraperEngine As Interfaces.ScraperEngine
                             ScraperEngine = CType(Activator.CreateInstance(fileType), Interfaces.ScraperEngine)
                             tExternalModule.ScraperEngine = ScraperEngine
+
+                            'For Each i As _XMLEmberModuleClass In Master.eSettings.EmberModules.Where(Function(f) f.AssemblyName = tAssemblyItem.AssemblyName AndAlso
+                            'f.PanelType = Enums.SettingsPanelType.MovieSearch)
+                            'SettingsPanel.SettingsPanel.ScraperEnabled = i.ModuleEnabled
+                            'DataScraperAnyEnabled_Movie = DataScraperAnyEnabled_Movie OrElse i.ModuleEnabled
+                            'SettingsPanel.ModuleOrder = i.ModuleOrder
+                            'DataScraperFound_Movie = True
+                            'Next
                         End If
 
                         fType = fileType.GetInterface("SearchEngine")
@@ -244,11 +248,6 @@ Public Class ModulesManager
 
             'Modules ordering
             Dim c As Integer = 0
-            For Each ext As _externalGenericModuleClass In externalGenericModules.OrderBy(Function(f) f.ModuleOrder)
-                ext.ModuleOrder = c
-                c += 1
-            Next
-            c = 0
             'For Each ext As _externalScraperModuleClass In externalScraperModules.OrderBy(Function(f) f.ModuleOrder)
             '    ext.ModuleOrder = c
             '    c += 1
@@ -296,12 +295,12 @@ Public Class ModulesManager
             Application.DoEvents()
         End While
 
-        Dim modules As IEnumerable(Of _externalGenericModuleClass) = externalGenericModules.Where(Function(e) e.ProcessorModule.IsBusy)
-        If modules.Count() > 0 Then
-            Return True
-        Else
-            Return False
-        End If
+        'Dim modules As IEnumerable(Of _externalGenericModuleClass) = externalGenericModules.Where(Function(e) e.ProcessorModule.IsBusy)
+        'If modules.Count() > 0 Then
+        '    Return True
+        'Else
+        Return False
+        'End If
     End Function
 
     Function QueryScraperCapabilities(ByVal externalScraperModule As _externalModuleClass, ByVal tScrapeModifiers As Structures.ScrapeModifiers, ByVal tContentType As Enums.ContentType) As Boolean
@@ -397,20 +396,20 @@ Public Class ModulesManager
         End While
 
         Try
-            Dim modules As IEnumerable(Of _externalGenericModuleClass) = externalGenericModules.Where(Function(e) e.ProcessorModule.ModuleType.Contains(mType) AndAlso e.ProcessorModule.ModuleEnabled)
-            If (modules.Count() <= 0) Then
-                logger.Warn("[ModulesManager] [RunGeneric] No generic modules defined <{0}>", mType.ToString)
-            Else
-                For Each _externalGenericModule As _externalGenericModuleClass In modules
-                    Try
-                        logger.Trace("[ModulesManager] [RunGeneric] Run generic module <{0}>", _externalGenericModule.ProcessorModule.ModuleName)
-                        ret = _externalGenericModule.ProcessorModule.RunGeneric(mType, _params, _singleobjekt, DBElement)
-                    Catch ex As Exception
-                        logger.Error(ex, New StackFrame().GetMethod().Name & Convert.ToChar(Keys.Tab) & "Error scraping movies images using <" & _externalGenericModule.ProcessorModule.ModuleName & ">")
-                    End Try
-                    If ret.bBreakChain OrElse RunOnlyOne Then Exit For
-                Next
-            End If
+            'Dim modules As IEnumerable(Of _externalGenericModuleClass) = externalGenericModules.Where(Function(e) e.ProcessorModule.ModuleType.Contains(mType) AndAlso e.ProcessorModule.ModuleEnabled)
+            'If (modules.Count() <= 0) Then
+            '    logger.Warn("[ModulesManager] [RunGeneric] No generic modules defined <{0}>", mType.ToString)
+            'Else
+            '    For Each _externalGenericModule As _externalGenericModuleClass In modules
+            '        Try
+            '            logger.Trace("[ModulesManager] [RunGeneric] Run generic module <{0}>", _externalGenericModule.ProcessorModule.ModuleName)
+            '            ret = _externalGenericModule.ProcessorModule.RunGeneric(mType, _params, _singleobjekt, DBElement)
+            '        Catch ex As Exception
+            '            logger.Error(ex, New StackFrame().GetMethod().Name & Convert.ToChar(Keys.Tab) & "Error scraping movies images using <" & _externalGenericModule.ProcessorModule.ModuleName & ">")
+            '        End Try
+            '        If ret.bBreakChain OrElse RunOnlyOne Then Exit For
+            '    Next
+            'End If
         Catch ex As Exception
             logger.Error(ex, New StackFrame().GetMethod().Name)
         End Try
@@ -1174,14 +1173,6 @@ Public Class ModulesManager
             Application.DoEvents()
         End While
 
-        For Each _externalProcessorModule As _externalGenericModuleClass In externalGenericModules
-            Dim t As New _XMLEmberModuleClass
-            t.AssemblyName = _externalProcessorModule.AssemblyName
-            t.AssemblyFileName = _externalProcessorModule.AssemblyFileName
-            t.ModuleEnabled = _externalProcessorModule.ProcessorModule.ModuleEnabled
-            t.ContentType = _externalProcessorModule.ContentType
-            tmpForXML.Add(t)
-        Next
         For Each _externalScraperModule As _externalModuleClass In externalModules
             For Each nSettingsPanel As Containers.SettingsPanel In _externalScraperModule.Base.InjectSettingsPanels
                 Dim t As New _XMLEmberModuleClass
@@ -1203,18 +1194,18 @@ Public Class ModulesManager
             Return
         End If
 
-        Dim modules As IEnumerable(Of _externalGenericModuleClass) = externalGenericModules.Where(Function(p) p.AssemblyName = ModuleAssembly)
-        If (modules.Count < 0) Then
-            logger.Warn("[ModulesManager] [SetModuleEnable_Generic] No modules of type <{0}> were found", ModuleAssembly)
-        Else
-            For Each _externalProcessorModule As _externalGenericModuleClass In modules
-                Try
-                    _externalProcessorModule.ProcessorModule.ModuleEnabled = value
-                Catch ex As Exception
-                    logger.Error(ex, New StackFrame().GetMethod().Name & Convert.ToChar(Keys.Tab) & "Could not set module <" & ModuleAssembly & "> to enabled status <" & value & ">")
-                End Try
-            Next
-        End If
+        'Dim modules As IEnumerable(Of _externalGenericModuleClass) = externalGenericModules.Where(Function(p) p.AssemblyName = ModuleAssembly)
+        'If (modules.Count < 0) Then
+        '    logger.Warn("[ModulesManager] [SetModuleEnable_Generic] No modules of type <{0}> were found", ModuleAssembly)
+        'Else
+        '    For Each _externalProcessorModule As _externalGenericModuleClass In modules
+        '        Try
+        '            _externalProcessorModule.ProcessorModule.ModuleEnabled = value
+        '        Catch ex As Exception
+        '            logger.Error(ex, New StackFrame().GetMethod().Name & Convert.ToChar(Keys.Tab) & "Could not set module <" & ModuleAssembly & "> to enabled status <" & value & ">")
+        '        End Try
+        '    Next
+        'End If
     End Sub
 
     Public Sub SetScraperEnable(ByVal strModuleAssembly As String, ByVal tType As Enums.SettingsPanelType, ByVal bValue As Boolean)
@@ -1726,7 +1717,6 @@ Public Class ModulesManager
         Public ModuleOrder As Integer 'TODO: not important at this point.. for 1.5
         Public ProcessorModule As Interfaces.GenericEngine 'Object
         Public Type As List(Of Enums.ModuleEventType)
-        Public ContentType As Enums.ContentType = Enums.ContentType.Generic
 
 #End Region 'Fields
 
@@ -1755,9 +1745,9 @@ Public Class ModulesManager
 
         Public AssemblyFileName As String
         Public AssemblyName As String
-        Public ContentType As Enums.ContentType
         Public ModuleEnabled As Boolean
         Public ModuleOrder As Integer
+        Public PanelType As Enums.SettingsPanelType
 
 #End Region 'Fields
 

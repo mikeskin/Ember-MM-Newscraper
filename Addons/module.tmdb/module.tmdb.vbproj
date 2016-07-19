@@ -121,6 +121,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="clsScraperTMDB.vb" />
+    <Compile Include="frmSettingsPanel_Search_Movie.Designer.vb">
+      <DependentUpon>frmSettingsPanel_Search_Movie.vb</DependentUpon>
+    </Compile>
+    <Compile Include="frmSettingsPanel_Search_Movie.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="frmSettingsPanel_Trailer_Movie.Designer.vb">
       <DependentUpon>frmSettingsPanel_Trailer_Movie.vb</DependentUpon>
     </Compile>
@@ -181,6 +187,9 @@
     <Compile Include="clsModuleTMDB.vb" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="frmSettingsPanel_Search_Movie.resx">
+      <DependentUpon>frmSettingsPanel_Search_Movie.vb</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="frmSettingsPanel_Trailer_Movie.resx">
       <DependentUpon>frmSettingsPanel_Trailer_Movie.vb</DependentUpon>
       <SubType>Designer</SubType>

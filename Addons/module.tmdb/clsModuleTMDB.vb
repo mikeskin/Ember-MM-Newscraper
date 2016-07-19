@@ -51,6 +51,7 @@ Public Class clsModuleTMDB
     Private _ScraperEnabled_Image_Movie As Boolean = False
     Private _ScraperEnabled_Image_MovieSet As Boolean = False
     Private _ScraperEnabled_Image_TV As Boolean = False
+    Private _ScraperEnabled_Search_Movie As Boolean = False
     Private _ScraperEnabled_Trailer_Movie As Boolean = False
     Private _sPanel_Data_Movie As frmSettingsPanel_Data_Movie
     Private _sPanel_Data_MovieSet As frmSettingsPanel_Data_MovieSet
@@ -58,6 +59,7 @@ Public Class clsModuleTMDB
     Private _sPanel_Image_Movie As frmSettingsPanel_Image_Movie
     Private _sPanel_Image_MovieSet As frmSettingsPanel_Image_MovieSet
     Private _sPanel_Image_TV As frmSettingsPanel_Image_TV
+    Private _sPanel_Search_Movie As frmSettingsPanel_Search_Movie
     Private _sPanel_Trailer_Movie As frmSettingsPanel_Trailer_Movie
 
     'SearchEngine
@@ -272,6 +274,7 @@ Public Class clsModuleTMDB
         sPanelList.Add(InjectSettingsPanel_Image_Movie)
         sPanelList.Add(InjectSettingsPanel_Image_MovieSet)
         sPanelList.Add(InjectSettingsPanel_Image_TV)
+        sPanelList.Add(InjectSettingsPanel_Search_Movie)
         sPanelList.Add(InjectSettingsPanel_Trailer_Movie)
 
         Return sPanelList
@@ -463,6 +466,31 @@ Public Class clsModuleTMDB
         AddHandler _sPanel_Image_TV.ModuleNeedsRestart, AddressOf Handle_ModuleNeedsRestart
         AddHandler _sPanel_Image_TV.ModuleSettingsChanged, AddressOf Handle_ModuleSettingsChanged
         AddHandler _sPanel_Image_TV.ModuleStateChanged, AddressOf Handle_ModuleStateChanged
+
+        Return sPanel
+    End Function
+
+    Function InjectSettingsPanel_Search_Movie() As Containers.SettingsPanel
+        Dim sPanel As New Containers.SettingsPanel(Enums.SettingsPanelType.MovieSearch)
+        _sPanel_Search_Movie = New frmSettingsPanel_Search_Movie
+        _sPanel_Search_Movie.chkEnabled.Checked = _ScraperEnabled_Data_Movie
+        _sPanel_Search_Movie.chkFallBackEng.Checked = _SpecialSettings_Data_Movie.FallBackEng
+        _sPanel_Search_Movie.chkGetAdultItems.Checked = _SpecialSettings_Data_Movie.GetAdultItems
+        _sPanel_Search_Movie.chkSearchDeviant.Checked = _SpecialSettings_Data_Movie.SearchDeviant
+        _sPanel_Search_Movie.txtApiKey.Text = _strPrivateAPIKey
+
+        _sPanel_Search_Movie.orderChanged()
+
+        sPanel.Name = _AssemblyName
+        sPanel.Text = "TMDB"
+        sPanel.Prefix = "TMDBMovieInfo_"
+        sPanel.Order = 110
+        sPanel.ImageIndex = If(_ScraperEnabled_Search_Movie, 9, 10)
+        sPanel.Panel = _sPanel_Search_Movie.pnlSettings
+
+        AddHandler _sPanel_Search_Movie.ModuleNeedsRestart, AddressOf Handle_ModuleNeedsRestart
+        AddHandler _sPanel_Search_Movie.ModuleSettingsChanged, AddressOf Handle_ModuleSettingsChanged
+        AddHandler _sPanel_Search_Movie.ModuleStateChanged, AddressOf Handle_ModuleStateChanged
 
         Return sPanel
     End Function
