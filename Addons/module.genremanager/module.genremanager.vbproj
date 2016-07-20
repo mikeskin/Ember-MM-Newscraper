@@ -7,8 +7,8 @@
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{5B501BD8-D4BC-4719-B708-D4B91E3530D1}</ProjectGuid>
     <OutputType>Library</OutputType>
-    <RootNamespace>generic.EmberCore.GenresEditor</RootNamespace>
-    <AssemblyName>generic.EmberCore.GenresEditor</AssemblyName>
+    <RootNamespace>module.genremanager</RootNamespace>
+    <AssemblyName>module.genremanager</AssemblyName>
     <FileAlignment>512</FileAlignment>
     <MyType>Windows</MyType>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
@@ -134,13 +134,7 @@
     <Compile Include="dlgGenreManager.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="frmSettingsHolder.Designer.vb">
-      <DependentUpon>frmSettingsHolder.vb</DependentUpon>
-    </Compile>
-    <Compile Include="frmSettingsHolder.vb">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="genericGenreManager.vb" />
+    <Compile Include="clsModuleGenreManager.vb" />
     <Compile Include="My Project\AssemblyInfo.vb" />
     <Compile Include="My Project\Application.Designer.vb">
       <AutoGen>True</AutoGen>
@@ -160,10 +154,6 @@
   <ItemGroup>
     <EmbeddedResource Include="dlgGenreManager.resx">
       <DependentUpon>dlgGenreManager.vb</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="frmSettingsHolder.resx">
-      <DependentUpon>frmSettingsHolder.vb</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="My Project\Resources.resx">

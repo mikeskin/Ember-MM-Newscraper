@@ -56,28 +56,20 @@ Public Class Interfaces
 #Region "Events"
 
         Event GenericEvent(ByVal mType As Enums.ModuleEventType, ByRef _params As List(Of Object))
-        Event ModuleNeedsRestart()
-        Event ModuleSettingsChanged()
-        Event ModuleStateChanged(ByVal strName As String, ByVal bState As Boolean, ByVal intDiffOrder As Integer)
 
 #End Region 'Events
 
 #Region "Properties"
 
-        Property ModuleEnabled() As Boolean
+        ReadOnly Property ModuleEnabled(ByVal tType As Enums.SettingsPanelType) As Boolean
         ReadOnly Property IsBusy() As Boolean
-        ReadOnly Property ModuleName() As String
-        ReadOnly Property ModuleType() As List(Of Enums.ModuleEventType)
-        ReadOnly Property ModuleVersion() As String
+        'ReadOnly Property ModuleType() As List(Of Enums.ModuleEventType)
 
 #End Region 'Properties
 
 #Region "Methods"
 
-        Sub Init(ByVal sAssemblyName As String, ByVal sExecutable As String)
-        Function InjectSettingsPanel() As Containers.SettingsPanel
         Function RunGeneric(ByVal mType As Enums.ModuleEventType, ByRef _params As List(Of Object), ByRef _singleobjekt As Object, ByRef _dbelement As Database.DBElement) As ModuleResult
-        Sub SaveSettings(ByVal DoDispose As Boolean)
 
 #End Region 'Methods
 
