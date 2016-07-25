@@ -403,7 +403,7 @@ Public Class dlgSettings
     Sub AddExternalModulesPanels()
         Dim ModuleCounter As Integer = 1
         Dim tPanel As Containers.SettingsPanel
-        For Each sModule As ModulesManager._externalModuleClass In ModulesManager.Instance.externalModules '.OrderBy(Function(x) x.ModuleOrder)
+        For Each sModule As ModulesManager.ExternalModule In ModulesManager.Instance.externalModules '.OrderBy(Function(x) x.ModuleOrder)
             Dim nSettingsPanels As List(Of Containers.SettingsPanel) = sModule.Base.InjectSettingsPanels
             For Each cSettingsPanel In nSettingsPanels
                 tPanel = cSettingsPanel
@@ -436,7 +436,7 @@ Public Class dlgSettings
     End Sub
 
     Sub RemoveExternalModulesPanels()
-        For Each s As ModulesManager._externalModuleClass In ModulesManager.Instance.externalModules
+        For Each s As ModulesManager.ExternalModule In ModulesManager.Instance.externalModules
             RemoveHandler s.Base.ModuleNeedsRestart, AddressOf Handle_SetupNeedsRestart
             RemoveHandler s.Base.ModuleSettingsChanged, AddressOf Handle_ModuleSettingsChanged
             RemoveHandler s.Base.ModuleStateChanged, AddressOf Handle_ModuleStateChanged
@@ -3789,7 +3789,7 @@ Public Class dlgSettings
                     pbSettingsCurrent.Image = ilSettings.Images(If(bIsEnabled, 9, 10))
                 End If
 
-                For Each s As ModulesManager._externalModuleClass In (ModulesManager.Instance.externalModules.Where(Function(y) Not y.AssemblyName = strAssemblyName))
+                For Each s As ModulesManager.ExternalModule In (ModulesManager.Instance.externalModules.Where(Function(y) Not y.AssemblyName = strAssemblyName))
                     s.Base.ModuleOrderChanged(tPanelType)
                 Next
             Catch ex As Exception
@@ -5621,7 +5621,7 @@ Public Class dlgSettings
 
         End With
 
-        For Each s As ModulesManager._externalModuleClass In ModulesManager.Instance.externalModules
+        For Each s As ModulesManager.ExternalModule In ModulesManager.Instance.externalModules
             Try
                 s.Base.SaveSettingsPanel(Not isApply)
             Catch ex As Exception

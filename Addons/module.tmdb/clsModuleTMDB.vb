@@ -44,7 +44,10 @@ Public Class clsModuleTMDB
     Private _SpecialSettings_Data_TV As New SpecialSettings
     Private _SpecialSettings_Trailer_Movie As New SpecialSettings
 
-    'Scraper
+    'Base
+    Private ModuleConfig As String
+
+    'ScraperEngine
     Private _ScraperEnabled_Data_Movie As Boolean = False
     Private _ScraperEnabled_Data_MovieSet As Boolean = False
     Private _ScraperEnabled_Data_TV As Boolean = False

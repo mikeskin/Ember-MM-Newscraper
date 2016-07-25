@@ -26,13 +26,13 @@ Public Class Interfaces
 
         Event ModuleNeedsRestart()
         Event ModuleSettingsChanged()
-        Event ModuleStateChanged(ByVal strName As String, ByVal tPanelType As Enums.SettingsPanelType, ByVal bIsEnabled As Boolean, ByVal intDiffOrder As Integer)
+        Event ModuleStateChanged(ByVal strAssemblyName As String, ByVal tPanelType As Enums.SettingsPanelType, ByVal bIsEnabled As Boolean, ByVal intDiffOrder As Integer)
 
 #End Region 'Events
 
 #Region "Properties"
 
-        'ReadOnly Property ModuleEnabled(ByVal tType As Enums.SettingsPanelType) As Boolean
+        ReadOnly Property ModuleConfig As List(Of String)
         ReadOnly Property ModuleName() As String
         ReadOnly Property ModuleVersion() As String
 
@@ -40,8 +40,8 @@ Public Class Interfaces
 
 #Region "Methods"
 
-        Sub Init(ByVal sAssemblyName As String)
-        Sub SaveSettingsPanel(ByVal DoDispose As Boolean)
+        Sub Init(ByVal strAssemblyName As String)
+        Sub SaveSettingsPanel(ByVal bDoDispose As Boolean)
         Sub ModuleOrderChanged(ByVal tPanelType As Enums.SettingsPanelType)
 
         Function InjectSettingsPanels() As List(Of Containers.SettingsPanel)
@@ -61,9 +61,7 @@ Public Class Interfaces
 
 #Region "Properties"
 
-        ReadOnly Property ModuleEnabled(ByVal tType As Enums.SettingsPanelType) As Boolean
         ReadOnly Property IsBusy() As Boolean
-        'ReadOnly Property ModuleType() As List(Of Enums.ModuleEventType)
 
 #End Region 'Properties
 

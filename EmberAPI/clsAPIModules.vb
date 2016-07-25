@@ -33,7 +33,7 @@ Public Class ModulesManager
     Public Shared AssemblyList As New List(Of AssemblyListItem)
     Public Shared VersionList As New List(Of VersionItem)
 
-    Public externalModules As New List(Of _externalModuleClass)
+    Public externalModules As New List(Of ExternalModule)
     Public RuntimeObjects As New EmberRuntimeObjects
 
     'Singleton Instace for module manager .. allways use this one
@@ -75,7 +75,7 @@ Public Class ModulesManager
         VersionList.Clear()
         VersionList.Add(New VersionItem With {.AssemblyFileName = "*EmberAPP", .Name = "Ember Application", .Version = My.Application.Info.Version.ToString()})
         VersionList.Add(New VersionItem With {.AssemblyFileName = "*EmberAPI", .Name = "Ember API", .Version = Functions.EmberAPIVersion()})
-        For Each tExternalModule As _externalModuleClass In externalModules
+        For Each tExternalModule As ExternalModule In externalModules
             VersionList.Add(New VersionItem With {
                             .Name = tExternalModule.Base.ModuleName,
                             .AssemblyFileName = tExternalModule.AssemblyFilename,
@@ -145,25 +145,22 @@ Public Class ModulesManager
 
                     Dim fType As Type = fileType.GetInterface("Base")
                     If fType IsNot Nothing Then
-                        Dim Base As Interfaces.Base
-                        Base = CType(Activator.CreateInstance(fileType), Interfaces.Base)
+                        Dim Base As Interfaces.Base = CType(Activator.CreateInstance(fileType), Interfaces.Base)
 
-                        Dim tExternalModule As New _externalModuleClass
+                        Dim tExternalModule As New ExternalModule
                         tExternalModule.Base = Base
                         tExternalModule.AssemblyName = tAssemblyItem.AssemblyName
                         tExternalModule.AssemblyFilename = tAssemblyItem.Assembly.ManifestModule.Name
 
                         fType = fileType.GetInterface("GenericEngine")
                         If fType IsNot Nothing Then
-                            Dim GenericEngine As Interfaces.GenericEngine
-                            GenericEngine = CType(Activator.CreateInstance(fileType), Interfaces.GenericEngine)
+                            Dim GenericEngine As Interfaces.GenericEngine = CType(Activator.CreateInstance(fileType), Interfaces.GenericEngine)
                             tExternalModule.GenericEngine = GenericEngine
                         End If
 
                         fType = fileType.GetInterface("ScraperEngine")
                         If fType IsNot Nothing Then
-                            Dim ScraperEngine As Interfaces.ScraperEngine
-                            ScraperEngine = CType(Activator.CreateInstance(fileType), Interfaces.ScraperEngine)
+                            Dim ScraperEngine As Interfaces.ScraperEngine = CType(Activator.CreateInstance(fileType), Interfaces.ScraperEngine)
                             tExternalModule.ScraperEngine = ScraperEngine
 
                             'For Each i As _XMLEmberModuleClass In Master.eSettings.EmberModules.Where(Function(f) f.AssemblyName = tAssemblyItem.AssemblyName AndAlso
@@ -177,8 +174,7 @@ Public Class ModulesManager
 
                         fType = fileType.GetInterface("SearchEngine")
                         If fType IsNot Nothing Then
-                            Dim SearchEngine As Interfaces.SearchEngine
-                            SearchEngine = CType(Activator.CreateInstance(fileType), Interfaces.SearchEngine)
+                            Dim SearchEngine As Interfaces.SearchEngine = CType(Activator.CreateInstance(fileType), Interfaces.SearchEngine)
                             tExternalModule.SearchEngine = SearchEngine
                         End If
 
@@ -303,7 +299,7 @@ Public Class ModulesManager
         'End If
     End Function
 
-    Function QueryScraperCapabilities(ByVal externalScraperModule As _externalModuleClass, ByVal tScrapeModifiers As Structures.ScrapeModifiers, ByVal tContentType As Enums.ContentType) As Boolean
+    Function QueryScraperCapabilities(ByVal externalScraperModule As ExternalModule, ByVal tScrapeModifiers As Structures.ScrapeModifiers, ByVal tContentType As Enums.ContentType) As Boolean
         While Not ModulesLoaded
             Application.DoEvents()
         End While
@@ -331,7 +327,7 @@ Public Class ModulesManager
         Return False
     End Function
 
-    Function QueryScraperCapabilities(ByVal externalScraperModule As _externalModuleClass, ByVal tImageType As Enums.ModifierType, ByVal tContentType As Enums.ContentType) As Boolean
+    Function QueryScraperCapabilities(ByVal externalScraperModule As ExternalModule, ByVal tImageType As Enums.ModifierType, ByVal tContentType As Enums.ContentType) As Boolean
         While Not ModulesLoaded
             Application.DoEvents()
         End While
@@ -371,7 +367,7 @@ Public Class ModulesManager
         While Not ModulesLoaded
             Application.DoEvents()
         End While
-        For Each _externalScraperModule As _externalModuleClass In externalModules '.Where(Function(e) e.ScraperModule.ModuleEnabled)
+        For Each _externalScraperModule As ExternalModule In externalModules '.Where(Function(e) e.ScraperModule.ModuleEnabled)
             ret = QueryScraperCapabilities(_externalScraperModule, tImageType, tContentType)
             If ret Then Exit For
         Next
@@ -421,9 +417,9 @@ Public Class ModulesManager
         Dim tSearchResults As New MediaContainers.SearchResultsContainer
         Dim ret As Interfaces.SearchResults
 
-        Dim modules As IEnumerable(Of _externalModuleClass) = externalModules.Where(Function(e) e.SearchEngine IsNot Nothing)
+        Dim modules As IEnumerable(Of ExternalModule) = externalModules.Where(Function(e) e.SearchEngine IsNot Nothing)
 
-        For Each _externalScraperModule As _externalModuleClass In modules
+        For Each _externalScraperModule As ExternalModule In modules
             ret = _externalScraperModule.SearchEngine.RunSearch(strTitle, intYear, strLanguage, tContentType)
             If ret.tResult IsNot Nothing Then
                 tSearchResults.Movies.AddRange(ret.tResult.Movies)
@@ -442,7 +438,7 @@ Public Class ModulesManager
             Case Enums.ContentType.Movie
                 logger.Trace(String.Format("[ModulesManager] [Scrape] [Movie] [Start] {0}", tDBElement.Filename))
 
-                Dim modules As IEnumerable(Of _externalModuleClass) = externalModules.Where(Function(e) e.ScraperEngine IsNot Nothing) '.OrderBy(Function(e) e.ModuleOrder)
+                Dim modules As IEnumerable(Of ExternalModule) = externalModules.Where(Function(e) e.ScraperEngine IsNot Nothing) '.OrderBy(Function(e) e.ModuleOrder)
                 Dim ret As Interfaces.ScrapeResults
                 Dim tScrapedData As New List(Of MediaContainers.Movie)
                 Dim tScrapedImages As New List(Of MediaContainers.ImageResultsContainer)
@@ -456,7 +452,7 @@ Public Class ModulesManager
                 If (modules.Count() <= 0) Then
                     logger.Warn("[ModulesManager] [Scrape] [Movie] [Abort] No scrapers enabled")
                 Else
-                    For Each _externalScraperModule As _externalModuleClass In modules
+                    For Each _externalScraperModule As ExternalModule In modules
                         logger.Trace(String.Format("[ModulesManager] [Scrape] [Using] {0}", _externalScraperModule.Base.ModuleName))
                         'AddHandler _externalScraperModule.ProcessorModule.ScraperEvent, AddressOf Handler_ScraperEvent_Movie
 
@@ -1173,14 +1169,13 @@ Public Class ModulesManager
             Application.DoEvents()
         End While
 
-        For Each _externalScraperModule As _externalModuleClass In externalModules
+        For Each _externalScraperModule As ExternalModule In externalModules
             For Each nSettingsPanel As Containers.SettingsPanel In _externalScraperModule.Base.InjectSettingsPanels
                 Dim t As New _XMLEmberModuleClass
                 t.AssemblyName = _externalScraperModule.AssemblyName
                 t.AssemblyFileName = _externalScraperModule.AssemblyFilename
                 t.ModuleEnabled = nSettingsPanel.Enabled
                 t.ModuleOrder = nSettingsPanel.Order
-                't.ContentType = nSettingsPanel.ContentType
                 tmpForXML.Add(t)
             Next
         Next
@@ -1214,11 +1209,11 @@ Public Class ModulesManager
             Return
         End If
 
-        Dim modules As IEnumerable(Of _externalModuleClass) = externalModules.Where(Function(p) p.AssemblyName = strModuleAssembly)
+        Dim modules As IEnumerable(Of ExternalModule) = externalModules.Where(Function(p) p.AssemblyName = strModuleAssembly)
         If (modules.Count < 0) Then
             logger.Warn(String.Format("[ModulesManager] [SetScraperEnable_Data_Movie]  modules of type <{0}> were found", strModuleAssembly))
         Else
-            For Each _externalScraperModule As _externalModuleClass In modules
+            For Each _externalScraperModule As ExternalModule In modules
                 Try
                     '_externalScraperModule.Base.SettingsPanel.ScraperEnabled = bValue
                 Catch ex As Exception
@@ -1706,23 +1701,7 @@ Public Class ModulesManager
 
     End Class
 
-    Class _externalGenericModuleClass
-
-#Region "Fields"
-
-        Public AssemblyFileName As String
-
-        'Public Enabled As Boolean
-        Public AssemblyName As String
-        Public ModuleOrder As Integer 'TODO: not important at this point.. for 1.5
-        Public ProcessorModule As Interfaces.GenericEngine 'Object
-        Public Type As List(Of Enums.ModuleEventType)
-
-#End Region 'Fields
-
-    End Class
-
-    Class _externalModuleClass
+    Class ExternalModule
 
 #Region "Fields"
 
@@ -1730,6 +1709,7 @@ Public Class ModulesManager
         Public AssemblyName As String
         Public Base As Interfaces.Base
         Public GenericEngine As Interfaces.GenericEngine
+        Public ModuleConfig As List(Of String)
         Public ScraperEngine As Interfaces.ScraperEngine
         Public SearchEngine As Interfaces.SearchEngine
         'Public SettingsPanels As List(Of Interfaces.ScraperModuleSettingsPanel_Data_Movie)
@@ -1747,7 +1727,6 @@ Public Class ModulesManager
         Public AssemblyName As String
         Public ModuleEnabled As Boolean
         Public ModuleOrder As Integer
-        Public PanelType As Enums.SettingsPanelType
 
 #End Region 'Fields
 
