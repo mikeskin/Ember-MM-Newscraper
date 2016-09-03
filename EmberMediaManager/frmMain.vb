@@ -5010,13 +5010,17 @@ Public Class frmMain
 
     Private Sub cmnuMovieSetNew_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cmnuMovieSetNew.Click
         dgvMovieSets.ClearSelection()
+        ClearInfo()
 
         Dim tmpDBMovieSet = New Database.DBElement(Enums.ContentType.MovieSet) With {.MovieSet = New MediaContainers.MovieSet}
 
         Using dNewSet As New dlgNewSet()
             If dNewSet.ShowDialog(tmpDBMovieSet) = DialogResult.OK Then
                 tmpDBMovieSet = Master.DB.Save_MovieSet(dNewSet.Result, False, False)
-                FillList(False, True, False)
+                Dim iNewRowIndex = AddRow_MovieSet(tmpDBMovieSet.ID)
+                If Not iNewRowIndex = -1 Then
+                    dgvMovieSets.Rows(iNewRowIndex).Selected = True
+                End If
                 Edit_MovieSet(tmpDBMovieSet)
             End If
         End Using
@@ -5474,11 +5478,8 @@ Public Class frmMain
     Private Sub mnuMainToolsSortFiles_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles mnuMainToolsSortFiles.Click, cmnuTrayToolsSortFiles.Click
         SetControlsEnabled(False)
         Using dSortFiles As New dlgSortFiles
-            If dSortFiles.ShowDialog() = DialogResult.OK Then
-                LoadMedia(New Structures.ScanOrClean With {.Movies = True})
-            Else
-                SetControlsEnabled(True)
-            End If
+            dSortFiles.ShowDialog()
+            SetControlsEnabled(True)
         End Using
     End Sub
 
@@ -14483,8 +14484,8 @@ Public Class frmMain
     ''' </summary>
     ''' <param name="lngID"></param>
     ''' <remarks></remarks>
-    Private Sub AddRow_MovieSet(ByVal lngID As Long)
-        If lngID = -1 Then Return
+    Private Function AddRow_MovieSet(ByVal lngID As Long) As Integer
+        If lngID = -1 Then Return -1
 
         Dim myDelegate As New Delegate_dtListAddRow(AddressOf dtListAddRow)
         Dim newRow As DataRow = Nothing
@@ -14507,6 +14508,39 @@ Public Class frmMain
             End If
             AddHandler dgvMovieSets.CellEnter, AddressOf dgvMovieSets_CellEnter
             currRow_MovieSet = -1
+        End If
+
+        Return bsMovieSets.Find("idSet", lngID)
+    End Function
+    ''' <summary>
+    ''' Adds a new single TV Show row with informations from DB
+    ''' </summary>
+    ''' <param name="lngID"></param>
+    ''' <remarks></remarks>
+    Private Sub AddRow_TVShow(ByVal lngID As Long)
+        If lngID = -1 Then Return
+
+        Dim myDelegate As New Delegate_dtListAddRow(AddressOf dtListAddRow)
+        Dim newRow As DataRow = Nothing
+        Dim newTable As New DataTable
+
+        Master.DB.FillDataTable(newTable, String.Format("SELECT * FROM tvshowlist WHERE idShow={0}", lngID))
+        If newTable.Rows.Count = 1 Then
+            newRow = newTable.Rows.Item(0)
+        End If
+
+        Dim dRow = dtTVShows.NewRow()
+        dRow.ItemArray = newRow.ItemArray
+
+        If newRow IsNot Nothing Then
+            RemoveHandler dgvTVShows.CellEnter, AddressOf dgvTVShows_CellEnter
+            If InvokeRequired Then
+                Invoke(myDelegate, New Object() {dtTVShows, dRow})
+            Else
+                dtTVShows.Rows.Add(dRow)
+            End If
+            AddHandler dgvTVShows.CellEnter, AddressOf dgvTVShows_CellEnter
+            currRow_TVShow = -1
         End If
     End Sub
     ''' <summary>
@@ -15197,16 +15231,19 @@ Public Class frmMain
     Private Sub ScannerUpdated(ByVal eProgressValue As Scanner.ProgressValue)
         Select Case eProgressValue.Type
             Case Enums.ScannerEventType.Added_Movie
-                SetStatus(String.Concat(Master.eLang.GetString(815, "Added Movie:"), " ", eProgressValue.Message))
+                SetStatus(String.Concat(String.Concat(Master.eLang.GetString(815, "Added Movie"), ":"), " ", eProgressValue.Message))
                 AddRow_Movie(eProgressValue.ID)
             Case Enums.ScannerEventType.Added_TVEpisode
-                SetStatus(String.Concat(Master.eLang.GetString(814, "Added Episode:"), " ", eProgressValue.Message))
+                SetStatus(String.Concat(String.Concat(Master.eLang.GetString(814, "Added Episode"), ":"), " ", eProgressValue.Message))
+            Case Enums.ScannerEventType.Added_TVShow
+                SetStatus(String.Concat(String.Concat(Master.eLang.GetString(1089, "Added TV Show"), ":"), " ", eProgressValue.Message))
+                AddRow_TVShow(eProgressValue.ID)
             Case Enums.ScannerEventType.CleaningDatabase
                 SetStatus(Master.eLang.GetString(644, "Cleaning Database..."))
             Case Enums.ScannerEventType.PreliminaryTasks
                 SetStatus(Master.eLang.GetString(116, "Performing Preliminary Tasks (Gathering Data)..."))
             Case Enums.ScannerEventType.Refresh_TVShow
-                RefreshRow_TVShow(eProgressValue.ID)
+                RefreshRow_TVShow(eProgressValue.ID, True)
         End Select
     End Sub
 
