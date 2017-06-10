@@ -727,7 +727,7 @@ Public Class FileFolderRenamer
         Return MovieFile
     End Function
 
-    Public Shared Function GetInfo_TVEpisode(ByVal _DBElement As Database.DBElement) As FileRename
+    Public Shared Function GetInfo_TVEpisode(ByVal _DBElement As Database.DBElement, Optional lstEpsiodes As List(Of Database.DBElement) = Nothing) As FileRename
         Dim EpisodeFile As New FileRename
 
         'get list of all episodes for multi-episode files
@@ -758,7 +758,26 @@ Public Class FileFolderRenamer
                             aEpisode.ID = Convert.ToInt32(SQLReader("idEpisode"))
                             aEpisode.Episode = Convert.ToInt32(SQLReader("Episode"))
                             If Not DBNull.Value.Equals(SQLReader("SubEpisode")) Then aEpisode.SubEpisode = Convert.ToInt32(SQLReader("SubEpisode"))
-                            aEpisode.Title = SQLReader("Title").ToString
+
+                            'Title check
+                            'Title from scraping results
+                            If aEpisode.Episode = _DBElement.TVEpisode.Episode AndAlso
+                                aEpisode.SubEpisode = _DBElement.TVEpisode.SubEpisode AndAlso
+                                aSeason = _DBElement.TVEpisode.Season Then
+                                aEpisode.Title = _DBElement.TVEpisode.Title
+                            Else
+                                'Title from scraping results
+                                Dim nEpisodeInfo As Database.DBElement = Nothing
+                                If lstEpsiodes IsNot Nothing Then
+                                    nEpisodeInfo = lstEpsiodes.FirstOrDefault(Function(f) f.TVEpisode.Season = aSeason AndAlso f.TVEpisode.Episode = aEpisode.Episode)
+                                End If
+                                If nEpisodeInfo IsNot Nothing AndAlso nEpisodeInfo.TVEpisode.TitleSpecified Then
+                                    aEpisode.Title = nEpisodeInfo.TVEpisode.Title
+                                Else
+                                    'Title from existing DB entry
+                                    aEpisode.Title = SQLReader("Title").ToString
+                                End If
+                            End If
                             aEpisodesList.Add(aEpisode)
                         End While
                     End Using
@@ -1059,12 +1078,8 @@ Public Class FileFolderRenamer
         Return dtEpisodes
     End Function
 
-    Public Shared Function HaveBase(ByVal fPattern As String) As Boolean
-        If fPattern.Contains("$B") Then
-            Return True
-        Else
-            Return False
-        End If
+    Public Shared Function HaveBase(ByVal strPattern As String) As Boolean
+        Return strPattern.Contains("$B")
     End Function
 
     Public Shared Sub Process_Movie(ByRef MovieFile As FileRename, ByVal folderPattern As String, ByVal filePattern As String)
@@ -1106,7 +1121,7 @@ Public Class FileFolderRenamer
             Dim newFullDirPath As String = Path.Combine(MovieFile.BasePath, MovieFile.NewPath)
             Dim newDirInfo As New DirectoryInfo(newFullDirPath)
             MovieFile.FileExist = File.Exists(newFullFileName) AndAlso Not (newFullFileName.ToLower = MovieFile.OldFullFileName.ToLower)
-            MovieFile.DirExist = newDirInfo.Exists AndAlso Not If(newFullDirPath.ToLower = MovieFile.OldFullPath.ToLower, True, newDirInfo.GetFileSystemInfos.Count = 0) OrElse Not MovieFile.IsSingle
+            MovieFile.DirExist = MovieFile.IsSingle AndAlso newDirInfo.Exists AndAlso Not If(newFullDirPath.ToLower = MovieFile.OldFullPath.ToLower, True, newDirInfo.GetFileSystemInfos.Count = 0)
             MovieFile.DoRename = Not MovieFile.NewPath = MovieFile.Path OrElse Not MovieFile.NewFileName = MovieFile.OldFileName
         Catch ex As Exception
             logger.Error(ex, New StackFrame().GetMethod().Name)
@@ -1683,10 +1698,16 @@ Public Class FileFolderRenamer
         If Not String.IsNullOrEmpty(folderPatternSeasons) AndAlso Not String.IsNullOrEmpty(filePatternEpisodes) Then
             For Each tEpisode As Database.DBElement In _tmpShow.Episodes.Where(Function(f) f.IsOnline)
                 Dim EpisodeFile As New FileRename
-                EpisodeFile = GetInfo_TVEpisode(tEpisode)
+                EpisodeFile = GetInfo_TVEpisode(tEpisode, _tmpShow.Episodes)
                 Process_TVEpisode(EpisodeFile, folderPatternSeasons, filePatternEpisodes)
                 If EpisodeFile.DoRename Then
                     DoRenameSingle_TVEpisode(EpisodeFile, tEpisode, BatchMode, ShowError, False)
+
+                    'refresh Filename of Multi-Episode files
+                    Dim lstEpisodes = _tmpShow.Episodes.Where(Function(f) f.FilenameID = tEpisode.FilenameID AndAlso Not f.ID = tEpisode.ID)
+                    For Each nEpisode In lstEpisodes
+                        nEpisode.Filename = tEpisode.Filename
+                    Next
                 End If
             Next
         End If
