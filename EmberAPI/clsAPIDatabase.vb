@@ -442,6 +442,8 @@ Public Class Database
         Dim tPath As String = String.Empty
         Dim sPath As String = String.Empty
 
+        logger.Info("Cleaning videodatabase started")
+
         Using SQLtransaction As SQLiteTransaction = _myvideosDBConn.BeginTransaction()
             If CleanMovies Then
                 logger.Info("Cleaning movies started")
@@ -646,13 +648,16 @@ Public Class Database
             logger.Info("Cleaning global tables done")
 
             SQLtransaction.Commit()
-            logger.Info("Cleaning videodatabase done")
         End Using
+
+        logger.Info("Cleaning videodatabase done")
 
         ' Housekeeping - consolidate and pack database using vacuum command http://www.sqlite.org/lang_vacuum.html
         Using SQLcommand As SQLiteCommand = _myvideosDBConn.CreateCommand()
+            logger.Info("Rebulding videodatabase started")
             SQLcommand.CommandText = "VACUUM;"
             SQLcommand.ExecuteNonQuery()
+            logger.Info("Rebulding videodatabase done")
         End Using
     End Sub
 
@@ -809,7 +814,7 @@ Public Class Database
     Public Function Connect_MyVideos() As Boolean
 
         'set database version
-        Dim MyVideosDBVersion As Integer = 42
+        Dim MyVideosDBVersion As Integer = 43
 
         'set database filename
         Dim MyVideosDB As String = String.Format("MyVideos{0}.emm", MyVideosDBVersion)
@@ -846,7 +851,7 @@ Public Class Database
 
         Try
             If isNew Then
-                Dim sqlCommand As String = File.ReadAllText(FileUtils.Common.ReturnSettingsFile("DB", String.Format("MyVideosDBSQL_v{0}.txt", MyVideosDBVersion)))
+                Dim sqlCommand As String = File.ReadAllText(FileUtils.Common.ReturnSettingsFile("DB", "MyVideosDBSQL.txt"))
 
                 Using transaction As SQLiteTransaction = _myvideosDBConn.BeginTransaction()
                     Using command As SQLiteCommand = _myvideosDBConn.CreateCommand()
