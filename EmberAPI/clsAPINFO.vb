@@ -69,6 +69,7 @@ Public Class NFO
         Dim new_Title As Boolean = False
         Dim new_Top250 As Boolean = False
         Dim new_Trailer As Boolean = False
+        Dim new_UserRating As Boolean = False
         Dim new_Year As Boolean = False
 
         'If "Use Preview Datascraperresults" option is enabled, a preview window which displays all datascraperresults will be opened before showing the Edit Movie page!
@@ -345,6 +346,15 @@ Public Class NFO
                 DBMovie.Movie.Trailer = String.Empty
             End If
 
+            'User Rating
+            If (Not DBMovie.Movie.UserRatingSpecified OrElse Not Master.eSettings.MovieLockUserRating) AndAlso ScrapeOptions.bMainUserRating AndAlso
+                scrapedmovie.UserRatingSpecified AndAlso Master.eSettings.MovieScraperUserRating AndAlso Not new_UserRating Then
+                DBMovie.Movie.UserRating = scrapedmovie.UserRating
+                new_UserRating = True
+            ElseIf Master.eSettings.MovieScraperCleanFields AndAlso Not Master.eSettings.MovieScraperUserRating AndAlso Not Master.eSettings.MovieLockUserRating Then
+                DBMovie.Movie.UserRating = 0
+            End If
+
             'Year
             If (Not DBMovie.Movie.YearSpecified OrElse Not Master.eSettings.MovieLockYear) AndAlso ScrapeOptions.bMainYear AndAlso
                 scrapedmovie.YearSpecified AndAlso Master.eSettings.MovieScraperYear AndAlso Not new_Year Then
@@ -364,6 +374,21 @@ Public Class NFO
             End If
 
         Next
+
+        'UniqueIDs
+        DBMovie.Movie.UniqueIDs.Clear()
+        If DBMovie.Movie.IMDBSpecified Then
+            DBMovie.Movie.UniqueIDs.Add(New MediaContainers.Uniqueid With {
+                                        .IsDefault = True,
+                                        .Type = "imdb",
+                                        .Value = DBMovie.Movie.IMDB})
+        End If
+        If DBMovie.Movie.TMDBSpecified Then
+            DBMovie.Movie.UniqueIDs.Add(New MediaContainers.Uniqueid With {
+                                        .IsDefault = False,
+                                        .Type = "tmdb",
+                                        .Value = DBMovie.Movie.TMDB})
+        End If
 
         'Certification for MPAA
         If DBMovie.Movie.CertificationsSpecified AndAlso Master.eSettings.MovieScraperCertForMPAA AndAlso
@@ -495,6 +520,7 @@ Public Class NFO
         Dim new_Title As Boolean = False
         Dim new_OriginalTitle As Boolean = False
         Dim new_Trailer As Boolean = False
+        Dim new_UserRating As Boolean = False
 
         Dim KnownEpisodesIndex As New List(Of KnownEpisode)
         Dim KnownSeasonsIndex As New List(Of Integer)
@@ -660,15 +686,6 @@ Public Class NFO
                 DBTV.TVShow.Votes = String.Empty
             End If
 
-            'Runtime
-            If (Not DBTV.TVShow.RuntimeSpecified OrElse DBTV.TVShow.Runtime = "0" OrElse Not Master.eSettings.TVLockShowRuntime) AndAlso ScrapeOptions.bMainRuntime AndAlso
-                scrapedshow.RuntimeSpecified AndAlso Not scrapedshow.Runtime = "0" AndAlso Master.eSettings.TVScraperShowRuntime AndAlso Not new_Runtime Then
-                DBTV.TVShow.Runtime = scrapedshow.Runtime
-                new_Runtime = True
-            ElseIf Master.eSettings.TVScraperCleanFields AndAlso Not Master.eSettings.TVScraperShowRuntime AndAlso Not Master.eSettings.TVLockShowRuntime Then
-                DBTV.TVShow.Runtime = String.Empty
-            End If
-
             'Status
             If (DBTV.TVShow.StatusSpecified OrElse Not Master.eSettings.TVLockShowStatus) AndAlso ScrapeOptions.bMainStatus AndAlso
                 scrapedshow.StatusSpecified AndAlso Master.eSettings.TVScraperShowStatus AndAlso Not new_Status Then
@@ -729,6 +746,15 @@ Public Class NFO
             '        DBTV.Movie.Credits.Clear()
             '    End If
 
+            'User Rating
+            If (Not DBTV.TVShow.UserRatingSpecified OrElse Not Master.eSettings.TVLockShowUserRating) AndAlso ScrapeOptions.bMainUserRating AndAlso
+                scrapedshow.UserRatingSpecified AndAlso Master.eSettings.TVScraperShowUserRating AndAlso Not new_UserRating Then
+                DBTV.TVShow.UserRating = scrapedshow.UserRating
+                new_UserRating = True
+            ElseIf Master.eSettings.TVScraperCleanFields AndAlso Not Master.eSettings.TVScraperShowUserRating AndAlso Not Master.eSettings.TVLockShowUserRating Then
+                DBTV.TVShow.UserRating = 0
+            End If
+
             'Create KnowSeasons index
             For Each kSeason As MediaContainers.SeasonDetails In scrapedshow.KnownSeasons
                 If Not KnownSeasonsIndex.Contains(kSeason.Season) Then
@@ -764,6 +790,27 @@ Public Class NFO
                 Next
             End If
         Next
+
+        'UniqueIDs
+        DBTV.TVShow.UniqueIDs.Clear()
+        If DBTV.TVShow.TVDBSpecified Then
+            DBTV.TVShow.UniqueIDs.Add(New MediaContainers.Uniqueid With {
+                                        .IsDefault = True,
+                                        .Type = "tvdb",
+                                        .Value = DBTV.TVShow.TVDB})
+        End If
+        If DBTV.TVShow.IMDBSpecified Then
+            DBTV.TVShow.UniqueIDs.Add(New MediaContainers.Uniqueid With {
+                                        .IsDefault = False,
+                                        .Type = "imdb",
+                                        .Value = DBTV.TVShow.IMDB})
+        End If
+        If DBTV.TVShow.TMDBSpecified Then
+            DBTV.TVShow.UniqueIDs.Add(New MediaContainers.Uniqueid With {
+                                        .IsDefault = False,
+                                        .Type = "tmdb",
+                                        .Value = DBTV.TVShow.TMDB})
+        End If
 
         'Certification for MPAA
         If DBTV.TVShow.CertificationsSpecified AndAlso Master.eSettings.TVScraperShowCertForMPAA AndAlso
@@ -995,6 +1042,7 @@ Public Class NFO
         Dim new_Season As Boolean = False
         Dim new_ThumbPoster As Boolean = False
         Dim new_Title As Boolean = False
+        Dim new_UserRating As Boolean = False
 
         ''If "Use Preview Datascraperresults" option is enabled, a preview window which displays all datascraperresults will be opened before showing the Edit Movie page!
         'If (ScrapeType = Enums.ScrapeType_Movie_MovieSet_TV.SingleScrape OrElse ScrapeType = Enums.ScrapeType_Movie_MovieSet_TV.SingleField) AndAlso Master.eSettings.MovieScraperUseDetailView AndAlso ScrapedList.Count > 0 Then
@@ -1135,6 +1183,15 @@ Public Class NFO
                 DBTVEpisode.TVEpisode.Votes = String.Empty
             End If
 
+            'User Rating
+            If (Not DBTVEpisode.TVEpisode.UserRatingSpecified OrElse Not Master.eSettings.TVLockEpisodeUserRating) AndAlso ScrapeOptions.bEpisodeUserRating AndAlso
+                scrapedepisode.UserRatingSpecified AndAlso Master.eSettings.TVScraperEpisodeUserRating AndAlso Not new_UserRating Then
+                DBTVEpisode.TVEpisode.UserRating = scrapedepisode.UserRating
+                new_UserRating = True
+            ElseIf Master.eSettings.TVScraperCleanFields AndAlso Not Master.eSettings.TVScraperEpisodeUserRating AndAlso Not Master.eSettings.TVLockEpisodeUserRating Then
+                DBTVEpisode.TVEpisode.UserRating = 0
+            End If
+
             'Runtime
             If (Not DBTVEpisode.TVEpisode.RuntimeSpecified OrElse Not Master.eSettings.TVLockEpisodeRuntime) AndAlso ScrapeOptions.bEpisodeRuntime AndAlso
                 scrapedepisode.RuntimeSpecified AndAlso Master.eSettings.TVScraperEpisodeRuntime AndAlso Not new_Runtime Then
@@ -1159,6 +1216,27 @@ Public Class NFO
                 DBTVEpisode.TVEpisode.Title = String.Empty
             End If
         Next
+
+        'UniqueIDs
+        DBTVEpisode.TVEpisode.UniqueIDs.Clear()
+        If DBTVEpisode.TVEpisode.TVDBSpecified Then
+            DBTVEpisode.TVEpisode.UniqueIDs.Add(New MediaContainers.Uniqueid With {
+                                        .IsDefault = True,
+                                        .Type = "tvdb",
+                                        .Value = DBTVEpisode.TVEpisode.TVDB})
+        End If
+        If DBTVEpisode.TVEpisode.IMDBSpecified Then
+            DBTVEpisode.TVEpisode.UniqueIDs.Add(New MediaContainers.Uniqueid With {
+                                        .IsDefault = False,
+                                        .Type = "imdb",
+                                        .Value = DBTVEpisode.TVEpisode.IMDB})
+        End If
+        If DBTVEpisode.TVEpisode.TMDBSpecified Then
+            DBTVEpisode.TVEpisode.UniqueIDs.Add(New MediaContainers.Uniqueid With {
+                                        .IsDefault = False,
+                                        .Type = "tmdb",
+                                        .Value = DBTVEpisode.TVEpisode.TMDB})
+        End If
 
         'Add GuestStars to Actors
         If DBTVEpisode.TVEpisode.GuestStarsSpecified AndAlso Master.eSettings.TVScraperEpisodeGuestStarsToActors AndAlso Not Master.eSettings.TVLockEpisodeActors Then
@@ -1714,82 +1792,90 @@ Public Class NFO
     ''' <param name="fiRes"></param>
     ''' <returns></returns>
     Public Shared Function GetResFromDimensions(ByVal fiRes As MediaContainers.Video) As String
+        Dim iWidth As Integer
+        Dim iHeight As Integer
         Dim resOut As String = String.Empty
-        Try
-            If Not String.IsNullOrEmpty(fiRes.Width) AndAlso Not String.IsNullOrEmpty(fiRes.Height) AndAlso Not String.IsNullOrEmpty(fiRes.Aspect) Then
-                Dim iWidth As Integer = Convert.ToInt32(fiRes.Width)
-                Dim iHeight As Integer = Convert.ToInt32(fiRes.Height)
-                Dim sinADR As Single = NumUtils.ConvertToSingle(fiRes.Aspect)
 
-                Select Case True
-                    Case iWidth < 640
-                        resOut = "SD"
+        If Integer.TryParse(fiRes.Width, iWidth) AndAlso Integer.TryParse(fiRes.Height, iHeight) Then
+            Select Case True
                     'exact
-                    Case (iWidth = 3840 AndAlso iHeight = 2160) OrElse (iWidth = 3996 AndAlso iHeight = 2160) OrElse (iWidth = 4096 AndAlso iHeight = 2160) OrElse (iWidth = 5120 AndAlso iHeight = 2160)
-                        resOut = "2160"
-                    Case (iWidth = 2560 AndAlso iHeight = 1440)
-                        resOut = "1440"
-                    Case (iWidth = 1920 AndAlso (iHeight = 1080 OrElse iHeight = 800)) OrElse (iWidth = 1440 AndAlso iHeight = 1080) OrElse (iWidth = 1280 AndAlso iHeight = 1080)
-                        resOut = "1080"
-                    Case (iWidth = 1366 AndAlso iHeight = 768) OrElse (iWidth = 1024 AndAlso iHeight = 768)
-                        resOut = "768"
-                    Case (iWidth = 960 AndAlso iHeight = 720) OrElse (iWidth = 1280 AndAlso (iHeight = 720 OrElse iHeight = 544))
-                        resOut = "720"
-                    Case (iWidth = 1024 AndAlso iHeight = 576) OrElse (iWidth = 720 AndAlso iHeight = 576)
-                        resOut = "576"
-                    Case (iWidth = 720 OrElse iWidth = 960) AndAlso iHeight = 540
-                        resOut = "540"
-                    Case (iWidth = 852 OrElse iWidth = 720 OrElse iWidth = 704 OrElse iWidth = 640) AndAlso iHeight = 480
-                        resOut = "480"
-                    'by ADR
-                    Case sinADR >= 1.4 AndAlso iWidth = 3840
-                        resOut = "2160"
-                    Case sinADR >= 1.4 AndAlso iWidth = 2560
-                        resOut = "1440"
-                    Case sinADR >= 1.4 AndAlso iWidth = 1920
-                        resOut = "1080"
-                    Case sinADR >= 1.4 AndAlso iWidth = 1366
-                        resOut = "768"
-                    Case sinADR >= 1.4 AndAlso iWidth = 1280
-                        resOut = "720"
-                    Case sinADR >= 1.4 AndAlso iWidth = 1024
-                        resOut = "576"
-                    Case sinADR >= 1.4 AndAlso iWidth = 960
-                        resOut = "540"
-                    Case sinADR >= 1.4 AndAlso iWidth = 852
-                        resOut = "480"
-                    'loose
-                    Case iWidth > 2560 AndAlso iHeight > 1440
-                        resOut = "2160"
-                    Case iWidth > 1920 AndAlso iHeight > 1080
-                        resOut = "1440"
-                    Case iWidth >= 1200 AndAlso iHeight > 768
-                        resOut = "1080"
-                    Case iWidth >= 1000 AndAlso iHeight > 720
-                        resOut = "768"
-                    Case iWidth >= 1000 AndAlso iHeight > 500
-                        resOut = "720"
-                    Case iWidth >= 700 AndAlso iHeight > 540
-                        resOut = "576"
-                    Case iWidth >= 700 AndAlso iHeight > 480
-                        resOut = "540"
-                    Case Else
-                        resOut = "480"
-                End Select
-            End If
-        Catch ex As Exception
-            logger.Error(ex, New StackFrame().GetMethod().Name)
-        End Try
+                Case iWidth = 7680 AndAlso iHeight = 4320   'UHD 8K
+                    resOut = "4320"
+                Case iWidth = 4096 AndAlso iHeight = 2160   'UHD 4K (cinema)
+                    resOut = "2160"
+                Case iWidth = 3840 AndAlso iHeight = 2160   'UHD 4K
+                    resOut = "2160"
+                Case iWidth = 2560 AndAlso iHeight = 1600   'WQXGA (16:10)
+                    resOut = "1600"
+                Case iWidth = 2560 AndAlso iHeight = 1440   'WQHD (16:9)
+                    resOut = "1440"
+                Case iWidth = 1920 AndAlso iHeight = 1200   'WUXGA (16:10)
+                    resOut = "1200"
+                Case iWidth = 1920 AndAlso iHeight = 1080   'HD1080 (16:9)
+                    resOut = "1080"
+                Case iWidth = 1680 AndAlso iHeight = 1050   'WSXGA+ (16:10)
+                    resOut = "1050"
+                Case iWidth = 1600 AndAlso iHeight = 900    'HD+ (16:9)
+                    resOut = "900"
+                Case iWidth = 1280 AndAlso iHeight = 720    'HD720 / WXGA (16:9)
+                    resOut = "720"
+                Case iWidth = 800 AndAlso iHeight = 480     'Rec. 601 plus a quarter (5:3)
+                    resOut = "480"
+                Case iWidth = 768 AndAlso iHeight = 576     'PAL
+                    resOut = "576"
+                Case iWidth = 720 AndAlso iHeight = 480     'Rec. 601 (3:2)
+                    resOut = "480"
+                Case iWidth = 720 AndAlso iHeight = 576     'PAL (DVD)
+                    resOut = "576"
+                Case iWidth = 720 AndAlso iHeight = 540     'half of 1080p (16:9)
+                    resOut = "540"
+                Case iWidth = 640 AndAlso iHeight = 480     'VGA (4:3)
+                    resOut = "480"
+                Case iWidth = 640 AndAlso iHeight = 360     'Wide 360p (16:9)
+                    resOut = "360"
+                Case iWidth = 480 AndAlso iHeight = 360     '360p (4:3, uncommon)
+                    resOut = "360"
+                Case iWidth = 426 AndAlso iHeight = 240     'NTSC widescreen (16:9)
+                    resOut = "240"
+                Case iWidth = 352 AndAlso iHeight = 240     'NTSC-standard VCD / super-long-play DVD (4:3)
+                    resOut = "240"
+                Case iWidth = 320 AndAlso iHeight = 240     'CGA / NTSC square pixel (4:3)
+                    resOut = "240"
+                Case iWidth = 256 AndAlso iHeight = 144     'One tenth of 1440p (16:9)
+                    resOut = "144"
+                Case Else
+                    '
+                    ' MAM: simple version, totally sufficient. Add new res at the end of the list if they become available (before "99999999" of course!)
+                    ' Warning: this list needs to be sorted from lowest to highes resolution, else the search routine will go nuts!
+                    '
+                    Dim aVres() = New Dictionary(Of Integer, String) From
+                        {
+                        {426, "240"},
+                        {480, "360"},
+                        {640, "480"},
+                        {720, "576"},
+                        {1280, "720"},
+                        {1920, "1080"},
+                        {4096, "2160"},
+                        {7680, "4320"},
+                        {99999999, String.Empty}
+                    }.ToArray
+                    '
+                    ' search appropriate horizontal resolution
+                    ' Note: Array's last entry must be a ridiculous high number, else this loop will surely crash!
+                    '
+                    Dim i As Integer
+                    While (aVres(i).Key < iWidth)
+                        i = i + 1
+                    End While
+                    resOut = aVres(i).Value
+            End Select
 
-        If Not String.IsNullOrEmpty(resOut) Then
-            If String.IsNullOrEmpty(fiRes.Scantype) Then
-                Return String.Concat(resOut)
-            Else
+            If Not String.IsNullOrEmpty(resOut) AndAlso Not String.IsNullOrEmpty(fiRes.Scantype) Then
                 Return String.Concat(resOut, If(fiRes.Scantype.ToLower = "progressive", "p", "i"))
             End If
-        Else
-            Return String.Empty
         End If
+        Return resOut
     End Function
 
     Public Shared Function IsConformingNFO_Movie(ByVal sPath As String) As Boolean

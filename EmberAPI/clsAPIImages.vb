@@ -70,7 +70,6 @@ Public Class Images
     ''' 2013/11/25 Dekker500 - Disposed old image before replacing
     ''' </remarks>
     Public Sub UpdateMSfromImg(nImage As Image, Optional iQuality As Integer = 100)
-
         Try
             Dim ICI As ImageCodecInfo = GetEncoderInfo(ImageFormat.Jpeg)
 
@@ -111,7 +110,7 @@ Public Class Images
             Try
                 File.Delete(sPath)
             Catch ex As Exception
-                logger.Error(ex, New StackFrame().GetMethod().Name & Convert.ToChar(Windows.Forms.Keys.Tab) & "Param: <" & sPath & ">")
+                logger.Error(ex, New StackFrame().GetMethod().Name & Convert.ToChar(Keys.Tab) & "Param: <" & sPath & ">")
             End Try
         End If
     End Sub
@@ -143,7 +142,7 @@ Public Class Images
                 End Select
             Next
         Catch ex As Exception
-            logger.Error(ex, New StackFrame().GetMethod().Name & Convert.ToChar(Windows.Forms.Keys.Tab) & "<" & DBMovie.Filename & ">")
+            logger.Error(ex, New StackFrame().GetMethod().Name & Convert.ToChar(Keys.Tab) & "<" & DBMovie.Filename & ">")
         End Try
     End Sub
     ''' <summary>
@@ -162,7 +161,7 @@ Public Class Images
                 End If
             Next
         Catch ex As Exception
-            logger.Error(ex, New StackFrame().GetMethod().Name & Convert.ToChar(Windows.Forms.Keys.Tab) & "<" & DBMovieSet.MovieSet.Title & ">")
+            logger.Error(ex, New StackFrame().GetMethod().Name & Convert.ToChar(Keys.Tab) & "<" & DBMovieSet.MovieSet.Title & ">")
         End Try
     End Sub
     ''' <summary>
@@ -181,7 +180,7 @@ Public Class Images
                 End If
             Next
         Catch ex As Exception
-            logger.Error(ex, New StackFrame().GetMethod().Name & Convert.ToChar(Windows.Forms.Keys.Tab) & "<" & DBTVShow.ShowPath & ">")
+            logger.Error(ex, New StackFrame().GetMethod().Name & Convert.ToChar(Keys.Tab) & "<" & DBTVShow.ShowPath & ">")
         End Try
     End Sub
     ''' <summary>
@@ -208,7 +207,7 @@ Public Class Images
                 End Select
             Next
         Catch ex As Exception
-            logger.Error(ex, New StackFrame().GetMethod().Name & Convert.ToChar(Windows.Forms.Keys.Tab) & "<" & DBTVEpisode.ShowPath & ">")
+            logger.Error(ex, New StackFrame().GetMethod().Name & Convert.ToChar(Keys.Tab) & "<" & DBTVEpisode.ShowPath & ">")
         End Try
     End Sub
     ''' <summary>
@@ -227,7 +226,7 @@ Public Class Images
                 End If
             Next
         Catch ex As Exception
-            logger.Error(ex, New StackFrame().GetMethod().Name & Convert.ToChar(Windows.Forms.Keys.Tab) & "<" & DBTVSeason.ShowPath & ">")
+            logger.Error(ex, New StackFrame().GetMethod().Name & Convert.ToChar(Keys.Tab) & "<" & DBTVSeason.ShowPath & ">")
         End Try
     End Sub
     ''' <summary>
@@ -257,29 +256,49 @@ Public Class Images
                 End Select
             Next
         Catch ex As Exception
-            logger.Error(ex, New StackFrame().GetMethod().Name & Convert.ToChar(Windows.Forms.Keys.Tab) & "<" & DBTVShow.ShowPath & ">")
+            logger.Error(ex, New StackFrame().GetMethod().Name & Convert.ToChar(Keys.Tab) & "<" & DBTVShow.ShowPath & ">")
         End Try
     End Sub
     ''' <summary>
     ''' Loads this Image from the contents of the supplied file
     ''' </summary>
-    ''' <param name="sPath">Path to the image file</param>
-    ''' <param name="LoadBitmap">Create bitmap from memorystream</param>
+    ''' <param name="strPath">Path to the image file</param>
+    ''' <param name="bLoadBitmap">Create bitmap from memorystream</param>
     ''' <remarks></remarks>
-    Public Sub LoadFromFile(ByVal sPath As String, Optional LoadBitmap As Boolean = False)
-        If Not String.IsNullOrEmpty(sPath) AndAlso File.Exists(sPath) Then
-            _ms = New MemoryStream()
-            Using fsImage As FileStream = File.OpenRead(sPath)
-                Dim memStream As New MemoryStream
-                memStream.SetLength(fsImage.Length)
-                fsImage.Read(memStream.GetBuffer, 0, CInt(Fix(fsImage.Length)))
-                _ms.Write(memStream.GetBuffer, 0, CInt(Fix(fsImage.Length)))
-                _ms.Flush()
-                If LoadBitmap Then
-                    _image = New Bitmap(_ms)
-                End If
-            End Using
+    Public Sub LoadFromFile(ByVal strPath As String, Optional bLoadBitmap As Boolean = False)
+        If Not String.IsNullOrEmpty(strPath) Then
+            Dim fiImage = New FileInfo(strPath)
+
+            If Not fiImage.Exists Then
+                logger.Error(String.Format("[APIImages] [LoadFromFile]: File ""{0}"" not found", strPath))
+                _ms = New MemoryStream
+                _image = Nothing
+            ElseIf fiImage.Length > 0 Then
+                _ms = New MemoryStream()
+                _image = Nothing
+                Using fsImage As FileStream = File.OpenRead(strPath)
+                    Dim memStream As New MemoryStream
+                    memStream.SetLength(fsImage.Length)
+                    fsImage.Read(memStream.GetBuffer, 0, CInt(Fix(fsImage.Length)))
+                    _ms.Write(memStream.GetBuffer, 0, CInt(Fix(fsImage.Length)))
+                    _ms.Flush()
+                    If _ms.Length > 0 Then
+                        If bLoadBitmap Then
+                            _image = New Bitmap(_ms)
+                        End If
+                    Else
+                        logger.Error(String.Format("[APIImages] [LoadFromFile]: File ""{0}"" is empty", strPath))
+                        _ms = New MemoryStream
+                        _image = Nothing
+                    End If
+                End Using
+            Else
+                logger.Error(String.Format("[APIImages] [LoadFromFile]: File ""{0}"" is empty", strPath))
+                _ms = New MemoryStream
+                _image = Nothing
+            End If
         Else
+            logger.Error("[APIImages] [LoadFromFile]: Path is empty")
             _ms = New MemoryStream
             _image = Nothing
         End If
@@ -333,7 +352,7 @@ Public Class Images
             End If
 
         Catch ex As Exception
-            logger.Error(ex, New StackFrame().GetMethod().Name & Convert.ToChar(Windows.Forms.Keys.Tab) & "<" & sURL & ">")
+            logger.Error(ex, New StackFrame().GetMethod().Name & Convert.ToChar(Keys.Tab) & "<" & sURL & ">")
         End Try
     End Sub
 

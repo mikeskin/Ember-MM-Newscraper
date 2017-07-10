@@ -40,8 +40,7 @@ Public Class Scanner
 
 #Region "Events"
 
-    Public Event ScannerUpdated(ByVal eProgressValue As ProgressValue)
-    Public Event ScanningCompleted()
+    Public Event ProgressUpdate(ByVal eProgressValue As ProgressValue)
 
 #End Region 'Events
 
@@ -601,13 +600,13 @@ Public Class Scanner
                 Return False
             End If
             For Each s As String In AdvancedSettings.GetSetting("NotValidDirIs", ".actors|extrafanarts|extrathumbs|video_ts|bdmv|audio_ts|recycler|subs|subtitles|.trashes").Split(New String() {"|"}, StringSplitOptions.RemoveEmptyEntries)
-                If dInfo.Name.ToLower = s Then
+                If dInfo.Name.ToLower = s.ToLower Then
                     logger.Info(String.Format("[Sanner] [IsValidDir] [NotValidDirIs] Path ""{0}"" has been skipped (path name is ""{1}"")", dInfo.FullName, s))
                     Return False
                 End If
             Next
             For Each s As String In AdvancedSettings.GetSetting("NotValidDirContains", "-trailer|[trailer|temporary files|(noscan)|$recycle.bin|lost+found|system volume information|sample").Split(New String() {"|"}, StringSplitOptions.RemoveEmptyEntries)
-                If dInfo.Name.ToLower.Contains(s) Then
+                If dInfo.Name.ToLower.Contains(s.ToLower) Then
                     logger.Info(String.Format("[Sanner] [IsValidDir] [NotValidDirContains] Path ""{0}"" has been skipped (path contains ""{1}"")", dInfo.FullName, s))
                     Return False
                 End If
@@ -686,14 +685,27 @@ Public Class Scanner
                 Next
             End If
 
+            'Language
+            If DBMovie.Movie.LanguageSpecified Then
+                DBMovie.Language = DBMovie.Movie.Language
+            Else
+                DBMovie.Language = DBMovie.Source.Language
+                DBMovie.Movie.Language = DBMovie.Source.Language
+            End If
+
+            'Lock state
+            If DBMovie.Movie.Locked Then
+                DBMovie.IsLock = DBMovie.Movie.Locked
+            End If
+
             'VideoSource
             Dim vSource As String = APIXML.GetVideoSource(DBMovie.Filename, False)
             DBMovie.VideoSource = String.Empty
             If Not String.IsNullOrEmpty(vSource) Then
                 DBMovie.VideoSource = vSource
                 DBMovie.Movie.VideoSource = vSource
-            ElseIf Not DBMovie.VideoSourceSpecified AndAlso AdvancedSettings.GetBooleanSetting("MediaSourcesByExtension", False, "*EmberAPP") Then
-                vSource = AdvancedSettings.GetSetting(String.Concat("MediaSourcesByExtension:", Path.GetExtension(DBMovie.Filename)), String.Empty, "*EmberAPP")
+            ElseIf Not DBMovie.VideoSourceSpecified AndAlso AdvancedSettings.GetBooleanSetting("VideoSourceByExtension", False, "*EmberAPP") Then
+                vSource = AdvancedSettings.GetSetting(String.Concat("VideoSourceByExtension:", Path.GetExtension(DBMovie.Filename)), String.Empty, "*EmberAPP")
                 If Not String.IsNullOrEmpty(vSource) Then
                     DBMovie.VideoSource = vSource
                     DBMovie.Movie.VideoSource = vSource
@@ -703,19 +715,11 @@ Public Class Scanner
                 DBMovie.VideoSource = DBMovie.Movie.VideoSource
             End If
 
-            'Language
-            If DBMovie.Movie.LanguageSpecified Then
-                DBMovie.Language = DBMovie.Movie.Language
-            Else
-                DBMovie.Language = DBMovie.Source.Language
-                DBMovie.Movie.Language = DBMovie.Source.Language
-            End If
-
             'Do the Save
             If ToNfo AndAlso DBMovie.NfoPathSpecified Then
-                DBMovie = Master.DB.Save_Movie(DBMovie, Batchmode, True, False, False)
+                DBMovie = Master.DB.Save_Movie(DBMovie, Batchmode, True, False, True, False)
             Else
-                DBMovie = Master.DB.Save_Movie(DBMovie, Batchmode, False, False, False)
+                DBMovie = Master.DB.Save_Movie(DBMovie, Batchmode, False, False, True, False)
             End If
         End If
     End Sub
@@ -748,7 +752,12 @@ Public Class Scanner
             DBMovieSet.Language = DBMovieSet.MovieSet.Language
         End If
 
-        DBMovieSet = Master.DB.Save_MovieSet(DBMovieSet, Batchmode, False)
+        'Lock state
+        If DBMovieSet.MovieSet.Locked Then
+            DBMovieSet.IsLock = DBMovieSet.MovieSet.Locked
+        End If
+
+        DBMovieSet = Master.DB.Save_MovieSet(DBMovieSet, Batchmode, False, False, True)
     End Sub
 
     Public Function Load_TVEpisode(ByVal DBTVEpisode As Database.DBElement, ByVal isNew As Boolean, ByVal Batchmode As Boolean, ReportProgress As Boolean) As SeasonAndEpisodeItems
@@ -860,6 +869,11 @@ Public Class Scanner
                 End If
             End If
 
+            'Lock state
+            If cEpisode.TVEpisode.Locked Then
+                cEpisode.IsLock = cEpisode.TVEpisode.Locked
+            End If
+
             'VideoSource
             Dim vSource As String = APIXML.GetVideoSource(cEpisode.Filename, True)
             cEpisode.VideoSource = String.Empty
@@ -906,7 +920,7 @@ Public Class Scanner
                 SeasonAndEpisodeList.Seasons.Add(cEpisode.TVEpisode.Season)
             End If
 
-            If ReportProgress Then bwPrelim.ReportProgress(-1, New ProgressValue With {.Type = Enums.ScannerEventType.Added_TVEpisode, .ID = cEpisode.ID, .Message = String.Format("{0}: {1}", cEpisode.TVShow.Title, cEpisode.TVEpisode.Title)})
+            If ReportProgress Then bwPrelim.ReportProgress(-1, New ProgressValue With {.EventType = Enums.ScannerEventType.Added_TVEpisode, .ID = cEpisode.ID, .Message = String.Format("{0}: {1}", cEpisode.TVShow.Title, cEpisode.TVEpisode.Title)})
         Next
 
         If Not isNew Then
@@ -970,6 +984,11 @@ Public Class Scanner
                     Else
                         DBTVShow.Language = DBTVShow.Source.Language
                         DBTVShow.TVShow.Language = DBTVShow.Source.Language
+                    End If
+
+                    'Lock state
+                    If DBTVShow.TVShow.Locked Then
+                        DBTVShow.IsLock = DBTVShow.TVShow.Locked
                     End If
 
                     Master.DB.Save_TVShow(DBTVShow, Batchmode, False, False, False)
@@ -1320,7 +1339,7 @@ Public Class Scanner
                         currMovieContainer.Source = sSource
                         currMovieContainer.Subtitles = New List(Of MediaContainers.Subtitle)
                         Load_Movie(currMovieContainer, True)
-                        bwPrelim.ReportProgress(-1, New ProgressValue With {.Type = Enums.ScannerEventType.Added_Movie, .ID = currMovieContainer.ID, .Message = currMovieContainer.Movie.Title})
+                        bwPrelim.ReportProgress(-1, New ProgressValue With {.EventType = Enums.ScannerEventType.Added_Movie, .ID = currMovieContainer.ID, .Message = currMovieContainer.Movie.Title})
                     End If
 
                 Else
@@ -1362,7 +1381,7 @@ Public Class Scanner
                         currMovieContainer.Source = sSource
                         currMovieContainer.Subtitles = New List(Of MediaContainers.Subtitle)
                         Load_Movie(currMovieContainer, True)
-                        bwPrelim.ReportProgress(-1, New ProgressValue With {.Type = Enums.ScannerEventType.Added_Movie, .ID = currMovieContainer.ID, .Message = currMovieContainer.Movie.Title})
+                        bwPrelim.ReportProgress(-1, New ProgressValue With {.EventType = Enums.ScannerEventType.Added_Movie, .ID = currMovieContainer.ID, .Message = currMovieContainer.Movie.Title})
                     Next
                 End If
 
@@ -1500,7 +1519,7 @@ Public Class Scanner
 
                 Dim Result = Load_TVShow(currShowContainer, True, True, True)
                 If Not Result = Enums.ScannerEventType.None Then
-                    bwPrelim.ReportProgress(-1, New ProgressValue With {.Type = Result, .ID = currShowContainer.ID, .Message = currShowContainer.TVShow.Title})
+                    bwPrelim.ReportProgress(-1, New ProgressValue With {.EventType = Result, .ID = currShowContainer.ID, .Message = currShowContainer.TVShow.Title})
                 End If
             Else
                 For Each inDir As DirectoryInfo In dInfo.GetDirectories.Where(Function(d) IsValidDir(d, True)).OrderBy(Function(d) d.Name)
@@ -1533,7 +1552,7 @@ Public Class Scanner
 
                     Dim Result = Load_TVShow(currShowContainer, True, True, True)
                     If Not Result = Enums.ScannerEventType.None Then
-                        bwPrelim.ReportProgress(-1, New ProgressValue With {.Type = Result, .ID = currShowContainer.ID, .Message = currShowContainer.TVShow.Title})
+                        bwPrelim.ReportProgress(-1, New ProgressValue With {.EventType = Result, .ID = currShowContainer.ID, .Message = currShowContainer.TVShow.Title})
                     End If
                 Next
 
@@ -1665,7 +1684,7 @@ Public Class Scanner
 
                             Dim Result = Load_TVShow(currShowContainer, True, True, True)
                             If Not Result = Enums.ScannerEventType.None Then
-                                bwPrelim.ReportProgress(-1, New ProgressValue With {.Type = Result, .ID = currShowContainer.ID, .Message = currShowContainer.TVShow.Title})
+                                bwPrelim.ReportProgress(-1, New ProgressValue With {.EventType = Result, .ID = currShowContainer.ID, .Message = currShowContainer.TVShow.Title})
                             End If
                         End If
                     End If
@@ -1767,7 +1786,7 @@ Public Class Scanner
 
         'no separate MovieSet scanning possible, so we clean MovieSets when movies were scanned
         If (Master.eSettings.MovieCleanDB AndAlso Args.Scan.Movies) OrElse (Master.eSettings.MovieSetCleanDB AndAlso Args.Scan.Movies) OrElse (Master.eSettings.TVCleanDB AndAlso Args.Scan.TV) Then
-            bwPrelim.ReportProgress(-1, New ProgressValue With {.Type = Enums.ScannerEventType.CleaningDatabase, .Message = String.Empty})
+            bwPrelim.ReportProgress(-1, New ProgressValue With {.EventType = Enums.ScannerEventType.CleaningDatabase, .Message = String.Empty})
             'remove any db entries that no longer exist
             Master.DB.Clean(Master.eSettings.MovieCleanDB AndAlso Args.Scan.Movies, Master.eSettings.MovieSetCleanDB AndAlso Args.Scan.MovieSets, Master.eSettings.TVCleanDB AndAlso Args.Scan.TV, Args.SourceID)
         End If
@@ -1777,9 +1796,9 @@ Public Class Scanner
 
     Private Sub bwPrelim_ProgressChanged(ByVal sender As Object, ByVal e As System.ComponentModel.ProgressChangedEventArgs) Handles bwPrelim.ProgressChanged
         Dim tProgressValue As ProgressValue = DirectCast(e.UserState, ProgressValue)
-        RaiseEvent ScannerUpdated(tProgressValue)
+        RaiseEvent ProgressUpdate(tProgressValue)
 
-        Select Case tProgressValue.Type
+        Select Case tProgressValue.EventType
             Case Enums.ScannerEventType.Added_Movie
                 ModulesManager.Instance.RunGeneric(Enums.ModuleEventType.Notification, New List(Of Object)(New Object() {"newmovie", 3, Master.eLang.GetString(817, "New Movie Added"), tProgressValue.Message, Nothing}))
             Case Enums.ScannerEventType.Added_TVEpisode
@@ -1798,7 +1817,7 @@ Public Class Scanner
                 Dim params As New List(Of Object)(New Object() {False, False, False, True, Args.SourceID})
                 ModulesManager.Instance.RunGeneric(Enums.ModuleEventType.AfterUpdateDB_TV, params, Nothing)
             End If
-            RaiseEvent ScanningCompleted()
+            RaiseEvent ProgressUpdate(New ProgressValue With {.EventType = Enums.ScannerEventType.ScannerEnded})
         End If
     End Sub
 
@@ -1822,9 +1841,10 @@ Public Class Scanner
 
 #Region "Fields"
 
+        Dim ContentType As Enums.ContentType
+        Dim EventType As Enums.ScannerEventType
         Dim ID As Long
         Dim Message As String
-        Dim Type As Enums.ScannerEventType
 
 #End Region 'Fields
 
